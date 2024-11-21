@@ -1,0 +1,263 @@
+<div class="card card-w-title">
+    <h1><strong>{{titulo}}</strong></h1>
+
+    <!-- Filtros -->
+    <p-panel header="Opción de busqueda de {{subtitulo}}" [style]="{'margin-bottom':'20px'}">
+      <form [formGroup]="modeloForm">
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-2">
+            <p-calendar formControlName="dat1" placeholder="Seleccionar fecha inicial" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+          </div>
+          <div class="col-12 md:col-2">
+            <p-calendar formControlName="dat2" placeholder="Seleccionar fecha final" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+          </div>
+          <div class="col-12 md:col-2">
+            <p-multiSelect [options]="sedeList" [(ngModel)]="sedeSelected" formControlName="msSede" defaultLabel="Seleccione Sede" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-2">
+            <p-multiSelect [options]="tipoMovimientoList" [(ngModel)]="tipoMovimientoSelected" formControlName="msTipoMovimiento" defaultLabel="Seleccione tipo movimiento" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-2">
+            <input id="float-input-text1" type="text" placeholder="Buscar por nombre de cliente" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
+          </div>
+        </div>
+      </form>
+
+      <p-footer>
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-4">
+            <button [disabled]="buttonAcces.btnBuscar || !modeloForm.valid" pButton type="button" label="{{globalConstants.cBuscar}}" icon="{{globalConstants.icoBuscar}}" (click)="onToBuscar()"></button>
+          </div>
+          <div class="col-12 md:col-4">
+            <button [disabled]="buttonAcces.btnEXCEL || !modeloForm.valid" pButton type="button" label="{{globalConstants.cEXCEL}}" icon="{{globalConstants.icoExcel}}" (click)="onToExcel()"></button>
+          </div>
+          <div class="col-12 md:col-4">
+            <app-btn-salir [isMargenTop]="false"></app-btn-salir>
+          </div>
+        </div>
+      </p-footer>
+    </p-panel>
+
+    <!-- Grilla de Datos     -->
+    <p-panel header="Lista de {{subtitulo}}">
+        <p-table
+          [value]="reporteList"
+          [scrollable]="true"
+          scrollDirection="both"
+          scrollHeight="450px"
+          [autoLayout]="true"
+          [responsive]="true"
+          styleClass="{{globalConstants.cStyleTableGridLines}}"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}"
+          [rowHover]="true">
+          <!-- Header -->
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th style="width: 250px" pFrozenColumn pSortableColumn="nomTipoMovimiento" class="custom-header">
+                <p-sortIcon field="nomTipoMovimiento"></p-sortIcon>
+                Tipo de movimiento
+              </th>
+              <th style="width: 200px" pFrozenColumn pSortableColumn="numeroGuiaSAP" class="custom-header">
+                <p-sortIcon field="numeroGuiaSAP"></p-sortIcon>
+                Número de Guía SAP
+              </th>
+              <th style="width: 230px" pFrozenColumn pSortableColumn="numeroGuiaSUNAT" class="custom-header">
+                <p-sortIcon field="numeroGuiaSUNAT"></p-sortIcon>
+                Número de Guía SUNAT
+              </th>
+              <th style="width: 150px" pFrozenColumn pSortableColumn="docDate" class="custom-header">
+                <p-sortIcon field="docDate"></p-sortIcon>
+                Fecha de Guía
+              </th>
+              <th style="width: 200px" pSortableColumn="cardCode" class="custom-header">
+                <p-sortIcon field="cardCode"></p-sortIcon>
+                Código de Cliente
+              </th>
+              <th style="width: 300px" pSortableColumn="cardName" class="custom-header">
+                <p-sortIcon field="cardName"></p-sortIcon>
+                Nombre de Cliente
+              </th>
+              <th style="width: 250px" pSortableColumn="usuario" class="custom-header">
+                <p-sortIcon field="usuario"></p-sortIcon>
+                Usuario
+              </th>
+              <th style="width: 250px" pSortableColumn="itemCode" class="custom-header">
+                <p-sortIcon field="itemCode"></p-sortIcon>
+                Código de Artículo
+              </th>
+              <th style="width: 300px" pSortableColumn="itemName" class="custom-header">
+                <p-sortIcon field="itemName"></p-sortIcon>
+                Nombre de Artículo
+              </th>
+              <th style="width: 100px" pSortableColumn="sede" class="custom-header">
+                <p-sortIcon field="sede"></p-sortIcon>
+                Sede
+              </th>
+              <th style="width: 200px" pSortableColumn="centroCosto" class="custom-header">
+                <p-sortIcon field="centroCosto"></p-sortIcon>
+                Centro de Costo
+              </th>
+              <th style="width: 200px" pSortableColumn="almacenOrigen" class="custom-header">
+                <p-sortIcon field="almacenOrigen"></p-sortIcon>
+                Almacén de Origen
+              </th>
+              <th style="width: 200px" pSortableColumn="almacenDestino" class="custom-header">
+                <p-sortIcon field="almacenDestino"></p-sortIcon>
+                Almacén de Destino
+              </th>
+              <th style="width: 150px" pSortableColumn="bulto" class="custom-header">
+                <p-sortIcon field="bulto"></p-sortIcon>
+                Bulto
+              </th>
+              <th style="width: 150px" pSortableColumn="totalKg" class="custom-header">
+                <p-sortIcon field="totalKg"></p-sortIcon>
+                Total Kg
+              </th>
+              <th style="width: 100px" pSortableColumn="unidadMedida" class="custom-header">
+                <p-sortIcon field="unidadMedida"></p-sortIcon>
+                UM
+              </th>
+              <th style="width: 150px" pSortableColumn="Quantity" class="custom-header">
+                <p-sortIcon field="Quantity"></p-sortIcon>
+                Cantidad
+              </th>
+              <th style="width: 200px" pSortableColumn="numeroPedido" class="custom-header">
+                <p-sortIcon field="numeroPedido"></p-sortIcon>
+                Número de Pedido
+              </th>
+              <th style="width: 200px" pSortableColumn="fechaPedido" class="custom-header">
+                <p-sortIcon field="fechaPedido"></p-sortIcon>
+                Fecha de Pedido
+              </th>
+              <th style="width: 250px" pSortableColumn="numeroFacturaSAP" class="custom-header">
+                <p-sortIcon field="numeroFacturaSAP"></p-sortIcon>
+                Número de Factura SAP
+              </th>
+              <th style="width: 250px" pSortableColumn="numeroFacturaSUNAT" class="custom-header">
+                <p-sortIcon field="numeroFacturaSUNAT"></p-sortIcon>
+                Número de Factura SUNAT
+              </th>
+              <th style="width: 300px" pSortableColumn="nomTransportista" class="custom-header">
+                <p-sortIcon field="nomTransportista"></p-sortIcon>
+                Nombre de Transportista
+              </th>
+              <th style="width: 250px" pSortableColumn="rucTransportista" class="custom-header">
+                <p-sortIcon field="rucTransportista"></p-sortIcon>
+                RUC de Transportista
+              </th>
+              <th style="width: 250px" pSortableColumn="placaTransportista" class="custom-header">
+                <p-sortIcon field="placaTransportista"></p-sortIcon>
+                Placa de Transportista
+              </th>
+              <th style="width: 300px" pSortableColumn="nomConductor" class="custom-header">
+                <p-sortIcon field="nomConductor"></p-sortIcon>
+                Nombre de Conductor
+              </th>
+              <th style="width: 250px" pSortableColumn="lincenciaConductor" class="custom-header">
+                <p-sortIcon field="lincenciaConductor"></p-sortIcon>
+                Licencia de Conductor
+              </th>
+            </tr>
+          </ng-template>
+          <!-- body -->
+          <ng-template pTemplate="body" let-modelo let-editing="editing" let-ri="rowIndex">
+            <tr class="ui-selectable-row">
+              <td style="width: 250px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden" pFrozenColumn>
+                <span class="p-column-title">Tipo de Movimiento</span> {{modelo.nomTipoMovimiento}}
+              </td>
+              <td style="width: 200px" pFrozenColumn>
+                <span class="p-column-title">Número de Guía SAP</span> {{modelo.numeroGuiaSAP}}
+              </td>
+              <td style="width: 230px" pFrozenColumn>
+                <span class="p-column-title">Número de Guía SUNAT</span> {{modelo.numeroGuiaSUNAT}}
+              </td>
+              <td style="width: 150px" pFrozenColumn>
+                <span class="p-column-title">Fecha de Guía</span> {{modelo.docDate | date: 'dd/MM/yyyy'}}
+              </td>
+              <td style="width: 200px">
+                <span class="p-column-title">Código de Cliente</span> {{modelo.cardCode}}
+              </td>
+              <td style="width: 300px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden">
+                <span class="p-column-title">Nombre de Cliente</span> {{modelo.cardName}}
+              </td>
+              <td style="width: 250px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden">
+                <span class="p-column-title">Usuario</span> {{modelo.usuario}}
+              </td>
+              <td style="width: 250px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden">
+                <span class="p-column-title">Código de Artículo</span> {{modelo.itemCode}}
+              </td>
+              <td style="width: 300px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden">
+                <span class="p-column-title">Nombre de Artículo</span> {{modelo.itemName}}
+              </td>
+              <td style="width: 100px">
+                <span class="p-column-title">Sede</span> {{modelo.sede}}
+              </td>
+              <td style="width: 200px">
+                <span class="p-column-title">Centro de Costo</span> {{modelo.centroCosto}}
+              </td>
+              <td style="width: 200px">
+                <span class="p-column-title">Almacén de Origen</span> {{modelo.almacenOrigen}}
+              </td>
+              <td style="width: 200px">
+                <span class="p-column-title">Almacén de Destino</span> {{modelo.almacenDestino}}
+              </td>
+              <td style="width: 150px">
+                <span class="p-column-title">Bulto</span> {{modelo.bulto | number: '.2':'en-EN'}}
+              </td>
+              <td style="width: 150px">
+                <span class="p-column-title">Total Kg</span> {{modelo.totalKg | number: '.2':'en-EN'}}
+              </td>
+              <td style="width: 100px">
+                <span class="p-column-title">UM</span> {{modelo.unidadMedida}}
+              </td>
+              <td style="width: 150px">
+                <span class="p-column-title">Cantidad</span> {{modelo.quantity | number: '.2':'en-EN'}}
+              </td>
+              <td style="width: 200px">
+                <span class="p-column-title">Número de Pedido</span> {{modelo.numeroPedido}}
+              </td>
+              <td style="width: 200px">
+                <span class="p-column-title">Fecha de Pedido</span> {{modelo.fechaPedido | date: 'dd/MM/yyyy'}}
+              </td>
+              <td style="width: 250px">
+                <span class="p-column-title">Número de Factura SAP</span> {{modelo.numeroFacturaSAP}}
+              </td>
+              <td style="width: 250px">
+                <span class="p-column-title">Número de Factura NUNAT</span> {{modelo.numeroFacturaSUNAT}}
+              </td>
+              <td style="width: 300px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden">
+                <span class="p-column-title">Nombre de Transportista</span> {{modelo.nomTransportista}}
+              </td>
+              <td style="width: 250px">
+                <span class="p-column-title">RUC de Transportista</span> {{modelo.rucTransportista}}
+              </td>
+              <td style="width: 250px">
+                <span class="p-column-title">Placa de Transportista</span> {{modelo.placaTransportista}}
+              </td>
+              <td style="width: 300px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden">
+                <span class="p-column-title">Nombre de Conductor</span> {{modelo.nomConductor}}
+              </td>
+              <td style="width: 250px">
+                <span class="p-column-title">Licencia de Conductor</span> {{modelo.lincenciaConductor}}
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td style="width: 5630px" colspan="26">{{globalConstants.currentTableEmptyMessage}}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+    </p-panel>
+</div>
+
+
+<p-dialog header="Procesando" [(visible)]="isDisplay" [closable]="false" [modal]="true" [style]="{width: '50vw'}" [autoZIndex] [draggable]="false" [resizable]="false">
+  Obteniendo Información...!!!
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </div>
+  </div>
+</p-dialog>

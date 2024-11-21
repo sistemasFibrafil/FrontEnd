@@ -1,0 +1,113 @@
+<div class="card card-w-title">
+    <h1><strong>{{titulo}}</strong></h1>
+
+    <!-- Filtros -->
+    <p-panel header="Opción de busqueda de {{subtitulo}}" [style]="{'margin-bottom':'20px'}">
+      <form [formGroup]="modeloForm">
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-2">
+            <p-multiSelect [options]="sectorList" [(ngModel)]="sectorSelected" formControlName="msSector" defaultLabel="Seleccione el Sector" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-2">
+            <p-multiSelect [options]="estadoList2" [(ngModel)]="estadoSelected" formControlName="msEstado" defaultLabel="Seleccione el Estado" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-3">
+            <input id="float-input-text1" type="text" placeholder="Buscar por código, RUC o nombre" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
+          </div>
+        </div>
+      </form>
+
+      <p-footer>
+        <div class="grid p-fluid">
+          <div class="col-12 md:col-4">
+            <button [disabled]="buttonAcces.btnBuscar || !modeloForm.valid" pButton type="button" label="{{globalConstants.cBuscar}}" icon="{{globalConstants.icoBuscar}}" (click)="onToBuscar()"></button>
+          </div>
+          <div class="col-12 md:col-4">
+            <button [disabled]="buttonAcces.btnEXCEL || !modeloForm.valid" pButton type="button" label="{{globalConstants.cEXCEL}}" icon="{{globalConstants.icoExcel}}" (click)="onToExcel()"></button>
+          </div>
+          <div class="col-12 md:col-4">
+            <app-btn-salir [isMargenTop]="false"></app-btn-salir>
+          </div>
+        </div>
+      </p-footer>
+    </p-panel>
+
+    <!-- Grilla de Datos     -->
+    <p-panel header="Lista de {{subtitulo}}">
+      <p-table
+      [value]="reporteList"
+      [columns]="columnas"
+      [paginator]="true"
+      [rows]="globalConstants.sizePage"
+      dataKey="docEntry"
+      editMode="row"
+      [autoLayout]="true"
+      [responsive]="true"
+      styleClass="{{globalConstants.cStyleTableGridLines}}"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}"
+      [rowHover]="true">
+      <!-- Header -->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="{{col.field}}" *ngFor="let col of columns" class="custom-header">
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+            {{col.header}}
+          </th>
+        </tr>
+      </ng-template>
+        <!-- body -->
+        <ng-template pTemplate="body" let-modelo>
+          <tr class="ui-selectable-row">
+            <td class="custom-td-5">
+              <span class="p-column-title">RUC</span> {{modelo.licTradNum}}
+            </td>
+            <td class="p-fluid">
+              <span class="p-column-title">Nombre de Cliente</span> {{modelo.cardName}}
+            </td>
+            <td class="p-fluid">
+              <span class="p-column-title">Vendedor</span> {{modelo.slpName}}
+            </td>
+            <td class="p-fluid">
+              <span class="p-column-title">Sector</span> {{modelo.nomSector}}
+            </td>
+            <td class="p-fluid">
+              <span class="p-column-title">Contacto</span> {{modelo.nomContacto}}
+            </td>
+            <td class="custom-td-6">
+              <span class="p-column-title">Fecha de Alta</span> {{modelo.createDate | date: 'dd/MM/yyyy'}}
+            </td>
+            <td class="custom-td-7">
+              <span class="p-column-title">Fecha Última Venta</span> {{modelo.fechaUltimaVenta | date: 'dd/MM/yyyy'}}
+            </td>
+            <td class="p-fluid">
+              <span [ngSwitch] = "modelo.codStatus2">
+                <span class="label" style="background:green" *ngSwitchCase = "01">{{modelo.nomStatus}}</span>
+                <span class="label" style="background:red"   *ngSwitchCase = "02">{{modelo.nomStatus}}</span>
+                <span class="label" *ngSwitchDefault>{{modelo.nomStatus}}</span>
+              </span>
+            </td>
+            <!-- <td class="custom-td-5">
+              <span class="p-column-title">Estado</span> {{modelo.nomStatus}}
+            </td> -->
+          </tr>
+        </ng-template>
+        <!-- emptymessage -->
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="10">{{globalConstants.currentTableEmptyMessage}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-panel>
+</div>
+
+
+<p-dialog header="Procesando" [(visible)]="isDisplay" [closable]="false" [modal]="true" [style]="{width: '50vw'}" [autoZIndex] [draggable]="false" [resizable]="false">
+  Obteniendo Información...!!!
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </div>
+  </div>
+</p-dialog>

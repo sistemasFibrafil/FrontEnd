@@ -1,0 +1,63 @@
+<div class="card card-w-title">
+  <p-panel header="Actualización de {{titulo}}">
+    <div class="grid p-fluid">
+      <div class="col-12">
+        <form [formGroup]="modeloForm">
+          <div class="p-formgrid grid">
+            <div class="col-12 md:col-12">
+              <label class="label-custom" for="float-input-numLocal">Número: </label><span class="label" style="font-weight: bold; color:red">*</span>
+              <div class="p-inputgroup">
+                <input id="float-input-numLocal" type="text" placeholder="Número de local" maxlength="50" size="50" formControlName="numLocal" autocomplete="off" required pInputText>
+              </div>
+              <div *ngIf="modeloForm.controls['numLocal'].errors && modeloForm.controls['numLocal'].dirty">
+                <p-message severity="error" text="El número de local es requerido." *ngIf="modeloForm.controls['numLocal'].errors['required']"></p-message>
+              </div>
+            </div>
+            <div class="col-12 md:col-12">
+              <label class="label-custom" for="float-input-nomLocal">Nombre: </label><span class="label" style="font-weight: bold; color:red">*</span>
+              <div class="p-inputgroup">
+                <input id="float-input-nomLocal" type="text" placeholder="Nombre de local" maxlength="100" size="50" formControlName="nomLocal" autocomplete="off" required pInputText>
+              </div>
+              <div *ngIf="modeloForm.controls['nomLocal'].errors && modeloForm.controls['nomLocal'].dirty">
+                <p-message severity="error" text="El nombre de local es requerido." *ngIf="modeloForm.controls['nomLocal'].errors['required']"></p-message>
+              </div>
+            </div>
+            <div class="col-12 md:col-12">
+              <label class="label-custom" for="float-input-esOriente">¿Oriente?: </label>
+              <div class="p-inputgroup">
+                <p-checkbox [ngStyle]="{'padding-top': '5px'}" id="float-input-esOriente" [binary]="true" formControlName="esOriente"></p-checkbox>
+              </div>
+            </div>
+            <div class="col-12 md:col-12">
+              <label class="label-custom" for="float-input-cardCode">Código de cliente </label><span class="label" style="font-weight: bold; color:red">*</span>
+              <app-modal-socio-negocio-sap [title]="'Clientes'" [cardCode]="cardCode" [cardType] = "'C'" [transType] = "'N,Y'" (eventoAceptar)="onToSelectedCliente($event)"></app-modal-socio-negocio-sap>
+            </div>
+            <div class="col-12 md:col-12">
+              <label class="label-custom" for="float-input-cardName">Razón social o nombre </label><span class="label" style="font-weight: bold; color:red">*</span>
+              <div class="p-inputgroup">
+                <input id="float-input-cardName" type="text" placeholder="Razón social o nombre" maxlength="100" size="50" formControlName="cardName" autocomplete="off" required pInputText>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <p-footer>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-6">
+          <button pButton type="submit" [disabled]="!modeloForm.valid || cardCode ===''" label="{{globalConstants.cGrabar}}" icon="{{globalConstants.icoGrabar}}" (click)="onClickSave()"></button>
+        </div>
+        <div class="col-12 md:col-6">
+          <button pButton type="button" label="{{globalConstants.cRegresar}}" icon="{{globalConstants.icoRegresar}}" (click)="back()" class="{{globalConstants.cStyleButtonDanger}}"></button>
+        </div>
+      </div>
+    </p-footer>
+  </p-panel>
+</div>
+
+
+<!-- MODAL: Proceso -->
+<app-panel-obtener [isDisplay]="isDisplay"></app-panel-obtener>
+<app-panel-guardar [isDisplay]="isSaving"></app-panel-guardar>
+<app-panel-eliminar [isDisplay]="isDeleting" ></app-panel-eliminar>

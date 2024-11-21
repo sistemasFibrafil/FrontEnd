@@ -1,0 +1,107 @@
+<div class="card card-w-title">
+
+  <p-panel header="Registro de {{titulo}}">
+    <div class="grid p-fluid">
+      <div class="col-12">
+        <div class="card no-margin">
+          <form [formGroup]="modeloForm">
+            <div class="p-formgrid grid">
+              <div class="col-12 md:col-12">
+                <label class="label-custom" for="float-input-sede">Sede </label>
+                <p-dropdown id="float-input-sede" [options]="listSede" class="p dropdown-item-text" placeholder="Seleccionar el tipo de documento" formControlName="sede" [required] optionLabel="label" [showClear]="true" (onChange)="onChangeSede()"></p-dropdown>
+                <div *ngIf="modeloForm.controls['sede'].errors && modeloForm.controls['sede'].dirty">
+                  <p-message severity="error" text="La Sede es rquerida." *ngIf="modeloForm.controls['sede'].errors['required']"></p-message>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <p-contextMenu #cm [model]="items"></p-contextMenu>
+
+      <div class="col-12">
+        <div class="card no-margin">
+          <p-table
+          [value]="listSerieNumeracion"
+          [columns]="columnas"
+          dataKey="code"
+          editMode="row"
+          [rowHover]="true"
+          [autoLayout]="true"
+          [responsive]="true"
+          [contextMenu]="cm"
+          [showCurrentPageReport]="true"
+          [(contextMenuSelection)]="serieNumeracionSelected"
+          styleClass="{{globalConstants.cStyleTableGridLines}}"
+          currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}">
+          <!-- Header -->
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th *ngFor="let col of columns" class="custom-header">
+                {{col.header}}
+              </th>
+            </tr>
+          </ng-template>
+          <!-- body -->
+          <ng-template pTemplate="body" let-modelo let-ri="rowIndex">
+            <tr [pContextMenuRow]="modelo">
+              <td class="p-fluid">
+                <span class="p-column-title">Código</span><i class="pi pi-search" (click)="onClickSerieNumeracionOpen(ri)"></i> {{modelo.codSerieNumeracion}}
+              </td>
+              <td class="p-fluid">
+                <span class="p-column-title">Tipo de documento</span> {{modelo.tipDocumento}}
+              </td>
+              <td class="p-fluid">
+                <span class="p-column-title">Serie de documento</span> {{modelo.serDocumento}}
+              </td>
+              <td class="p-fluid">
+                <span class="p-column-title">Número de documento</span> {{modelo.numDocumento}}
+              </td>
+              <td class="p-fluid">
+                <span class="p-column-title">Máximo número habilitado</span> {{modelo.maxNumDocumento}}
+              </td>
+              <td class="p-fluid">
+                <span class="p-column-title">Formulario</span><i *ngIf="modelo.codSerieNumeracion !== ''" class="pi pi-search" (click)="onClickFormularioOpen(ri)"></i> {{modelo.nomFormulario}}
+              </td>
+            </tr>
+          </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">{{globalConstants.currentTableEmptyMessage}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+
+    <p-footer>
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-6">
+          <button pButton type="submit" [disabled]="!modeloForm.valid || listSerieNumeracion?.length <= 0" label="{{globalConstants.cGrabar}}" icon="{{globalConstants.icoGrabar}}" (click)="onClickSave()"></button>
+        </div>
+        <div class="col-12 md:col-6">
+          <app-btn-salir [isMargenTop]="false"></app-btn-salir>
+        </div>
+      </div>
+    </p-footer>
+  </p-panel>
+</div>
+
+<p-dialog *ngIf="isVisualizarSerieNumeracion" header="Serie - Numeración" [(visible)]="isVisualizarSerieNumeracion" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
+  <app-busqueda-serie-numeracion-sap (eventoAceptar)="onToSerieNumeracionItemSelected($event)"></app-busqueda-serie-numeracion-sap>
+  <ng-template pTemplate="footer">
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickSerieNumeracionClose()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog *ngIf="isVisualizarFormulario" header="Serie - Numeración" [(visible)]="isVisualizarFormulario" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
+  <app-busqueda-formulario (eventoAceptar)="onToFormularioItemSelected($event)"></app-busqueda-formulario>
+  <ng-template pTemplate="footer">
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickSerieNumeracionClose()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<app-panel-guardar [isDisplay]="isSaving"></app-panel-guardar>
+<app-panel-obtener [isDisplay]="isDisplay"></app-panel-obtener>

@@ -1,0 +1,292 @@
+<div class="frame" *ngIf="isDashboard">
+  <!-- <img src="assets/img/-logo.png" alt="logo-bienvenida"> -->
+  <div class="grid p-fluid">
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-1">
+          <h1>VENTAS DEL MES DE AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalVentaMesAnioAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-blue.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-2">
+          <h1>CUOTA DEL MES DE AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalCuotaMesAnioAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-green.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-3">
+          <h1>VARIACIÓN DEL MES DE AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalVariacionMesAnioAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-yellow.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-4">
+          <h1>AVANCE DEL MES DE AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalAvanceMesAnioAnterior | percent:'2.2-2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-red.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid p-fluid">
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-5">
+          <h1>VENTAS DEL AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalVentaAnioAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-blue.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-6">
+          <h1>CUOTA DEL AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalCuotaAnioAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-green.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-7">
+          <h1>VARIACIÓN DEL AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalVariacionAnioAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-yellow.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-8">
+          <h1>AVANCE DEL AÑO ANTERIOR</h1>
+          <div class="overview-value">{{totalAvanceAnioAnterior | percent:'2.2-2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-red.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid p-fluid">
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-9">
+          <h1>VENTAS DEL MES ANTERIOR</h1>
+          <div class="overview-value">{{totalVentaMesAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-blue.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-10">
+          <h1>CUOTA DEL MES ANTERIOR</h1>
+          <div class="overview-value">{{totalCuotaMesAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-green.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-11">
+          <h1>VARIACIÓN DEL MES ANTERIOR</h1>
+          <div class="overview-value">{{totalVariacionMesAnterior | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-yellow.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-12">
+          <h1>AVANCE DEL MES ANTERIOR</h1>
+          <div class="overview-value">{{totalAvanceMesAnterior | percent:'2.2-2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-red.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid p-fluid">
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-13">
+          <h1>VENTAS DEL MES</h1>
+          <div class="overview-value">{{totalVentaMesActual | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-blue.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-14">
+          <h1>CUOTA DEL MES</h1>
+          <div class="overview-value">{{totalCuotaMesActual | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-green.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-15">
+          <h1>VARIACIÓN DEL MES</h1>
+          <div class="overview-value">{{totalVariacionMesActual | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-yellow.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-16">
+          <h1>AVANCE DEL MES</h1>
+          <div class="overview-value">{{totalAvanceMesActual | percent:'2.2-2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-red.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid p-fluid">
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-17">
+          <h1>VENTAS DEL AÑO</h1>
+          <div class="overview-value">{{totalVentaAnioActual | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-blue.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-18">
+          <h1>CUOTA DEL AÑO</h1>
+          <div class="overview-value">{{totalCuotaAnioActual | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-green.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-19">
+          <h1>VARIACIÓN DEL AÑO</h1>
+          <div class="overview-value">{{totalVariacionAnioActual | number: '.2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-yellow.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 md:col-3">
+      <div class="ui-g dashboard">
+        <div class="overview-box overview-box-20">
+          <h1>AVANCE DEL AÑO</h1>
+          <div class="overview-value">{{totalAvanceAnioActual | percent:'2.2-2':'en-EN'}}</div>
+          <img src="assets/layout/images/dashboard/graph-red.svg" alt="apollo-layout"/>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <p-table
+    [value]="lista"
+    dataKey="docEntry"
+    editMode="row"
+    [autoLayout]="true"
+    [responsive]="true"
+    [showCurrentPageReport]="true"
+    styleClass="{{globalConstants.cStyleTableGridLines}}"
+    [rowHover]="true">
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="custom-header" rowspan="2">Vendedor</th>
+        <th class="custom-header" colspan="4">Mensual</th>
+        <th class="custom-header" colspan="4">Anual</th>
+      </tr>
+      <tr>
+        <th class="custom-header">Venta</th>
+        <th class="custom-header">Cuota</th>
+        <th class="custom-header">Variación</th>
+        <th class="custom-header">%Avance</th>
+        <th class="custom-header">Venta</th>
+        <th class="custom-header">Cuota</th>
+        <th class="custom-header">Variación</th>
+        <th class="custom-header">%Avance</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-modelo let-editing="editing" let-ri="rowIndex">
+      <tr class="ui-selectable-row">
+        <td class="p-fluid">
+          <span class="p-column-title">Vendedor</span> {{modelo.slpName}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">Venta</span> {{modelo.ventaMesActual | number: '.0':'en-EN'}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">Cuota</span> {{modelo.cuotaMesActual | number: '.0':'en-EN'}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">Variación</span> {{modelo.variacionMesActual | number: '.0':'en-EN'}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">%Avance</span> {{modelo.avanceMesActual | percent:'2.2-2':'en-EN'}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">Venta</span> {{modelo.ventaAnioActual | number: '.0':'en-EN'}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">Cuota</span> {{modelo.cuotaAnioActual | number: '.0':'en-EN'}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">Variación</span> {{modelo.variacionAnioAcutal | number: '.0':'en-EN'}}
+        </td>
+        <td class="custom-td-numero">
+          <span class="p-column-title">%Avance</span> {{modelo.avanceAnioActual | percent:'2.2-2':'en-EN'}}
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <tr>
+        <td class="p-fluid">Totales</td>
+        <td class="custom-td-numero">{{totalVentaMesActual | number: '.2':'en-EN'}}</td>
+        <td class="custom-td-numero">{{totalCuotaMesActual | number: '.2':'en-EN'}}</td>
+        <td class="custom-td-numero">{{totalVariacionMesActual | number: '.2':'en-EN'}}</td>
+        <td class="custom-td-numero">{{totalAvanceMesActual | percent:'2.2-2':'en-EN'}}</td>
+        <td class="custom-td-numero">{{totalVentaAnioActual | number: '.2':'en-EN'}}</td>
+        <td class="custom-td-numero">{{totalCuotaAnioActual | number: '.2':'en-EN'}}</td>
+        <td class="custom-td-numero">{{totalVariacionMesActual | number: '.2':'en-EN'}}</td>
+        <td class="custom-td-numero">{{totalAvanceMesActual | percent}}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+          <td colspan="9">{{globalConstants.currentTableEmptyMessage}}</td>
+      </tr>
+    </ng-template>
+  </p-table> -->
+</div>
+
+<!-- MODAL: Proceso -->
+<app-panel-obtener [isDisplay]="isDisplay"></app-panel-obtener>
