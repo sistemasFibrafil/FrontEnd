@@ -19,9 +19,10 @@ export class OrdenVentaSodimacService {
   ){}
 
   setCreate(value: OrdenVentaSodimacCreateModel) {
+    debugger
     const param: string = JSON.stringify(value);
 
-    if(value.idOrdenVentaSodimac == 0 || value.idOrdenVentaSodimac === undefined)
+    if(value.id == 0 || value.id === undefined)
     {
         return this.http.post(`${environment.url_api_fib}OrdenVentaSodimac/SetCreate/`, param);
     }
@@ -53,6 +54,7 @@ export class OrdenVentaSodimacService {
   }
 
   getListOrdenVentaSodimacDetallePendienteLpnByIdAndFiltro(value: FilterRequestModel) {
+    debugger
     let params = new HttpParams();
     params = params.append('id1', value.id1.toString());
     params = params.append('text1', value.text1);

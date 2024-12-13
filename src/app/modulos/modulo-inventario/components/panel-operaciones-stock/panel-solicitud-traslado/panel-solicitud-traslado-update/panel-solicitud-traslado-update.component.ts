@@ -71,8 +71,10 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
   // DETALLE
   columnas: any[];
   items: MenuItem[];
+  modelo: ISolicitudTraslado;
   detalle: ISolicitudTrasladoDetalle[] = [];
-  detalleDelete: ISolicitudTrasladoDetalle[] = [];
+  detalleCerrar: ISolicitudTrasladoDetalle[] = [];
+  detalleEliminar: ISolicitudTrasladoDetalle[] = [];
   detalleSelected: ISolicitudTrasladoDetalle;
 
   // MODAL: Artículo
@@ -123,7 +125,8 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     this.items =
     [
       {label: 'Añadir línea', icon: 'pi pi-plus',   command: () => this.addLine() },
-      {label: 'Borrar línea', icon: 'pi pi-trash',  command: () => this.onClickDelete(this.detalleSelected) }
+      {label: 'Borrar línea', icon: 'pi pi-trash',  command: () => this.onClickBorrar(this.detalleSelected) },
+      //{label: 'Cerrar línea', icon: 'pi pi-unlock', command: () => this.onClickCerrar(this.detalleSelected) }
     ];
   }
 
@@ -244,7 +247,7 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     this.modeloFormOtr.patchValue({ 'codTipSalida' : value.fldValue });
   }
 
-  //#region <<< DETALLE >>>
+  //#region <<< Detalle >>>
   //=======================================================================================================================
   //============================= INI: ARTICULO ===========================================================================
   //=======================================================================================================================
@@ -364,13 +367,18 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     this.addLine();
   }
 
-  onClickDelete(value: ISolicitudTrasladoDetalle)
+  onClickBorrar(value: ISolicitudTrasladoDetalle)
   {
+    if(value.lineStatus === '02' && value.record == 2)
+    {
+      this.swaCustomService.swaMsgInfo('No se puede borrar el ítem, ya que tiene el estado Cerrado.');
+      return;
+    }
     if(value.record == 2)
     {
-      // Se define que es eliminado
+      // Se define que es borrado
       value.record = 3;
-      this.detalleDelete.push(value);
+      this.detalleEliminar.push(value);
     }
     let index = this.detalle.indexOf(value);
     this.detalle.splice(+index, 1);
@@ -378,6 +386,21 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     if(this.detalle.length === 0)
     {
       this.addLine();
+    }
+  }
+
+  onClickCerrar(value: ISolicitudTrasladoDetalle)
+  {
+    if(value.lineStatus === '02' && value.record == 2)
+    {
+      this.swaCustomService.swaMsgInfo('El ítem está Cerrado.');
+      return;
+    }
+    if(value.record == 2)
+    {
+      // Se define que es cerrado
+      value.record = 4;
+      this.detalleCerrar.push(value);
     }
   }
   //#endregion
@@ -402,12 +425,22 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
     const status = this.docStatus.find(x => x.statusCode === data.docStatus);
 
+    this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
+    this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
+    this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
+    this.modeloFormCab1.controls['address'].setValue( data.address );
     this.modeloFormCab2.controls['number'].setValue( data.number );
     this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
     this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
     this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );
     this.modeloFormCab2.controls['docDueDate'].setValue( data.docDueDate == null ?  null : new Date(data.docDueDate) );
     this.modeloFormCab2.controls['taxDate'].setValue( data.taxDate == null ?  null : new Date(data.taxDate) );
+    this.modeloFormCab3.controls['whsCodeOrigen'].setValue( data.filler );
+    this.modeloFormCab3.controls['whsCodeDestino'].setValue( data.toWhsCode );
+    this.modeloFormOtr.controls['codTipTraslado'].setValue( data.codTipTraslado );
+    this.modeloFormOtr.controls['codMotTraslado'].setValue( data.codMotTraslado );
+    this.modeloFormOtr.controls['codTipSalida'].setValue( data.codTipSalida );
+    this.modeloFormPie1.controls['slpCode'].setValue( data.slpCode );
     this.modeloFormPie1.controls['jrnlMemo'].setValue( data.jrnlMemo );
     this.modeloFormPie1.controls['comments'].setValue( data.comments );
   }
@@ -416,11 +449,12 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     this.isDisplay = true;
     this.solicitudTrasladoService.getById(id)
     .subscribe({next:(data: ISolicitudTraslado) => {
+      this.modelo = data;
       setTimeout(() => {
-        this.set(data);
+        this.set(this.modelo);
       }, 10);
       setTimeout(() => {
-        data.linea.forEach(element => {
+        this.modelo.linea.forEach(element => {
           this.detalle.push(element);
         });
       }, 1000);
@@ -432,7 +466,7 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     });
   }
 
-  //#region <<< SAVE >>>
+  //#region <<< Save >>>
   onValidatedSave(){
     let reg: number = 0;
     const fromWhsCode = this.modeloFormCab3.controls['whsCodeOrigen'].value;
@@ -445,11 +479,9 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
       return false;
     }
 
-    for (let index = 0; index < this.detalle.length; index++) {
-      if(this.detalle[index].itemCode === '')
-      {
-        reg++;
-      }
+    for(const linea of this.detalle.filter(x => x.itemCode === ''))
+    {
+      reg++;
     }
 
     if(reg > 0)
@@ -459,21 +491,19 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
       return false;
     }
 
-    for (let index = 0; index < this.detalle.length; index++) {
-      if(this.detalle[index].itemCode !== '')
+    for(const linea of this.detalle.filter(x => x.itemCode !== ''))
+    {
+      if(linea.fromWhsCod === linea.whsCode)
       {
-        if(this.detalle[index].fromWhsCod === this.detalle[index].whsCode)
-        {
-          this.isSaving = false;
-          this.swaCustomService.swaMsgInfo('El almacén de destino no puede ser idéntico al almacén de Origen.');
-          return false;
-        }
+        this.isSaving = false;
+        this.swaCustomService.swaMsgInfo('El almacén de destino no puede ser idéntico al almacén de Origen.');
+        return false;
       }
-      if (this.detalle[index].quantity === 0)
+      if (linea.quantity === 0)
       {
         this.isSaving = false;
         this.swaCustomService.swaMsgInfo('La cantidad debe ser mayor que CERO (0).');
-        return;
+        return false;
       }
     }
 
@@ -486,6 +516,7 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
     // CAB 02: SOCIO NEGOCIO
     // CAB 02: SOLICITUD DE TRASLADO
+
     this.modeloSave.id = this.id;
     this.modeloSave.docEntry = this.docEntry;
     this.modeloSave.docDate = this.modeloFormCab2.controls['docDate'].value;
@@ -510,52 +541,71 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
     this.modeloSave.linea = [];
 
-    for (let index = 0; index < this.detalle.length; index++) {
-      if(this.detalle[index].itemCode !== '')
-      {
-        this.modeloSave.linea.push
-        ({
-          id                  : this.id,
-          line                : this.detalle[index].line,
-          docEntry            : this.detalle[index].docEntry,
-          lineNum             : this.detalle[index].lineNum,
-          itemCode            : this.detalle[index].itemCode,
-          dscription          : this.detalle[index].dscription,
-          fromWhsCod          : this.detalle[index].fromWhsCod,
-          whsCode             : this.detalle[index].whsCode,
-          unitMsr             : this.detalle[index].unitMsr,
-          quantity            : this.detalle[index].quantity,
-          openQty             : this.detalle[index].openQty,
-          openQtyRding        : this.detalle[index].openQtyRding,
-          idUsuarioCreate     : this.userContextService.getIdUsuario(),
-          idUsuarioUpdate     : this.userContextService.getIdUsuario(),
-          record              : this.detalle[index].record,
-        });
-      }
+    for(const linea of this.detalle.filter(x => x.itemCode !== '' && x.record !== 4))
+    {
+      this.modeloSave.linea.push
+      ({
+        id                  : this.id,
+        line                : linea.line,
+        docEntry            : linea.docEntry,
+        lineNum             : linea.lineNum,
+        lineStatus          : linea.lineStatus,
+        itemCode            : linea.itemCode,
+        dscription          : linea.dscription,
+        fromWhsCod          : linea.fromWhsCod,
+        whsCode             : linea.whsCode,
+        unitMsr             : linea.unitMsr,
+        quantity            : linea.quantity,
+        openQty             : linea.openQty,
+        openQtyRding        : linea.openQtyRding,
+        idUsuarioCreate     : this.userContextService.getIdUsuario(),
+        idUsuarioUpdate     : this.userContextService.getIdUsuario(),
+        record              : linea.record,
+      });
     }
 
-    for (let index = 0; index < this.detalleDelete.length; index++) {
-      if(this.detalleDelete[index].itemCode !== '')
-      {
-        this.modeloSave.linea.push
-        ({
-          id                  : this.id,
-          line                : this.detalleDelete[index].line,
-          docEntry            : this.detalleDelete[index].docEntry,
-          lineNum             : this.detalleDelete[index].lineNum,
-          itemCode            : this.detalleDelete[index].itemCode,
-          dscription          : this.detalleDelete[index].dscription,
-          fromWhsCod          : this.detalleDelete[index].fromWhsCod,
-          whsCode             : this.detalleDelete[index].whsCode,
-          unitMsr             : this.detalleDelete[index].unitMsr,
-          quantity            : this.detalleDelete[index].quantity,
-          openQty             : this.detalleDelete[index].openQty,
-          openQtyRding         : this.detalleDelete[index].openQtyRding,
-          idUsuarioCreate     : this.userContextService.getIdUsuario(),
-          idUsuarioUpdate     : this.userContextService.getIdUsuario(),
-          record              : this.detalleDelete[index].record,
-        });
-      }
+
+    for (const linea of this.detalleEliminar.filter(x => x.itemCode !== ''))
+    {
+      this.modeloSave.linea.push
+      ({
+        id                  : this.id,
+        line                : linea.line,
+        docEntry            : linea.docEntry,
+        lineNum             : linea.lineNum,
+        lineStatus          : linea.lineStatus,
+        itemCode            : linea.itemCode,
+        dscription          : linea.dscription,
+        fromWhsCod          : linea.fromWhsCod,
+        whsCode             : linea.whsCode,
+        unitMsr             : linea.unitMsr,
+        quantity            : linea.quantity,
+        openQty             : linea.openQty,
+        openQtyRding        : linea.openQtyRding,
+        record              : linea.record,
+      });
+    }
+
+    for (const linea of this.detalleCerrar.filter(x => x.itemCode !== ''))
+    {
+      this.modeloSave.linea.push
+      ({
+        id                  : this.id,
+        line                : linea.line,
+        docEntry            : linea.docEntry,
+        lineNum             : linea.lineNum,
+        lineStatus          : linea.lineStatus,
+        itemCode            : linea.itemCode,
+        dscription          : linea.dscription,
+        fromWhsCod          : linea.fromWhsCod,
+        whsCode             : linea.whsCode,
+        unitMsr             : linea.unitMsr,
+        quantity            : linea.quantity,
+        openQty             : linea.openQty,
+        openQtyRding        : linea.openQtyRding,
+        record              : linea.record,
+        idUsuarioClose      : this.userContextService.getIdUsuario(),
+      });
     }
 
     this.solicitudTrasladoService.setUpdate(this.modeloSave)

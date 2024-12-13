@@ -36,7 +36,7 @@ export class PanelSodimacDetalladoEanViewComponent implements OnInit {
 
   idOrdenVentaSodimac: number = 0;
   docEntry: number = 0;
-  numAtCard: string = '';
+  numOrdenCompra: string = '';
   cntctCode: number = 0;
   modeloSave: OrdenVentaSodimacLpnUpdateModel = new OrdenVentaSodimacLpnUpdateModel();
 
@@ -147,6 +147,6 @@ export class PanelSodimacDetalladoEanViewComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-pallet-list']);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-pallet-list']);
   }
 }

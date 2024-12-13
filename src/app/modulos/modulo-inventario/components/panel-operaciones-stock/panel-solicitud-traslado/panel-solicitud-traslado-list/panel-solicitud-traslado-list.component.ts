@@ -38,7 +38,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
 
   modeloDelete: ISolicitudTraslado;
   modeloSelected: ISolicitudTraslado;
-  listPicking: ISolicitudTraslado[] = [];
+  listSolicitud: ISolicitudTraslado[] = [];
 
   docStatus: DocStatus[];
   docStatusList: SelectItem[];
@@ -102,7 +102,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
 
   onSelectedItem(modelo: ISolicitudTraslado) {
     this.modeloSelected = modelo;
-    if(this.buttonAcces.btnEditar || modelo.docStatus === '01'){
+    if(this.buttonAcces.btnEditar || modelo.docStatus === '01' || modelo.docStatus === '02'){
       this.opciones.find(x => x.label == "Editar").visible = true;
     } else {
       this.opciones.find(x => x.label == "Editar").visible = false;
@@ -146,7 +146,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
     .subscribe({next:(data: ISolicitudTraslado[]) =>
     {
       this.isDisplay = false;
-      this.listPicking = data;
+      this.listSolicitud = data;
     },error:(e)=>{
       this.isDisplay = false;
       this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
@@ -168,7 +168,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
 
   close() {
     this.isClosing = true;
-    const param: any = { idSolicitudTraslado: this.modeloSelected.id, docEntry: this.modeloSelected.docEntry, idUsuarioClose: this.userContextService.getIdUsuario() };
+    const param: any = { id: this.modeloSelected.id, docEntry: this.modeloSelected.docEntry, idUsuarioClose: this.userContextService.getIdUsuario() };
     this.solicitudTrasladoService.setClose(param)
     .subscribe({ next: (resp:any)=>{
         this.getList();

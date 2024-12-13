@@ -8,6 +8,6 @@ export class PackingListService {
     private http: HttpClient) { }
 
   getPackingListPdfByDocEntry(docEntry: number) {
-    return this.http.get(`${environment.url_api_fib}Picking/GetListPickingPdfByDocEntry/${docEntry}`, {responseType: 'blob',  observe: 'response', reportProgress: true });
+    return this.http.get(`${environment.url_api_fib}PickingList/GetListPickingPdfByDocEntry/${docEntry}`, {responseType: 'blob',  observe: 'response', reportProgress: true });
   }
 }

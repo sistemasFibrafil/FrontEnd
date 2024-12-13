@@ -19,4 +19,11 @@ export class SerieNumeracionSapService {
     params = params.append('text1', value.text1);
     return this.http.get<ISerieNumeracionSap[]>(`${environment.url_api_fib}SerieNumeracionSap/GetListByFiltro/`,{params: params});
   }
+
+  getNumDocumentoByTipoAndSerie(value: FilterRequestModel) {
+    let params = new HttpParams();
+    params = params.append('cod1', value.cod1);
+    params = params.append('cod2', value.cod2);
+    return this.http.get<ISerieNumeracionSap>(`${environment.url_api_fib}SerieNumeracionSap/GetNumDocumentoByTipoAndSerie/`,{params: params});
+  }
 }

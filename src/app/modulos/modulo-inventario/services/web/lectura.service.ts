@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { LecturaCreateModel, LecturaDeleteModel } from '../../models/lectura.model';
-import { ILectura, ILecturaByBaseTypeAndBaseEntryAndFiltro, ILecturaByBaseTypeBaseEntry } from '../../interfaces/lectura.inteface';
+import { ILectura, ILecturaByBaseTypeAndBaseEntryAndFiltro, ILecturaByBaseTypeBaseEntry, ILecturaCopyToTransferencia } from '../../interfaces/lectura.inteface';
 
 
 
@@ -65,6 +65,6 @@ export class LecturaService {
 
   getLecturaCopyToTransferencia(value: any) {
     const param: string = JSON.stringify(value);
-    return this.http.post<any>(`${environment.url_api_fib}Lectura/GetLecturaCopyToTransferencia/`, param);
+    return this.http.post<ILecturaCopyToTransferencia>(`${environment.url_api_fib}Lectura/GetLecturaCopyToTransferencia/`, param);
   }
 }

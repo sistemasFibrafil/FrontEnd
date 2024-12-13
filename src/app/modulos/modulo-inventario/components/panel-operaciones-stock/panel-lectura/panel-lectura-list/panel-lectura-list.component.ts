@@ -13,7 +13,7 @@ import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/lectura.i
 import { LecturaFindModel } from 'src/app/modulos/modulo-inventario/models/lectura.model';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
-import { EstadoDocumentoService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/estado-documento.service';
+
 
 interface DocStatus {
   statusCode  : string,
@@ -66,7 +66,10 @@ export class PanelLecturaListComponent implements OnInit {
     private readonly swaCustomService: SwaCustomService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
     private lecturaService: LecturaService,
-  ) {}
+  )
+  {
+    this.isRowSelectable = this.isRowSelectable.bind(this);
+  }
 
 
   ngOnInit() {
@@ -218,9 +221,18 @@ export class PanelLecturaListComponent implements OnInit {
     });
   }
 
+  isRowSelectable(event) {
+    return !this.isOutOfStock(event.data);
+  }
+
+  isOutOfStock(data) {
+    return data.docStatus === '02';
+}
+
   onToCopy()
   {
-    if(this.lecturaSelected.length>0)
+
+    if(this.lecturaSelected.length > 0)
     {
       this.paramsLectura.idBase = this.lecturaSelected[0].idBase;
       this.paramsLectura.baseType = this.lecturaSelected[0].baseType;
@@ -239,11 +251,7 @@ export class PanelLecturaListComponent implements OnInit {
           });
         }
       }
-      // let miArray: any[] = [];
-      // const json = JSON.stringify(this.paramsLectura);
-      // console.log("Json: ", json);
-      // miArray = JSON.parse(json);
-      // console.log("Array: ", miArray);
+
       this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', JSON.stringify(this.paramsLectura)]);
     }
   }

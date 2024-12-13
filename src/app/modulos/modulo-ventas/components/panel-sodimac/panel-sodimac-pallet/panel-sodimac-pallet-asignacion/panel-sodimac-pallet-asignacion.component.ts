@@ -35,7 +35,7 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
   globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
 
   docEntry: number = 0;
-  numAtCard: string = '';
+  numOrdenCompra: string = '';
   cntctCode: number = 0;
   modeloSave: OrdenVentaSodimacLpnUpdateModel = new OrdenVentaSodimacLpnUpdateModel();
 
@@ -79,8 +79,8 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
   onBuildForm() {
     this.modeloForm = this.fb.group(
     {
-      'idOrdenVentaSodimac'   : new FormControl('', Validators.compose([Validators.required])),
-      'numAtCard'             : new FormControl('', Validators.compose([Validators.required])),
+      'id'                : new FormControl('', Validators.compose([Validators.required])),
+      'numOrdenCompra'    : new FormControl('', Validators.compose([Validators.required])),
     });
 
     this.modeloFormBusqueda = this.fb.group({
@@ -113,8 +113,8 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
   onToSelectedOrdenVenta(value: IOrdenVentaSodimacConsulta)
   {
     this.modeloForm.patchValue({
-      'idOrdenVentaSodimac': value.idOrdenVentaSodimac,
-      'numAtCard': value.numAtCard
+      'id'              : value.id,
+      'numOrdenCompra'  : value.numOrdenCompra
     });
   }
 
@@ -127,7 +127,7 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
     this.isDisplay = true;
     this.listModal = [];
     this.params = this.modeloFormBusqueda.getRawValue();
-    this.params.id1 = this.modeloForm.controls['idOrdenVentaSodimac'].value;
+    this.params.id1 = this.modeloForm.controls['id'].value;
     this.ordenVentaSodimacService.getListOrdenVentaSodimacDetallePendienteLpnByIdAndFiltro(this.params)
     .subscribe({next:(data: IOrdenVentaSodimacConsulta[]) =>{
         this.isDisplay = false;
@@ -217,9 +217,9 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
     for (let index = 0; index < this.detail.length; index++) {
       this.modeloSave.item.push
         ({
-          idOrdenVentaSodimac : this.detail[index].idOrdenVentaSodimac,
-          line                : this.detail[index].line,
-          numLocal            : this.detail[index].numLocal,
+          id            : this.detail[index].id,
+          line          : this.detail[index].line,
+          numLocal      : this.detail[index].numLocal,
         });
     }
 
@@ -249,6 +249,6 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-pallet-list']);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-pallet-list']);
   }
 }

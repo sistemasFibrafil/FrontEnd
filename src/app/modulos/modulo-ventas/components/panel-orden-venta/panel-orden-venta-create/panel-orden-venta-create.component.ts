@@ -11,11 +11,11 @@ import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
 
+import { IStatus } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/status.interface';
 import { IAlmacenSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/almacen-sap.interface';
 import { IImpuestoSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/finanzas/impuesto-sap.iterface';
 import { ISocioNegocio } from 'src/app/modulos/modulo-socio-negocios/interfaces/socio-segocio.interface';
 import { ITipoCambioSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/tipo-cambio-sap.interface';
-import { IEstadoDocumento } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/estado-documento.interface';
 import { IDetalleSociedadSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/inicializacion-sistema/detalle-sociedad-sap.interface';
 import { IOrdenVenta, IOrdenVentaDetalle } from '../../../interfaces/orden-venta.interface';
 import { IArticuloDocumentoSap, IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/articulo-sap.interface';
@@ -24,7 +24,7 @@ import { OrdenVentaService } from '../../../services/web/orden-venta.service';
 import { ArticuloSapService } from 'src/app/modulos/modulo-inventario/services/sap/articulo-sap.service';
 import { ImpuestoSapService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/finanzas/impuesto-sap.service';
 import { TipoCambioSapService } from 'src/app/modulos/modulo-gestion/services/sap/tipo-cambio-sap.service';
-import { EstadoDocumentoService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/estado-documento.service';
+import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
 import { DetalleSociedadSapService } from 'src/app/modulos/modulo-gestion/services/sap/inicializacion-sistema/detalle-sociedad-sap.service';
 
 
@@ -104,11 +104,11 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
     private readonly swaCustomService: SwaCustomService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
     private userContextService: UserContextService,
+    private statusService: StatusService,
     private impuestoSapService: ImpuestoSapService,
     private ordenVentaService: OrdenVentaService,
     private articuloSapService: ArticuloSapService,
     private tipoCambioSapService: TipoCambioSapService,
-    private estadoDocumentoService: EstadoDocumentoService,
     private detalleSociedadSapService: DetalleSociedadSapService,
   ) {}
 
@@ -311,11 +311,11 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
   //#endregion
 
   getListEstado() {
-    this.estadoDocumentoService.getListAll()
-    .subscribe({next:(data: IEstadoDocumento[]) =>{
+    this.statusService.getList()
+    .subscribe({next:(data: IStatus[]) =>{
         this.listEstado = [];
         for (let item of data) {
-          this.listEstado.push({ label: item.nomEstado, value: item.codEstado });
+          this.listEstado.push({ label: item.statusName, value: item.statusCode });
         }
         const item: any = this.listEstado.find(x=>x.value === '01');
         this.modeloFormCab2.controls['docStatus'].setValue({ label: item.label, value: item.value });

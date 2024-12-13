@@ -29,9 +29,9 @@ export class ModalSerieDocumentoComponent implements OnInit, OnChanges {
   params: FilterRequestModel = new FilterRequestModel();
 
   @Input() codSede: number = 0;
-  @Input() codFormulario: number = 0;
   @Input() tipDocumento: string;
   @Input() serDocumento: string;
+  @Input() codFormulario: number = 0;
   @Input() isHabilitaControl: boolean;
   @Input() isHabilitarButton: boolean;
   @Input() isVisibleLimpiar: boolean = false;

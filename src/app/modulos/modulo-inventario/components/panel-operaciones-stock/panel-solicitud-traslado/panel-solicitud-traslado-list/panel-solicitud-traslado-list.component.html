@@ -11,7 +11,7 @@
           <div class="col-12 md:col-2">
             <p-calendar formControlName="dat2" placeholder="Seleccionar fecha final" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="docStatusList" [(ngModel)]="docStatusSelected" formControlName="msDocStatus" defaultLabel="Seleccione el Estado" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
         </div>
@@ -37,7 +37,7 @@
     <!-- Grilla de Datos     -->
     <p-panel header="Lista de {{titulo}}">
         <p-table
-          [value] = "listPicking"
+          [value] = "listSolicitud"
           [columns] = "columnas"
           [paginator] = "true"
           [rows] = "globalConstants.sizePage"

@@ -73,21 +73,21 @@
             <span class="p-column-title">Almacén</span> {{modelo.whsName}}
           </td>
           <td class="custom-td-5">
-            <span class="p-column-title">UM</span> {{modelo.unidadInventario}}
+            <span class="p-column-title">UM</span> {{modelo.invntryUom}}
           </td>
           <td class="custom-td-numero">
-            <span class="p-column-title">Stock</span> {{modelo.stock | number: '.2':'en-EN'}}
+            <span class="p-column-title">Stock</span> {{modelo.onHand | number: '.2':'en-EN'}}
           </td>
           <td class="custom-td-numero">
-            <span class="p-column-title">Comprometido</span> {{modelo.comprometido | number: '.2':'en-EN'}}
+            <span class="p-column-title">Comprometido</span> {{modelo.isCommited | number: '.2':'en-EN'}}
           </td>
           <td class="custom-td-numero">
-            <span class="p-column-title">Solicitado</span> {{modelo.solicitado | number: '.2':'en-EN'}}
+            <span class="p-column-title">Solicitado</span> {{modelo.onOrder | number: '.2':'en-EN'}}
           </td>
           <td class="custom-td-numero">
             <span class="p-column-title">Disponible</span>
-            <span class="label" style="background:green" *ngIf="modelo.disponible >  0">{{modelo.disponible | number: '.2':'en-EN'}}</span>
-            <span class="label" style="background:red"   *ngIf="modelo.disponible <= 0">{{modelo.disponible | number: '.2':'en-EN'}}</span>
+            <span class="label" style="background:green" *ngIf="modelo.available >  0">{{modelo.available | number: '.2':'en-EN'}}</span>
+            <span class="label" style="background:red"   *ngIf="modelo.available <= 0">{{modelo.available | number: '.2':'en-EN'}}</span>
           </td>
           <td class="custom-td-numero">
             <span class="p-column-title">Peso Promedio Kg</span> {{modelo.pesoPromedioKg | number: '.2':'en-EN'}}

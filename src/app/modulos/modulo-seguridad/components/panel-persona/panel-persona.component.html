@@ -47,9 +47,6 @@
             <!-- body -->
             <ng-template pTemplate="body" let-modelo let-editing="editing" let-ri="rowIndex">
             <tr>
-              <td class="custom-td-5">
-                <span class="p-column-title">Codigo</span> {{modelo.idPersona}}
-              </td>
               <td class="custom-td-6">
                 <span class="p-column-title">Usuario</span> {{modelo.usuario}}
               </td>
@@ -62,9 +59,6 @@
               <td class="custom-td-3">
                 <span class="p-column-title">Perfil</span> {{modelo.descripcionPerfil}}
               </td>
-              <!-- <td class="p-fluid">
-                <span class="p-column-title">Centro Costo</span> {{modelo.desCentroCosto}}
-              </td> -->
               <td class="custom-td-4">
                 <span class="p-column-title">Activo</span>
                 <p-checkbox [(ngModel)]="modelo.flgActivo" [binary]="true" [disabled]="true"></p-checkbox>
@@ -79,7 +73,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
-                    <td colspan="8">{{globalConstants.currentTableEmptyMessage}}</td>
+                    <td colspan="7">{{globalConstants.currentTableEmptyMessage}}</td>
                 </tr>
             </ng-template>
         </p-table>

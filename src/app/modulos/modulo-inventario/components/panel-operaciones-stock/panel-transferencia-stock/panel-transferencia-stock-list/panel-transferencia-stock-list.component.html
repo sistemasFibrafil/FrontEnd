@@ -11,7 +11,7 @@
           <div class="col-12 md:col-2">
             <p-calendar formControlName="dat2" placeholder="Seleccionar fecha final" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="docStatusList" [(ngModel)]="docStatusSelected" formControlName="msDocStatus" defaultLabel="Seleccione el Estado" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
         </div>
@@ -37,7 +37,7 @@
     <!-- Grilla de Datos     -->
     <p-panel header="Lista de {{titulo}}">
         <p-table
-          [value] = "listPicking"
+          [value] = "listTransferencia"
           [columns] = "columnas"
           [paginator] = "true"
           [rows] = "globalConstants.sizePage"
@@ -108,3 +108,23 @@
 <!-- MODAL: Proceso -->
 <app-panel-obtener [isDisplay] = "isDisplay"></app-panel-obtener>
 <app-panel-cerrar [isClosing] = "isClosing" ></app-panel-cerrar>
+
+
+<p-dialog *ngIf="isDisplayGenerandoVisor" header="Generando visor" [(visible)]="isDisplayGenerandoVisor" [closable]="false" [modal]="true" [style]="{width: '50vw'}" [autoZIndex] [draggable]="false" [resizable]="false">
+  Generando visor del registro seleccionado...!!!
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <p-progressBar mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    </div>
+  </div>
+</p-dialog>
+
+
+<p-dialog *ngIf="isDisplayVisor" header="FORMATO DE REGISTRO" [(visible)]="isDisplayVisor" [modal]="true" [style]="{width: '80vw'}" [autoZIndex] [maximizable]="true">
+  <div class="ui-g ui-fluid">
+    <div class="ui-g-12">
+      <app-modal-visor-pdf [isFile]="isDataBlob"></app-modal-visor-pdf>
+    </div>
+  </div>
+</p-dialog>
+

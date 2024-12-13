@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
+import { HttpEventType } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ButtonAcces } from 'src/app/models/acceso-button.model';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
@@ -9,10 +10,13 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { ISolicitudTraslado } from 'src/app/modulos/modulo-inventario/interfaces/solicitud-traslado.interface';
-import { FilterRequestModel } from 'src/app/models/filter-request.model';
-import { SolicitudTrasladoService } from 'src/app/modulos/modulo-inventario/services/web/solicitud-traslado.service';
 import { LecturaFindModel } from 'src/app/modulos/modulo-inventario/models/lectura.model';
+import { FilterRequestModel } from 'src/app/models/filter-request.model';
+import { TransferenciaStockService } from 'src/app/modulos/modulo-inventario/services/web/transferencia-stock.service';
+import { TransferenciaStockSapService } from 'src/app/modulos/modulo-inventario/services/sap/transferencia-stock-sap.service';
+import { ITransferenciaStock } from 'src/app/modulos/modulo-inventario/interfaces/transferencia-stock.interface';
+
+
 
 interface DocStatus {
   statusCode  : string,
@@ -34,19 +38,23 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   // Name de los botones de accion
   globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
 
+  isDataBlob: Blob;
+  isDisplay: Boolean = false;
+  isClosing: boolean = false;
+  isDisplayVisor: boolean = false;
+  isDisplayGenerandoVisor: boolean = false;
+
   columnas: any[];
   opciones: any = [];
 
-  modeloDelete: ISolicitudTraslado;
-  modeloSelected: ISolicitudTraslado;
-  listPicking: ISolicitudTraslado[] = [];
+  modeloDelete: ITransferenciaStock;
+  modeloSelected: ITransferenciaStock;
+  listTransferencia: ITransferenciaStock[] = [];
 
   docStatus: DocStatus[];
   docStatusList: SelectItem[];
   docStatusSelected: any[];
 
-  isDisplay: Boolean = false;
-  isClosing: boolean = false;
   params: FilterRequestModel = new FilterRequestModel();
   paramsLectura: LecturaFindModel = new LecturaFindModel();
 
@@ -59,7 +67,8 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
     private userContextService: UserContextService,
     private readonly swaCustomService: SwaCustomService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
-    private solicitudTrasladoService: SolicitudTrasladoService,
+    private transferenciaStockService: TransferenciaStockService,
+    private transferenciaStockSapService: TransferenciaStockSapService,
   ) {}
 
 
@@ -97,12 +106,13 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   opcionesTabla() {
     this.opciones = [
       { label: 'Editar',      icon: 'pi pi-pencil',      command: () => { this.onClickEditar() } },
-      { label: 'Cerrar',      icon: 'pi pi-times',       command: () => { this.onClickCerrar() } },
+      { label: 'Cancelar',    icon: 'pi pi-times',       command: () => { this.onClickCancelar() } },
+      { label: 'Imprimir',    icon: 'pi pi-print',       command: () => { this.onClickImprimir() } },
       { label: 'Visualizar',  icon: 'pi pi-eye',         command: () => { this.onClickVisualizar() } },
     ];
   }
 
-  onSelectedItem(modelo: ISolicitudTraslado) {
+  onSelectedItem(modelo: ITransferenciaStock) {
     this.modeloSelected = modelo;
     if(this.buttonAcces.btnEditar || modelo.docStatus === '01'){
       this.opciones.find(x => x.label == "Editar").visible = true;
@@ -110,9 +120,9 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
       this.opciones.find(x => x.label == "Editar").visible = false;
     }
     if(this.buttonAcces.btnCerrar || modelo.docStatus === '01'){
-      this.opciones.find(x => x.label == "Cerrar").visible = true;
+      this.opciones.find(x => x.label == "Cancelar").visible = true;
     } else {
-      this.opciones.find(x => x.label == "Cerrar").visible = false;
+      this.opciones.find(x => x.label == "Cancelar").visible = false;
     }
     if(this.buttonAcces.btnVizualizar || modelo.docStatus === '01' || modelo.docStatus === '02'){
       this.opciones.find(x => x.label == "Visualizar").visible = true;
@@ -144,11 +154,11 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   getList() {
     this.isDisplay = true;
     this.onSetParametro();
-    this.solicitudTrasladoService.getListFiltro(this.params)
-    .subscribe({next:(data: ISolicitudTraslado[]) =>
+    this.transferenciaStockService.getListFiltro(this.params)
+    .subscribe({next:(data: ITransferenciaStock[]) =>
     {
       this.isDisplay = false;
-      this.listPicking = data;
+      this.listTransferencia = data;
     },error:(e)=>{
       this.isDisplay = false;
       this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
@@ -165,39 +175,60 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   }
 
   onClickEditar(){
+    console.log("SELECTED: ", this.modeloSelected);
     this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-update', this.modeloSelected.id]);
   }
 
   close() {
-    this.isClosing = true;
-    const param: any = { idSolicitudTraslado: this.modeloSelected.id, docEntry: this.modeloSelected.docEntry, idUsuarioClose: this.userContextService.getIdUsuario() };
-    this.solicitudTrasladoService.setClose(param)
-    .subscribe({ next: (resp:any)=>{
-        this.getList();
-        this.isClosing = false;
-        this.swaCustomService.swaMsgExito(null);
-      },
-      error:(e)=>{
-        this.isClosing = false;
-        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-      }
-    });
+    // this.isClosing = true;
+    // const param: any = { idSolicitudTraslado: this.modeloSelected.id, docEntry: this.modeloSelected.docEntry, idUsuarioClose: this.userContextService.getIdUsuario() };
+    // this.transferenciaStockService.setClose(param)
+    // .subscribe({ next: (resp:any)=>{
+    //     this.getList();
+    //     this.isClosing = false;
+    //     this.swaCustomService.swaMsgExito(null);
+    //   },
+    //   error:(e)=>{
+    //     this.isClosing = false;
+    //     this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
+    //   }
+    // });
   }
 
-  onClickCerrar()
+  onClickCancelar()
   {
-    this.swaCustomService.swaConfirmation(
-      this.globalConstants.titleCerrar,
-      this.globalConstants.subTitleCerrar,
-      this.globalConstants.icoSwalQuestion
-    ).then((result) => {
-      if (result.isConfirmed) {
-        this.close();
-      }
-    });
+    // this.swaCustomService.swaConfirmation(
+    //   this.globalConstants.titleCerrar,
+    //   this.globalConstants.subTitleCerrar,
+    //   this.globalConstants.icoSwalQuestion
+    // ).then((result) => {
+    //   if (result.isConfirmed) {
+    //     this.close();
+    //   }
+    // });
   }
 
   onClickVisualizar(){
     this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-view', this.modeloSelected.id]);
+  }
+
+  onClickImprimir() {
+    this.isDisplayGenerandoVisor = true;
+    this.transferenciaStockSapService.getTransferenciaStockPdfByDocEntry(this.modeloSelected.docEntry)
+    .subscribe({next:(resp: any) => {
+      switch (resp.type) {
+        case HttpEventType.DownloadProgress:
+          break;
+        case HttpEventType.Response:
+          this.isDataBlob = new Blob([resp.body], {type: resp.body.type});
+          this.isDisplayGenerandoVisor = false;
+          this.isDisplayVisor = true;
+          break;
+      }
+      },error:(e)=>{
+        this.isDisplayGenerandoVisor = false;
+        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
+      }
+    });
   }
 }

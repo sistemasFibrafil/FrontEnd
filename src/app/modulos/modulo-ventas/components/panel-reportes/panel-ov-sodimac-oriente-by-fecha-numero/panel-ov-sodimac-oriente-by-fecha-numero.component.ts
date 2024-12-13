@@ -18,16 +18,16 @@ import { OrdenVentaSodimacService } from '../../../services/web/orden-venta-sodi
 
 
 @Component({
-  selector: 'app-ven-panel-ov-sodimac-selva-by-fecha-numero',
-  templateUrl: './panel-ov-sodimac-selva-by-fecha-numero.component.html',
-  styleUrls: ['./panel-ov-sodimac-selva-by-fecha-numero.component.css']
+  selector: 'app-ven-panel-ov-sodimac-oriente-by-fecha-numero',
+  templateUrl: './panel-ov-sodimac-oriente-by-fecha-numero.component.html',
+  styleUrls: ['./panel-ov-sodimac-oriente-by-fecha-numero.component.css']
 })
-export class PanelOrdenVentaSodimacSelvaByFechaNumeroComponent implements OnInit {
+export class PanelOrdenVentaSodimacOrienteByFechaNumeroComponent implements OnInit {
   modeloForm: FormGroup;
 
   // Titulo del componente
-  titulo = 'Reporte - Despacho de Sodimac Selva';
-  subtitulo = 'Despacho de Sodimac Selva';
+  titulo = 'Reporte - Despacho de Sodimac Oriente';
+  subtitulo = 'Despacho de Sodimac Oriente';
   // Acceso de botones
   buttonAcces: ButtonAcces = new ButtonAcces();
   // Name de los botones de accion
@@ -46,7 +46,7 @@ export class PanelOrdenVentaSodimacSelvaByFechaNumeroComponent implements OnInit
   params: FilterRequestModel = new FilterRequestModel();
 
   fecha: string = this.datePipe.transform(new Date(), 'dd-MM-yyyy');
-  nombreArchivo: string = 'Reporte - Despacho de Sodimac Selva -';
+  nombreArchivo: string = 'Reporte - Despacho de Sodimac Oriente -';
 
 
   constructor
@@ -80,7 +80,7 @@ export class PanelOrdenVentaSodimacSelvaByFechaNumeroComponent implements OnInit
     ];
 
     // Iniciamos el acceso a las opciones con la que cuenta el usuario
-    this.buttonAcces = this.accesoOpcionesService.getObtieneOpciones('app-ven-panel-ov-sodimac-selva-by-fecha-numero');
+    this.buttonAcces = this.accesoOpcionesService.getObtieneOpciones('app-ven-panel-ov-sodimac-oriente-by-fecha-numero');
   }
 
   onToBuscar() {

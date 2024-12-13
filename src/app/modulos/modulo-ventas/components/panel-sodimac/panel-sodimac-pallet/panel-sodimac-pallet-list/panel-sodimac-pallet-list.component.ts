@@ -81,7 +81,7 @@ export class PanelSodimacPalletListComponent implements OnInit {
   onBuildColumn() {
     this.columnas = [
       { field: 'docNum',          header: 'Número' },
-      { field: 'numAtCard',       header: 'OC' },
+      { field: 'numOrdenCompra',  header: 'OC' },
       { field: 'docDate',         header: 'Fecha de contabilización' },
       { field: 'docDueDate',      header: 'Fecha de entrega' },
       { field: 'taxDate',         header: 'Fecha de documento' },
@@ -92,7 +92,7 @@ export class PanelSodimacPalletListComponent implements OnInit {
 
   opcionesTabla() {
     this.opciones = [
-      { label: 'Editar',      icon: 'pi pi-pencil',         command: () => { this.editar() } },
+      //{ label: 'Editar',      icon: 'pi pi-pencil',         command: () => { this.editar() } },
       { label: 'Vizualizar',  icon: 'pi pi-eye',            command: () => { this.ver() } },
       { label: 'Imprimir',    icon: 'pi pi-print',          command: () => { this.imprimir() } },
       { label: 'Eliminar',    icon: 'pi pi-trash',          command: () => { this.eliminar() } },
@@ -125,7 +125,7 @@ export class PanelSodimacPalletListComponent implements OnInit {
   }
 
   onToCreate() {
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-pallet-asignacion']);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-pallet-asignacion']);
   }
 
   onToItemSelected(modelo: IOrdenVentaSodimacConsulta) {
@@ -154,7 +154,7 @@ export class PanelSodimacPalletListComponent implements OnInit {
   // }
 
   ver(){
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-detallado-pallet-view', this.modeloSelected.idOrdenVentaSodimac]);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-detallado-pallet-view', this.modeloSelected.id]);
   }
 
   // onToRowSelectEdit(modelo: IPickingVentaByFiltro){
@@ -171,7 +171,7 @@ export class PanelSodimacPalletListComponent implements OnInit {
 
   imprimir() {
     this.isDisplayGenerandoVisor = true;
-    this.ordenVentaSodimacService.getBarcodeLpnPdfById(this.modeloSelected.idOrdenVentaSodimac)
+    this.ordenVentaSodimacService.getBarcodeLpnPdfById(this.modeloSelected.id)
     .subscribe({next:(resp: any) => {
         switch (resp.type) {
           case HttpEventType.DownloadProgress:

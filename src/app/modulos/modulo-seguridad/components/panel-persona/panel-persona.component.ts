@@ -46,12 +46,10 @@ export class PanelPersonaComponent implements OnInit, OnDestroy {
     this.buttonAcces = this.accesoOpcionesService.getObtieneOpciones('app-seg-panel-persona');
 
     this.columnas = [
-      { header: 'Codigo' },
       { header: 'Usuario' },
       { header: 'Apellidos y Nombres' },
       { header: 'Nro Documento' },
       { header: 'Perfil' },
-      // { header: 'Centro Costo' },
       { header: 'Activo' }
     ];
 

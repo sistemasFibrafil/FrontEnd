@@ -1,7 +1,9 @@
 export class EntregaEnviarModel {
-  docEntry: number;
+  objType   : string;
+  docEntry  : number;
 
   constructor(){
+    this.objType  =  '';
     this.docEntry = null;
   }
 }

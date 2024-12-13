@@ -16,9 +16,11 @@ import { PanelSolicitudTrasladoViewComponent } from './components/panel-operacio
 
 import { PanelPanelTransferenciaStockListComponent } from './components/panel-operaciones-stock/panel-transferencia-stock/panel-transferencia-stock-list/panel-transferencia-stock-list.component';
 import { PanelPanelTransferenciaStockCreateComponent } from './components/panel-operaciones-stock/panel-transferencia-stock/panel-transferencia-stock-create/panel-transferencia-stock-create.component';
+import { PanelPanelTransferenciaStockUpdateComponent } from './components/panel-operaciones-stock/panel-transferencia-stock/panel-transferencia-stock-update/panel-transferencia-stock-update.component';
 
 import { PanelStockGeneralByAlmacenComponent } from './components/panel-reportes/panel-stock-general-by-almacen/panel-stock-general-by-almacen.component';
 import { PanelMovimientoStockByFechaSedeComponent } from './components/panel-reportes/panel-movimiento-stock-by-fecha-sede/panel-movimiento-stock-by-fecha-sede.component';
+import { PanelArticuloByGrupoSubGrupoFiltroComponent } from './components/panel-reportes/panel-articulo-by-grupo-sub-grupo-filtro/panel-articulo-by-grupo-sub-grupo-filtro.component';
 import { PanelStockArticuloVentaByGrupoSubGrupoComponent } from './components/panel-reportes/panel-stock-articulo-venta-by-grupo-sub-grupo/panel-stock-articulo-venta-by-grupo-sub-grupo.component';
 import { PanelArticuloVentaByGrupoSubGrupoEstadoComponent } from './components/panel-reportes/panel-articulo-venta-by-grupo-sub-grupo-estado/panel-articulo-venta-by-grupo-sub-grupo-estado.component';
 import { PanelStockGeneralDetalladoAlmacenByAlmacenComponent } from './components/panel-reportes/panel-stock-general-detallado-almacen-by-almacen/panel-stock-general-detallado-almacen-by-almacen.component';
@@ -37,9 +39,11 @@ import { PanelStockGeneralDetalladoAlmacenByAlmacenComponent } from './component
 
       PanelPanelTransferenciaStockListComponent,
       PanelPanelTransferenciaStockCreateComponent,
+      PanelPanelTransferenciaStockUpdateComponent,
 
       PanelStockGeneralByAlmacenComponent,
       PanelMovimientoStockByFechaSedeComponent,
+      PanelArticuloByGrupoSubGrupoFiltroComponent,
       PanelStockArticuloVentaByGrupoSubGrupoComponent,
       PanelArticuloVentaByGrupoSubGrupoEstadoComponent,
       PanelStockGeneralDetalladoAlmacenByAlmacenComponent,

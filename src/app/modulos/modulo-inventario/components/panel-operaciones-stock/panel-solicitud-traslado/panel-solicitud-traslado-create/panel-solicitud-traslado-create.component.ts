@@ -446,7 +446,7 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
       {
         this.isSaving = false;
         this.swaCustomService.swaMsgInfo('La cantidad debe ser mayor que CERO (0).');
-        return;
+        return false;
       }
     }
 

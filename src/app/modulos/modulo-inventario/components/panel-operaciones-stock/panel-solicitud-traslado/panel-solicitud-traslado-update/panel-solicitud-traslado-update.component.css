@@ -1,3 +1,7 @@
 i {
   cursor: pointer;
 }
+
+:host ::ng-deep .row-cerrado {
+  background-color: rgba(0,0,0,.15) !important;
+}

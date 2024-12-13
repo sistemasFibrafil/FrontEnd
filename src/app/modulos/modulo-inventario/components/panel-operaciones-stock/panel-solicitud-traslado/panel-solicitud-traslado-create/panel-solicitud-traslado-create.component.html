@@ -229,7 +229,7 @@
     <p-footer>
       <div class="grid p-fluid">
         <div class="col-12 md:col-6">
-          <button pButton type="submit" [disabled]="!modeloFormCab2.valid || !modeloFormCab3.valid || !modeloFormPie1.valid || detalle?.length <= 0" label="{{globalConstants.cGrabar}}" icon="{{globalConstants.icoGrabar}}" (click)="onClickSave()"></button>
+          <button pButton type="submit" [disabled]="!modeloFormCab2.valid || !modeloFormCab3.valid || !modeloFormOtr.valid || !modeloFormPie1.valid || detalle?.length <= 0" label="{{globalConstants.cGrabar}}" icon="{{globalConstants.icoGrabar}}" (click)="onClickSave()"></button>
         </div>
         <div class="col-12 md:col-6">
           <button pButton type="button" label="{{globalConstants.cRegresar}}" icon="{{globalConstants.icoRegresar}}" (click)="onClickBack()" class="{{globalConstants.cStyleButtonDanger}}"></button>

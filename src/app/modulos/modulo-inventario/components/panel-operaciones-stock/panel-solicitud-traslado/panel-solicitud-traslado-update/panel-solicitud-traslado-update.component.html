@@ -7,7 +7,7 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-cardCode">Código de cliente </label>
-                <app-modal-socio-negocio-sap [title]="'Socio de Negocios'" [cardCode]="cardCode" [cardType] = "'C,S'" [transType] = "'N,Y'" (eventoAceptar)="onSelectedSocioNegocio($event)"></app-modal-socio-negocio-sap>
+                <app-modal-socio-negocio-sap [cardCode]="cardCode" [isHabilitarButton]="modelo === undefined?false : modelo.docStatus === '01'? false : true" [title]="'Socio de Negocios'" [cardType] = "'C,S'" [transType] = "'N,Y'" (eventoAceptar)="onSelectedSocioNegocio($event)"></app-modal-socio-negocio-sap>
               </div>
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-cardName">Razón social o nombre </label>
@@ -58,7 +58,7 @@
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-docDate">Fecha de contabilización </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
-                  <p-calendar id="float-calendar-docDate" placeholder="Fecha de contabilización" formControlName="docDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+                  <p-calendar id="float-calendar-docDate" [disabled]="modelo === undefined?false : modelo.docStatus === '01'? false : true" placeholder="Fecha de contabilización" formControlName="docDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
                 </div>
                 <div *ngIf="modeloFormCab2.controls['docDate'].errors && modeloFormCab2.controls['docDate'].dirty">
                   <p-message severity="error" text="La fecha de contabilización es requerida." *ngIf="modeloFormCab2.controls['docDate'].errors['required']"></p-message>
@@ -67,7 +67,7 @@
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-docDueDate">Fecha de entrega </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
-                  <p-calendar id="float-calendar-docDueDate" placeholder="Fecha de entrega" formControlName="docDueDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+                  <p-calendar id="float-calendar-docDueDate" [disabled]="modelo === undefined?false : modelo.docStatus === '01'? false : true" placeholder="Fecha de entrega" formControlName="docDueDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
                 </div>
                 <div *ngIf="modeloFormCab2.controls['docDueDate'].errors && modeloFormCab2.controls['docDueDate'].dirty">
                   <p-message severity="error" text="La fecha de entrega es requerida." *ngIf="modeloFormCab2.controls['docDueDate'].errors['required']"></p-message>
@@ -76,7 +76,7 @@
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-taxDate">Fecha de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
-                  <p-calendar id="float-calendar-taxDate" placeholder="Fecha de documento" formControlName="taxDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
+                  <p-calendar id="float-calendar-taxDate" [disabled]="modelo === undefined?false : modelo.docStatus === '01'? false : true" placeholder="Fecha de documento" formControlName="taxDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
                 </div>
                 <div *ngIf="modeloFormCab2.controls['taxDate'].errors && modeloFormCab2.controls['taxDate'].dirty">
                   <p-message severity="error" text="La fecha de documento es requerida." *ngIf="modeloFormCab2.controls['taxDate'].errors['required']"></p-message>
@@ -92,18 +92,18 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-6">
                 <label class="label-custom" for="float-input-almacen-origen">Almacén de origen </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-almacen-sap [whsCode]="whsCodeOrigen" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenOrigen($event)"></app-modal-almacen-sap>
+                <app-modal-almacen-sap [whsCode]="whsCodeOrigen" [isHabilitarButton]="modelo === undefined?false : modelo.docStatus === '01'? false : true" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenOrigen($event)"></app-modal-almacen-sap>
               </div>
               <div class="col-12 md:col-6">
                 <label class="label-custom" for="float-input-destino">Almacén de destino </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-almacen-sap [whsCode]="whsCodeDestino" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenDestino($event)"></app-modal-almacen-sap>
+                <app-modal-almacen-sap [whsCode]="whsCodeDestino" [isHabilitarButton]="modelo === undefined?false : modelo.docStatus === '01'? false : true" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenDestino($event)"></app-modal-almacen-sap>
               </div>
             </div>
           </form>
         </div>
       </div>
 
-      <p-contextMenu #cm [model]="items"></p-contextMenu>
+      <p-contextMenu #cm [model]="items" [hidden]="detalleCerrar === undefined? true : detalleCerrar.length>0? true : false"></p-contextMenu>
 
       <div class="col-12">
         <div class="card no-margin">
@@ -136,24 +136,27 @@
                 </ng-template>
                 <!-- body -->
                 <ng-template pTemplate="body" let-modelo let-ri="rowIndex">
-                  <tr [pContextMenuRow]="modelo">
+                  <tr [pContextMenuRow]="modelo" [ngClass]="{'row-cerrado': modelo.lineStatus === '02'}">
                     <td class="p-fluid">
-                      <span class="p-column-title">Código: </span><i class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{modelo.itemCode}}
+                      <span class="p-column-title">Código: </span><i *ngIf="modelo.lineStatus === '01'" class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{modelo.itemCode}}
                     </td>
                     <td class="p-fluid">
                         <span class="p-column-title">Descripción: </span> {{modelo.dscription}}
                     </td>
 
                     <td class="p-fluid">
-                      <span class="p-column-title">Almacén de origen: </span><i *ngIf="modelo.itemCode !== ''" class="pi pi-search" (click)="onOpenAlmacenOrigen(modelo, ri)" ></i> {{modelo.fromWhsCod}}
+                      <span class="p-column-title">Almacén de origen: </span><i *ngIf="modelo.itemCode !== '' && modelo.lineStatus === '01'" class="pi pi-search" (click)="onOpenAlmacenOrigen(modelo, ri)" ></i> {{modelo.fromWhsCod}}
                     </td>
                     <td class="p-fluid">
-                      <span class="p-column-title">Almacén de destino: </span><i *ngIf="modelo.itemCode !== ''" class="pi pi-search" (click)="onOpenAlmacenDestino(modelo, ri)"></i> {{modelo.whsCode}}
+                      <span class="p-column-title">Almacén de destino: </span><i *ngIf="modelo.itemCode !== '' && modelo.lineStatus === '01'" class="pi pi-search" (click)="onOpenAlmacenDestino(modelo, ri)"></i> {{modelo.whsCode}}
                     </td>
                     <td class="custom-td-3">
                       <span class="p-column-title">UM: </span> {{modelo.unitMsr}}
                     </td>
-                    <td class="custom-td-numero" pEditableColumn>
+                    <td class="custom-td-numero" *ngIf="modelo.lineStatus === '02'">
+                      <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
+                    </td>
+                    <td class="custom-td-numero" pEditableColumn *ngIf="modelo.lineStatus === '01'">
                       <span class="p-column-title">Cantidad: </span>
                       <p-cellEditor>
                         <ng-template pTemplate="input">
@@ -206,7 +209,7 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-empleado-ventas">Empleado de ventas </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-empleado-venta-sap [slpCode]="slpCode" (eventoAceptar)="onSelectedEmpleadoVenta($event)"></app-modal-empleado-venta-sap>
+                <app-modal-empleado-venta-sap [slpCode]="slpCode" [isHabilitarButton]="modelo === undefined?false : modelo.docStatus === '01'? false : true" (eventoAceptar)="onSelectedEmpleadoVenta($event)"></app-modal-empleado-venta-sap>
               </div>
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-jrnlMemo">Comentarios </label>

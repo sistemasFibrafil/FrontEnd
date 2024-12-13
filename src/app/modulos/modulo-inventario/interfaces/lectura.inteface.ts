@@ -1,5 +1,5 @@
 export interface ILectura {
-  Id                    : number;
+  id                    : number;
   idBase                : number;
   lineBase              : number;
   numBase               : number;
@@ -72,4 +72,39 @@ export interface ILecturaLineaByObject {
   unitMsr             : string;
   quantity            : number;
   peso                : number;
+}
+
+export interface ILecturaCopyToTransferencia {
+  cardCode?             : string;
+  cardName?             : string;
+  cntctCode             : number;
+  address               : string;
+  filler                : string;
+  toWhsCode?            : string;
+  codTipTraslado        : string;
+  codMotTraslado        : string;
+  codTipSalida          : string;
+  slpCode               : number;
+  jrnlMemo              : string;
+  comments?             : string;
+  linea                 : ILecturaCopyToTransferenciaDetalle[];
+}
+
+export interface ILecturaCopyToTransferenciaDetalle {
+  id                    : number;
+  idBase                : number;
+  lineBase              : number;
+  baseType              : string;
+  baseEntry             : number;
+  baseLine              : number;
+  return                : string;
+  itemCode              : string;
+  dscription            : string;
+  barcode               : string;
+  fromWhsCod            : string;
+  whsCode?              : string;
+  codTipOperacion?      : string;
+  unitMsr               : string;
+  quantity              : number;
+  openQty               : number;
 }

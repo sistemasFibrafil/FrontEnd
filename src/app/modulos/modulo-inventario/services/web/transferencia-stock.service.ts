@@ -33,6 +33,7 @@ export class TransferenciaStockService {
   }
 
   setCreate(value: TransferenciaStockCreateModel) {
+    console.log("VALUES", value);
     const param: string = JSON.stringify(value);
     return this.http.post<any[]>(`${environment.url_api_fib}TransferenciaStock/SetCreate/`, param);
   }

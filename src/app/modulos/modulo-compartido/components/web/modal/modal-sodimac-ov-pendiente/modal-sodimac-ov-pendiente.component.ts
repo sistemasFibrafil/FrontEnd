@@ -71,10 +71,10 @@ export class ModalSodimacOvPendienteComponent implements OnInit, OnChanges {
   onBuildColum() {
     this.columnas =
     [
-      { field: 'docNum',      header: 'Número' },
-      { field: 'numAtCard',   header: 'OC' },
-      { field: 'cardCode',    header: 'Código de cliente' },
-      { field: 'cardName',    header: 'Nombre de cliente' },
+      { field: 'docNum',            header: 'Número' },
+      { field: 'numOrdenCompra',    header: 'OC' },
+      { field: 'cardCode',          header: 'Código de cliente' },
+      { field: 'cardName',          header: 'Nombre de cliente' },
     ];
   }
 

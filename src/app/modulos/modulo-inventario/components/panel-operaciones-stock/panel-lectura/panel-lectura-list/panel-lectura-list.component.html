@@ -45,6 +45,7 @@
         [autoLayout]="true"
         [responsive]="true"
         [(selection)]="lecturaSelected"
+        [rowSelectable]="isRowSelectable"
         [showCurrentPageReport]="true"
         [rows]="globalConstants.sizePage"
         styleClass="{{globalConstants.cStyleTableGridLines}}"
@@ -63,13 +64,13 @@
         </ng-template>
         <!-- body -->
         <ng-template pTemplate = "body" let-modelo let-editing = "editing" let-ri = "rowIndex">
-          <tr class="ui-selectable-row" [ngClass]="{'row-accessories': modelo.docStatus === '02'}">
+          <tr class="p-selectable-row" [ngClass]="{'row-cerrado': modelo.docStatus === '02'}">
             <td class="custom-td-2">
               <p-splitButton icon="pi pi-cog" [model] = "opciones1" (onDropdownClick) = "onToItemSelected(modelo)" appendTo = "body">
               </p-splitButton>
             </td>
             <td class="custom-td-2">
-              <p-tableCheckbox [disabled]="modelo.docStatus === '02'" [value]="modelo" ></p-tableCheckbox>
+              <p-tableCheckbox [disabled]="isOutOfStock(modelo)" [value]="modelo"></p-tableCheckbox>
             </td>
             <td class="custom-td-5">
               <span class="p-column-title">Número: </span> {{modelo.numBase}}

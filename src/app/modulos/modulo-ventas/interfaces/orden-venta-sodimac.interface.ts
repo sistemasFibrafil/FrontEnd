@@ -1,11 +1,10 @@
 
 export interface IOrdenVentaSodimac {
-  idOrdenVentaSodimac       : number;
+  id                        : number;
   docEntry                  : number;
   docNum                    : number;
-  numAtCard                 : string;
-  codEstado                 : string;
-  nomEstado                 : string;
+  numOrdenCompra            : string;
+  docStatus                 : string;
   docDate                   : Date;
   docDueDate                : Date;
   taxDate                   : Date;
@@ -18,11 +17,11 @@ export interface IOrdenVentaSodimac {
 }
 
 export interface IOrdenVentaSodimacDetalle {
-  idOrdenVentaSodimac       : number;
+  id                        : number;
   line                      : number;
   numLocal                  : number;
   nomLocal                  : string;
-  codEstado                 : string;
+  lineStatus                : string;
   itemCode                  : string;
   sku                       : string;
   dscription                : string;
@@ -33,11 +32,10 @@ export interface IOrdenVentaSodimacDetalle {
 }
 
 export interface IOrdenVentaSodimacByFiltro {
-  idOrdenVentaSodimac       : number;
+  id                        : number;
   docNum                    : number;
-  numAtCard                 : string;
-  codEstado                 : string;
-  nomEstado                 : string;
+  numOrdenCompra            : string;
+  docStatus                 : string;
   docDate                   : Date;
   docDueDate                : Date;
   taxDate                   : Date;
@@ -46,11 +44,11 @@ export interface IOrdenVentaSodimacByFiltro {
 }
 
 export interface IOrdenVentaSodimacConsulta {
-  idOrdenVentaSodimac?      : number;
+  id?                       : number;
   line?                     : number;
 
   docNum?                   : number;
-  numAtCard?                : string;
+  numOrdenCompra?           : string;
   docDate?                  : Date;
   docDueDate?               : Date;
   taxDate?                  : Date;

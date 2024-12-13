@@ -36,10 +36,10 @@
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-number">Número </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
-                  <input id="float-input-number" type="text" placeholder="Número de solicitud" maxlength="50" size="50" formControlName="number" autocomplete="off" required pInputText [readOnly]="true">
+                  <input id="float-input-number" type="text" placeholder="Número de transferencia" maxlength="50" size="50" formControlName="number" autocomplete="off" required pInputText [readOnly]="true">
                 </div>
                 <div *ngIf="modeloFormCab2.controls['number'].errors && modeloFormCab2.controls['number'].dirty">
-                  <p-message severity="error" text="El número de solicitud es requerido." *ngIf="modeloFormCab2.controls['number'].errors['required']"></p-message>
+                  <p-message severity="error" text="El número de transferencia es requerido." *ngIf="modeloFormCab2.controls['number'].errors['required']"></p-message>
                 </div>
               </div>
               <div class="col-12 md:col-12">
@@ -165,6 +165,9 @@
                     <td class="p-fluid">
                       <span class="p-column-title">Almacén de destino: </span><i *ngIf="modelo.itemCode !== ''" class="pi pi-search" (click)="onOpenAlmacenDestino(modelo, ri)"></i> {{modelo.whsCode}}
                     </td>
+                    <td class="p-fluid">
+                      <span class="p-column-title">Tipo de operación: </span><i *ngIf="modelo.itemCode !== ''" class="pi pi-search" (click)="onOpenTipoOperacion(modelo, ri)"></i> {{modelo.codTipOperacion}}
+                    </td>
                     <td class="custom-td-3">
                       <span class="p-column-title">UM: </span> {{modelo.unitMsr}}
                     </td>
@@ -202,7 +205,7 @@
                         <div class="col-12 md:col-2">
                           <label class="label-custom" for="float-input-ruc-transportista">RUC </label>
                           <div class="p-inputgroup">
-                            <input id="float-input-ruc-transportista" type="text" placeholder="RUC de transportita" maxlength="11" size="50" formControlName="rucTransportista" autocomplete="off" pInputText>
+                            <input id="float-input-ruc-transportista" type="text" placeholder="RUC de transportita" maxlength="11" size="50" formControlName="numTipoDocTransportista" autocomplete="off" pInputText>
                           </div>
                         </div>
                         <div class="col-12 md:col-4">
@@ -214,7 +217,7 @@
                         <div class="col-12 md:col-2">
                           <label class="label-custom" for="float-input-num-pla-transportista">Número de placa </label>
                           <div class="p-inputgroup">
-                            <input id="float-input-num-pla-transportista" type="text" placeholder="Número de placa" maxlength="100" size="50" formControlName="numPlaTransportista" autocomplete="off" pInputText>
+                            <input id="float-input-num-pla-transportista" type="text" placeholder="Número de placa" maxlength="100" size="50" formControlName="numPlaVehTransportista" autocomplete="off" pInputText>
                           </div>
                         </div>
                       </div>
@@ -231,19 +234,19 @@
                         <div class="col-12 md:col-3">
                           <label class="label-custom" for="float-input-num-doc-conductor">Número de documento </label>
                           <div class="p-inputgroup">
-                            <input id="float-input-num-doc-conductor" type="text" placeholder="Número de documento" maxlength="15" size="50" formControlName="numDocConductor" autocomplete="off" pInputText>
+                            <input id="float-input-num-doc-conductor" type="text" placeholder="Número de documento" maxlength="15" size="50" formControlName="numTipoDocConductor" autocomplete="off" pInputText>
                           </div>
                         </div>
                         <div class="col-12 md:col-3">
                           <label class="label-custom" for="float-input-nom-conductor">Nombre </label>
                           <div class="p-inputgroup">
-                            <input id="float-input-nom-conductor" type="text" placeholder="Nombre" maxlength="100" size="50" formControlName="nomConductor" autocomplete="off" pInputText>
+                            <input id="float-input-nom-conductor" type="text" placeholder="Nombre" maxlength="100" size="50" formControlName="nomConductor" autocomplete="off" pInputText (ngModelChange)="onChangeNomConductor()">
                           </div>
                         </div>
                         <div class="col-12 md:col-3">
                           <label class="label-custom" for="float-input-ape-conductor">Apellidos </label>
                           <div class="p-inputgroup">
-                            <input id="float-input-ape-conductor" type="text" placeholder="Apellidos" maxlength="100" size="50" formControlName="ApeConductor" autocomplete="off" pInputText>
+                            <input id="float-input-ape-conductor" type="text" placeholder="Apellidos" maxlength="100" size="50" formControlName="apeConductor" autocomplete="off" pInputText (ngModelChange)="onChangeNomConductor()">
                           </div>
                         </div>
                         <div class="col-12 md:col-3">
@@ -255,7 +258,7 @@
                         <div class="col-12 md:col-12">
                           <label class="label-custom" for="float-input-num-lic-conductor">Número de licencia </label>
                           <div class="p-inputgroup">
-                            <input id="float-input-num-lic-conductor" type="text" placeholder="Número de licencia" maxlength="20" size="50" formControlName="numLicComConductor" autocomplete="off" pInputText>
+                            <input id="float-input-num-lic-conductor" type="text" placeholder="Número de licencia" maxlength="20" size="50" formControlName="numLicConductor" autocomplete="off" pInputText>
                           </div>
                         </div>
 
@@ -275,15 +278,15 @@
                 <div class="p-fluid p-formgrid grid">
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-tipo-traslado">Tipo de traslado </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Traslado'" [fldValue]="codTipTraslado" [placeholder]="'Tipo de traslado'" [nomTabla]="'OWTQ'" [nomCampo]="'FIB_TIP_TRAS'" (eventoAceptar)="onSelectedTipoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Traslado'" [fldValue]="codTipTraslado" [placeholder]="'Tipo de traslado'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIP_TRAS'" (eventoAceptar)="onSelectedTipoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-motivo-traslado">Motivo de traslado </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Motivo de Traslado'" [fldValue]="codMotTraslado" [placeholder]="'Motivo de traslado'" [nomTabla]="'OWTQ'" [nomCampo]="'BPP_MDMT'" (eventoAceptar)="onSelectedMotivoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [title]="'Motivo de Traslado'" [fldValue]="codMotTraslado" [placeholder]="'Motivo de traslado'" [nomTabla]="'OWTR'" [nomCampo]="'BPP_MDMT'" (eventoAceptar)="onSelectedMotivoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-tipo-salida">Tipo de salida </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Salida'" [fldValue]="codTipSalida" [placeholder]="'Tipo de salida'" [nomTabla]="'OWTQ'" [nomCampo]="'BPP_MDTS'" (eventoAceptar)="onSelectedTipoSalida($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Salida'" [fldValue]="codTipSalida" [placeholder]="'Tipo de salida'" [nomTabla]="'OWTR'" [nomCampo]="'BPP_MDTS'" (eventoAceptar)="onSelectedTipoSalida($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                 </div>
               </form>
@@ -304,13 +307,13 @@
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-num-bulto">Número de bultos </label>
                 <div class="p-inputgroup">
-                  <p-inputNumber id="float-input-num-bulto" styleClass="input-number" placeholder="Número de boltos" formControlName="numBulto" autocomplete="off" mode="decimal" locale="en-EN" [minFractionDigits]="3" [maxFractionDigits]="3" (onInput)="onInputBulto($event)" ></p-inputNumber>
+                  <p-inputNumber id="float-input-num-bulto" styleClass="input-number" placeholder="Número de boltos" formControlName="numBulto" autocomplete="off" mode="decimal" locale="en-EN" [minFractionDigits]="3" [maxFractionDigits]="3" (onInput)="onInputBulto($event.value)" ></p-inputNumber>
                 </div>
               </div>
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-tot-kilo">Total kilos </label>
                 <div class="p-inputgroup">
-                  <p-inputNumber id="float-input-tot-kilo" styleClass="input-number" placeholder="Total kilos" formControlName="totKilo" autocomplete="off" mode="decimal" locale="en-EN" [minFractionDigits]="3" [maxFractionDigits]="3"></p-inputNumber>
+                  <p-inputNumber id="float-input-tot-kilo" styleClass="input-number" placeholder="Total kilos" formControlName="totKilo" autocomplete="off" mode="decimal" locale="en-EN" [minFractionDigits]="3" [maxFractionDigits]="3" (onInput)="onInpuKilo($event.value)"></p-inputNumber>
                 </div>
               </div>
               <div class="col-12 md:col-6">
@@ -364,6 +367,74 @@
   <app-busqueda-almacen-sap [demandante]="demandanteAlmacenItem" [itemCode]="itemCode" [inactive]="inactiveAlmacenItem" (eventoAceptar)="onSelectedAlmacenDestinoItem($event)"></app-busqueda-almacen-sap>
   <ng-template pTemplate="footer">
     <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickCloseAlmacenDestino()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog *ngIf="isVisualizarTipoOperacion" header="Tipo de operación" [(visible)]="isVisualizarTipoOperacion" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
+  <app-busqueda-tipo-operacion-sap [title]="'Tipo de Operación'" [fldValue]="codTipTraslado" [placeholder]="'Tipo de operación'" [nomTabla]="'OWTR'" [nomCampo]="'U_tipoOpT12'" (eventoAceptar)="onSelectedTipoOperacionItem($event)"></app-busqueda-tipo-operacion-sap>
+  <ng-template pTemplate="footer">
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickCloseTipoOperacion()"></p-button>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog *ngIf="isVisualizarBarcode" header="Código de barra" [(visible)]="isVisualizarBarcode" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
+  <p-panel id="modal" header="Opciones de búsqueda" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+    <form [formGroup]="modeloFormBar">
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-6">
+          <div class="p-inputgroup">
+            <input id="float-input-filtro" type="text" placeholder="Buscar por código de barra" maxlength="100" size="50" formControlName="filtro" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
+          </div>
+        </div>
+        <div class="col-12 md:col-6">
+          <button pButton type="button" label="{{globalConstants.cBuscar}}" icon="{{globalConstants.icoBuscar}}" (click)="onToBuscar()"></button>
+        </div>
+      </div>
+    </form>
+  </p-panel>
+  <p-panel header="Lista de códigos de barras" [toggleable]="true">
+    <p-table
+    [value]="bardcodeList"
+    [columns]="columnasBarcode"
+    [rowHover]="true"
+    [autoLayout]="true"
+    [responsive]="true"
+    selectionMode="single"
+    [showCurrentPageReport]="true"
+    styleClass="{{globalConstants.cStyleTableGridLines}}"
+    currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}">
+      <!-- Header -->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="{{col.field}}" *ngFor="let col of columns" class="custom-header">
+            <p-sortIcon field="{{col.field}}"></p-sortIcon>
+            {{col.header}}
+          </th>
+          <th class="custom-header"></th>
+        </tr>
+      </ng-template>
+      <!-- body -->
+      <ng-template pTemplate="body" let-modelo let-editing="editing">
+        <tr class="p-selectable-row">
+          <td class="p-fluid">
+            <span class="p-column-title">Código: </span> {{modelo.itemCode}}
+          </td>
+          <td class="p-fluid">
+            <span class="p-column-title">Barcode: </span> {{modelo.barcode}}
+          </td>
+          <td class="custom-td-numero">
+            <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
+          </td>
+          <td class="custom-td-2">
+            <button pButton icon="{{globalConstants.icoEliminar}}" class="{{globalConstants.cStyleButtonDanger}}" (click)="onToSelectedDeleteRow(modelo)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+  <ng-template pTemplate="footer">
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickBarcodeClose()"></p-button>
   </ng-template>
 </p-dialog>
 

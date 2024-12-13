@@ -10,13 +10,17 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IEstadoDocumento } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/estado-documento.interface';
 import { SelectItem } from 'primeng/api';
-import { EstadoDocumentoService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/estado-documento.service';
+import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
 import { IOrdenVentaSodimacByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
 
+
+interface DocStatus {
+  statusCode  : string,
+  statusName  : string
+}
 
 
 @Component({
@@ -41,8 +45,9 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
   modeloSelected: IOrdenVentaSodimacByFiltro;
   list: IOrdenVentaSodimacByFiltro[] = [];
 
-  estadoDocumentoList: SelectItem[];
-  estadoDocumentoSelected:IEstadoDocumento[];
+  docStatusItem: SelectItem[];
+  docStatusList: DocStatus[];
+  docStatusSelected:DocStatus[];
 
   params: FilterRequestModel = new FilterRequestModel();
   isDisplay: Boolean = false;
@@ -57,7 +62,7 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
     private userContextService: UserContextService,
     private readonly swaCustomService: SwaCustomService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
-    private estadoDocumentoService: EstadoDocumentoService,
+    private statusService: StatusService,
     private ordenVentaSodimacService: OrdenVentaSodimacService,
   ) {}
 
@@ -66,7 +71,7 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
     this.onBuildForm();
     this.onBuildColumn();
     this.opcionesTabla();
-    this.getListEstadoDocumentoAll();
+    this.getListStatus();
   }
 
   onBuildForm() {
@@ -74,7 +79,7 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
     {
       'dat1'              : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
       'dat2'              : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-      'msEstadoDocumento' : new FormControl('', Validators.compose([Validators.required])),
+      'msStatus'          : new FormControl('', Validators.compose([Validators.required])),
       'text1'             : new FormControl(''),
     });
 
@@ -84,8 +89,8 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
   onBuildColumn() {
     this.columnas = [
       { field: 'docNum',          header: 'Número' },
-      { field: 'NumAtCard',       header: 'OC' },
-      { field: 'nomEstado',       header: 'Estado' },
+      { field: 'numOrdenCompra',  header: 'OC' },
+      { field: 'docStatus',       header: 'Estado' },
       { field: 'docDate',         header: 'Fecha de contabilización' },
       { field: 'docDueDate',      header: 'Fecha de entrega' },
       { field: 'taxDate',         header: 'Fecha de documento' },
@@ -101,26 +106,26 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
     ];
   }
 
-  getListEstadoDocumentoAll() {
-    this.estadoDocumentoService.getListAll()
-    .subscribe({next:(data: IEstadoDocumento[]) =>{
-        this.estadoDocumentoList = [];
-        this.estadoDocumentoSelected = [];
+  getListStatus() {
+    this.docStatusList = [];
+    this.docStatusList = [
+      { statusCode: '01', statusName: 'Abierto' },
+      { statusCode: '02', statusName: 'Cerrado' },
+      { statusCode: '03', statusName: 'Cancelado' },
+    ];
 
-        for (let item of data) {
-          this.estadoDocumentoSelected.push({ codEstado: item.codEstado, nomEstado: item.nomEstado });
-          this.estadoDocumentoList.push({ label: item.nomEstado, value: { codEstado: item.codEstado, nomEstado: item.nomEstado } });
-        }
-      },error:(e)=>{
-        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-      }
-    });
+    this.docStatusItem = [];
+    this.docStatusSelected = [];
+    for (let item of this.docStatusList) {
+      this.docStatusSelected.push({ statusCode: item.statusCode, statusName: item.statusName });
+      this.docStatusItem.push({ label: item.statusName, value: { statusCode: item.statusCode, statusName: item.statusName } });
+    }
   }
 
   onSetParametro()
   {
     this.params = this.modeloForm.getRawValue();
-    this.params.cod1 = this.estadoDocumentoSelected.map(x=> x.codEstado).join(",");
+    this.params.cod1 = this.docStatusSelected.map(x=> x.statusCode).join(",");
   }
 
   onListar() {
@@ -143,7 +148,7 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
   }
 
   onToCreate() {
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-ov-create']);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-create']);
   }
 
   onToItemSelected(modelo: IOrdenVentaSodimacByFiltro) {
@@ -155,13 +160,13 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
     //   this.opciones.find(x => x.label == "Editar").visible = true;
     // }
 
-    if(this.buttonAcces.btnEditar || modelo.codEstado === '02' || modelo.codEstado === '03'){
+    if(this.buttonAcces.btnEditar || modelo.docStatus === '02' || modelo.docStatus === '03'){
       this.opciones.find(x => x.label == "Visualizar").visible = false;
     } else {
       this.opciones.find(x => x.label == "Visualizar").visible = true;
     }
 
-    if(this.buttonAcces.btnEliminar || modelo.codEstado === '02' || modelo.codEstado === '03'){
+    if(this.buttonAcces.btnEliminar || modelo.docStatus === '02' || modelo.docStatus === '03'){
       this.opciones.find(x => x.label == "Eliminar").visible = false;
     } else {
       this.opciones.find(x => x.label == "Eliminar").visible = true;
@@ -173,7 +178,7 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
   // }
 
   ver(){
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-ov-view', this.modeloSelected.idOrdenVentaSodimac]);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-view', this.modeloSelected.id]);
   }
 
   // onToRowSelectEdit(modelo: IPickingVentaByFiltro){
@@ -181,7 +186,7 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
   // }
 
   editar(){
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-ov-update', this.modeloSelected.idOrdenVentaSodimac]);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-update', this.modeloSelected.id]);
   }
 
   onToDelete() {

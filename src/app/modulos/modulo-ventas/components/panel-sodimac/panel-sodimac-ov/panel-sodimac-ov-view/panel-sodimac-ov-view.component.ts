@@ -13,11 +13,11 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 
-import { IEstadoDocumento } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/estado-documento.interface';
+import { IStatus } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/status.interface';
 import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sap.interface';
 import { IOrdenVentaSodimac, IOrdenVentaSodimacDetalle } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
 import { OrdenVentaSodimacCreateModel } from 'src/app/modulos/modulo-ventas/models/orden-venta-sodimac.model';
-import { EstadoDocumentoService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/estado-documento.service';
+import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
 
 
@@ -66,7 +66,7 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
     private readonly route: ActivatedRoute,
     public readonly utilService: UtilService,
     private readonly swaCustomService: SwaCustomService,
-    private estadoDocumentoService: EstadoDocumentoService,
+    private statusService: StatusService,
     private ordenVentaSodimacService: OrdenVentaSodimacService,
   ) {}
 
@@ -94,13 +94,13 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'docEntry'    : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'docNum'      : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'numAtCard'   : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'estado'      : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'docDate'     : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
-      'docDueDate'  : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
-      'taxDate'     : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
+      'docEntry'          : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'docNum'            : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'numOrdenCompra'    : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'estado'            : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'docDate'           : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
+      'docDueDate'        : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
+      'taxDate'           : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
     });
   }
 
@@ -117,11 +117,11 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
   }
 
   getListEstado() {
-    this.estadoDocumentoService.getListAll()
-    .subscribe({next:(data: IEstadoDocumento[]) =>{
+    this.statusService.getList()
+    .subscribe({next:(data: IStatus[]) =>{
         this.listEstado = [];
         for (let item of data) {
-          this.listEstado.push({ label: item.nomEstado, value: item.codEstado });
+          this.listEstado.push({ label: item.statusName, value: item.statusCode });
         }
 
         const item: any = this.listEstado.find(x=>x.value === '01');
@@ -145,12 +145,12 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
 
     this.modeloFormCab2.patchValue
     ({
-        docEntry    : value.docEntry,
-        docNum      : value.docNum,
-        numAtCard   : value.numAtCard,
-        docDate     : (value.docDate == null ?  null : new Date(value.docDate)),
-        docDueDate  : (value.docDueDate == null ?  null : new Date(value.docDueDate)),
-        taxDate     : (value.taxDate == null ?  null : new Date(value.taxDate)),
+        docEntry          : value.docEntry,
+        docNum            : value.docNum,
+        numOrdenCompra    : value.numOrdenCompra,
+        docDate           : (value.docDate == null ?  null : new Date(value.docDate)),
+        docDueDate        : (value.docDueDate == null ?  null : new Date(value.docDueDate)),
+        taxDate           : (value.taxDate == null ?  null : new Date(value.taxDate)),
     });
   }
 
@@ -183,7 +183,7 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
 
     if(this.modeloFormCab2.controls['docNum'].value)
     {
-      if(!this.modeloFormCab2.controls['numAtCard'].value)
+      if(!this.modeloFormCab2.controls['numOrdenCompra'].value)
       {
         this.swaCustomService.swaMsgInfo('La órden de venta seleccionada no tiene el número de OC asignado.');
         return;
@@ -226,7 +226,7 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
 
     if(this.modeloFormCab2.controls['docNum'].value)
     {
-      if(!this.modeloFormCab2.controls['numAtCard'].value)
+      if(!this.modeloFormCab2.controls['numOrdenCompra'].value)
       {
         this.swaCustomService.swaMsgInfo('La órden de venta seleccionada no tiene el número de OC asignado.');
         return false;
@@ -274,11 +274,11 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
 
     // CAB 02: ORDEN DE VENTA
     this.modeloSave.docNum = this.modeloFormCab2.controls['docNum'].value;
-    this.modeloSave.numAtCard = this.modeloFormCab2.controls['numAtCard'].value;
+    this.modeloSave.numOrdenCompra = this.modeloFormCab2.controls['numOrdenCompra'].value;
 
     if (this.modeloFormCab2.controls['estado'].value) {
       let itemEstado = this.modeloFormCab2.controls['estado'].value;
-      this.modeloSave.codEstado = itemEstado.value;
+      this.modeloSave.docStatus = itemEstado.value;
     }
     this.modeloSave.docDate = this.modeloFormCab2.controls['docDate'].value;
     this.modeloSave.docDueDate = this.modeloFormCab2.controls['docDueDate'].value;
@@ -290,10 +290,10 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
     for (let index = 0; index < this.detail.length; index++) {
       this.modeloSave.item.push
       ({
-        idOrdenVentaSodimac : 0,
+        id                  : 0,
         line                : this.detail[index].line,
         numLocal            : this.detail[index].numLocal,
-        codEstado           : this.detail[index].codEstado,
+        lineStatus          : this.detail[index].lineStatus,
         itemCode            : this.detail[index].itemCode,
         sku                 : this.detail[index].sku,
         dscription          : this.detail[index].dscription,
@@ -329,6 +329,6 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/main/modulo-ve/panel-sodimac-ov-list']);
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-list']);
   }
 }

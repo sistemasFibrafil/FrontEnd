@@ -38,8 +38,19 @@ export class SolicitudTrasladoService {
   }
 
   setUpdate(value: SolicitudTrasladoUpdateModel) {
-    const param: string = JSON.stringify(value);
-    return this.http.put(`${environment.url_api_fib}SolicitudTraslado/SetUpdate/`, param);
+    debugger
+    var closeList = value.linea.filter(x=>x.record === 4);
+
+    if (closeList.length === 0)
+    {
+      const param: string = JSON.stringify(value);
+      return this.http.put(`${environment.url_api_fib}SolicitudTraslado/SetUpdate/`, param);
+    }
+    else
+    {
+      const param: string = JSON.stringify(closeList);
+      return this.http.put(`${environment.url_api_fib}SolicitudTraslado/SetItemClose/`, param);
+    }
   }
 
   setClose(value: SolicitudTrasladoCloseModel) {

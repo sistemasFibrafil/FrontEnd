@@ -8,13 +8,11 @@ import { FacturacionElectronicaRoutingModule } from './modulo-facturacion-electr
 import { CompartidoModule } from '../modulo-compartido/modulo-compartido.module';
 
 import { PanelGuiaListComponent } from './components/panel-guia/panel-guia-list/panel-guia-list.component';
-import { PanelGuiaInternaListComponent } from './components/panel-guía-interna/panel-guía-interna-list/panel-guia-interna-list.component';
 
 @NgModule({
     declarations:
     [
       PanelGuiaListComponent,
-      PanelGuiaInternaListComponent
     ],
     imports:
     [

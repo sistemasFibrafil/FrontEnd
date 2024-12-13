@@ -110,6 +110,7 @@ export class SolicitudTrasladoDetalleUpdateModel {
   line                        : number;
   docEntry                    : number;
   lineNum                     : number;
+  lineStatus                  : string;
   itemCode                    : string;
   dscription                  : string;
   fromWhsCod                  : string;
@@ -120,6 +121,7 @@ export class SolicitudTrasladoDetalleUpdateModel {
   openQtyRding                : number;
   idUsuarioCreate?            : number;
   idUsuarioUpdate?            : number;
+  idUsuarioClose?             : number;
   record                      : number;
 
   constructor(){
@@ -127,6 +129,7 @@ export class SolicitudTrasladoDetalleUpdateModel {
     this.line                 = 0;
     this.docEntry             = 0;
     this.lineNum              = 0;
+    this.lineStatus           = '01';
     this.itemCode             = '';
     this.dscription           = '';
     this.fromWhsCod           = '';
@@ -137,6 +140,7 @@ export class SolicitudTrasladoDetalleUpdateModel {
     this.openQtyRding         = 0;
     this.idUsuarioCreate      = 0;
     this.idUsuarioUpdate      = 0;
+    this.idUsuarioClose       = 0;
     this.record               = 0;
   }
 }

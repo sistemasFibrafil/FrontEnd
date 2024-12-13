@@ -133,7 +133,7 @@
                 </ng-template>
                 <!-- body -->
                 <ng-template pTemplate="body" let-modelo let-ri="rowIndex">
-                  <tr>
+                  <tr [ngClass]="{'row-cerrado': modelo.lineStatus === '02'}">
                     <td class="p-fluid">
                       <span class="p-column-title">Código: </span><i class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{modelo.itemCode}}
                     </td>
@@ -172,15 +172,15 @@
                 <div class="p-fluid p-formgrid grid">
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-tipo-traslado">Tipo de traslado </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Traslado'" [fldValue]="codTipTraslado" [placeholder]="'Tipo de traslado'" [nomTabla]="'OWTQ'" [nomCampo]="'FIB_TIP_TRAS'" (eventoAceptar)="onSelectedTipoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [fldValue]="codTipTraslado" [isHabilitarButton]="true" [title]="'Tipo de Traslado'" [placeholder]="'Tipo de traslado'" [nomTabla]="'OWTQ'" [nomCampo]="'FIB_TIP_TRAS'" (eventoAceptar)="onSelectedTipoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-motivo-traslado">Motivo de traslado </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Motivo de Traslado'" [fldValue]="codMotTraslado" [placeholder]="'Motivo de traslado'" [nomTabla]="'OWTQ'" [nomCampo]="'BPP_MDMT'" (eventoAceptar)="onSelectedMotivoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [fldValue]="codMotTraslado" [isHabilitarButton]="true" [title]="'Motivo de Traslado'" [placeholder]="'Motivo de traslado'" [nomTabla]="'OWTQ'" [nomCampo]="'BPP_MDMT'" (eventoAceptar)="onSelectedMotivoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-tipo-salida">Tipo de salida </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Salida'" [fldValue]="codTipSalida" [placeholder]="'Tipo de salida'" [nomTabla]="'OWTQ'" [nomCampo]="'BPP_MDTS'" (eventoAceptar)="onSelectedTipoSalida($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [fldValue]="codTipSalida" [isHabilitarButton]="true" [title]="'Tipo de Salida'" [placeholder]="'Tipo de salida'" [nomTabla]="'OWTQ'" [nomCampo]="'BPP_MDTS'" (eventoAceptar)="onSelectedTipoSalida($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                 </div>
               </form>

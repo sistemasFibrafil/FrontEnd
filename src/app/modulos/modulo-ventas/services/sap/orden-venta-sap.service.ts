@@ -25,7 +25,6 @@ export class OrdenVentaSapService {
   }
 
   getOrdenVentaItemPendienteForPickingByBarCode(value: any) {
-    debugger
     let params = new HttpParams();
     params = params.append('idPicking', value.idPicking);
     params = params.append('docEntry', value.docEntry);
@@ -39,7 +38,6 @@ export class OrdenVentaSapService {
   }
 
   getListOrdenVentaSeguimientoByFecha(value: FilterRequestModel) {
-    debugger
     let params = new HttpParams();
     params = params.append('dat1', this.datePipe.transform(value.dat1, 'yyyy-MM-dd'));
     params = params.append('dat2', this.datePipe.transform(value.dat2, 'yyyy-MM-dd'));
@@ -124,7 +122,6 @@ export class OrdenVentaSapService {
   }
 
   getListOrdenVentaSodimacPendienteByFiltro(value: FilterRequestModel) {
-    debugger
     let params = new HttpParams();
     params = params.append('text1', value.text1);
 

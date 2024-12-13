@@ -110,7 +110,7 @@ export interface IOrdenVentaPendienteByFecha {
 export interface IOrdenVentaSapPendienteByFiltro {
   docEntry                  : number;
   docNum                    : number;
-  numAtCard                 : string;
+  numOrdenCompra            : string;
   docDate                   : Date;
   docDueDate                : Date;
   taxDate                   : Date;

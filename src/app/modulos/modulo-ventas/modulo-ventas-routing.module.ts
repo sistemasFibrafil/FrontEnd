@@ -28,7 +28,7 @@ import { PanelOrdenVentaSeguimientoDetalladoByFechaComponent } from './component
 import { PanelOrdenVentaPendienteStockAlmaProdByFechaComponent } from './components/panel-reportes/panel-ov-pendiente-stock-alma-prod-by-fecha/panel-ov-pendiente-stock-alma-prod-by-fecha.component';
 
 import { PanelOrdenVentaSodimacByFechaNumeroComponent } from './components/panel-reportes/panel-ov-sodimac-by-fecha-numero/panel-ov-sodimac-by-fecha-numero.component';
-import { PanelOrdenVentaSodimacSelvaByFechaNumeroComponent } from './components/panel-reportes/panel-ov-sodimac-selva-by-fecha-numero/panel-ov-sodimac-selva-by-fecha-numero.component';
+import { PanelOrdenVentaSodimacOrienteByFechaNumeroComponent } from './components/panel-reportes/panel-ov-sodimac-oriente-by-fecha-numero/panel-ov-sodimac-oriente-by-fecha-numero.component';
 
 import { PanelVentaByFechaComponent } from './components/panel-reportes/panel-venta-by-fecha/panel-venta-by-fecha.component';
 import { PanelFacturaVentaByFechaComponent } from './components/panel-reportes/panel-fv-venta-by-fecha/panel-factura-venta-by-fecha.component';
@@ -63,7 +63,7 @@ const routes: Routes = [
   { path: 'panel-ov-pendiente-stock-alma-prod-by-fecha',        data: { breadcrumb: 'Reporte - Órdenes de Venta - Pendientes - Stock de Almacenes de Produccíon' }, component: PanelOrdenVentaPendienteStockAlmaProdByFechaComponent },
 
   { path: 'panel-ov-sodimac-by-fecha-numero',                   data: { breadcrumb: 'Reporte - Despacho de Sodimac- Fecha - Número' }, component: PanelOrdenVentaSodimacByFechaNumeroComponent },
-  { path: 'panel-ov-sodimac-selva-by-fecha-numero',             data: { breadcrumb: 'Reporte - Despacho de Sodimac Selva- Fecha - Número' }, component: PanelOrdenVentaSodimacSelvaByFechaNumeroComponent },
+  { path: 'panel-ov-sodimac-oriente-by-fecha-numero',             data: { breadcrumb: 'Reporte - Despacho de Sodimac Selva- Fecha - Número' }, component: PanelOrdenVentaSodimacOrienteByFechaNumeroComponent },
 
   { path: 'panel-venta-by-fecha',                               data: { breadcrumb: 'Reporte - Ventas-fecha' }, component: PanelVentaByFechaComponent },
   { path: 'panel-factura-venta-by-fecha',                       data: { breadcrumb: 'Reporte - Facturas de Venta' }, component: PanelFacturaVentaByFechaComponent },

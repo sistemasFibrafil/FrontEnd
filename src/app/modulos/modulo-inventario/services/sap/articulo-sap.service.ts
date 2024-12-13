@@ -108,6 +108,36 @@ export class ArticuloSapService {
     return this.http.get(`${environment.url_api_fib}ArticuloSap/GetArticuloVentaStockExcelByGrupoSubGrupo/`,{params: params, responseType: 'arraybuffer'});
   }
 
+  getListArticuloByGrupoSubGrupoFiltro(value: FilterRequestModel) {
+    let params = new HttpParams();
+    params = params.append('val1', value.val1.toString());
+    params = params.append('val2', value.val2.toString());
+    params = params.append('val3', value.val3.toString());
+    params = params.append('val4', value.val4.toString());
+    params = params.append('val5', value.val5.toString());
+    params = params.append('cod1', value.cod1);
+    params = params.append('cod2', value.cod2);
+    params = params.append('cod3', value.cod3);
+    params = params.append('text1', value.text1);
+
+    return this.http.get<IArticuloSap[]>(`${environment.url_api_fib}ArticuloSap/GetListArticuloByGrupoSubGrupoFiltro/`,{params: params});
+  }
+
+  getListArticuloExcelByGrupoSubGrupoFiltro(value: FilterRequestModel){
+    let params = new HttpParams();
+    params = params.append('val1', value.val1.toString());
+    params = params.append('val2', value.val2.toString());
+    params = params.append('val3', value.val3.toString());
+    params = params.append('val4', value.val4.toString());
+    params = params.append('val5', value.val5.toString());
+    params = params.append('cod1', value.cod1);
+    params = params.append('cod2', value.cod2);
+    params = params.append('cod3', value.cod3);
+    params = params.append('text1', value.text1);
+
+    return this.http.get(`${environment.url_api_fib}ArticuloSap/GetListArticuloExcelByGrupoSubGrupoFiltro/`,{params: params, responseType: 'arraybuffer'});
+  }
+
   getListMovimientoStockByFechaSede(value: FilterRequestModel) {
     let params = new HttpParams();
     params = params.append('dat1', this.datePipe.transform(value.dat1, 'yyyy-MM-dd'));

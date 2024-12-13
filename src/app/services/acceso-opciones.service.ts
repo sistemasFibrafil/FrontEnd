@@ -117,7 +117,7 @@ export class AccesoOpcionesService {
             if (element.keyOpcion === 'btn-resumen') {
               this.buttonAcces.btnResumen = false;
             }
-            if (element.keyOpcion === 'btn-enviar-fe') {
+            if (element.keyOpcion === 'btn-enviar') {
               this.buttonAcces.btnEnviar = false;
             }
             if (element.keyOpcion === 'btn-agregar') {

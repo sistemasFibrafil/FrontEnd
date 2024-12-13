@@ -26,6 +26,7 @@ import { BusquedaAlmacenSapComponent } from './components/sap/busqueda/busqueda-
 import { BusquedaArticuloSapComponent } from './components/sap/busqueda/busqueda-articulo-sap/busqueda-articulo-sap.component';
 import { BusquedaImpuestoSapComponent } from './components/sap/busqueda/busqueda-impuesto-sap/busqueda-impuesto-sap.component';
 import { BusquedaAlmacenStockSapComponent } from './components/sap/busqueda/busqueda-almacen-stock-sap/busqueda-almacen-stock-sap.component';
+import { BusquedaTipoOperacionSapComponent } from './components/sap/busqueda/busqueda-tipo-operacion-sap/busqueda-tipo-operacion-sap.component';
 import { BusquedaSerieNumeracionSapComponent } from './components/sap/busqueda/busqueda-serie-numeracion-sap/busqueda-serie-numeracion-sap.component';
 
 import { ModalMonedaSapComponent } from './components/sap/modal/modal-moneda-sap/modal-moneda-sap.component';
@@ -65,6 +66,7 @@ import { ModalDireccionSocioNegocioSapComponent } from './components/sap/modal/m
       BusquedaArticuloSapComponent,
       BusquedaImpuestoSapComponent,
       BusquedaAlmacenStockSapComponent,
+      BusquedaTipoOperacionSapComponent,
       BusquedaSerieNumeracionSapComponent,
 
       ModalMonedaSapComponent,
@@ -109,6 +111,7 @@ import { ModalDireccionSocioNegocioSapComponent } from './components/sap/modal/m
       BusquedaArticuloSapComponent,
       BusquedaImpuestoSapComponent,
       BusquedaAlmacenStockSapComponent,
+      BusquedaTipoOperacionSapComponent,
       BusquedaSerieNumeracionSapComponent,
 
       ModalMonedaSapComponent,

@@ -34,7 +34,7 @@ import { PanelOrdenVentaSeguimientoDetalladoByFechaComponent } from './component
 import { PanelOrdenVentaPendienteStockAlmaProdByFechaComponent } from './components/panel-reportes/panel-ov-pendiente-stock-alma-prod-by-fecha/panel-ov-pendiente-stock-alma-prod-by-fecha.component';
 
 import { PanelOrdenVentaSodimacByFechaNumeroComponent } from './components/panel-reportes/panel-ov-sodimac-by-fecha-numero/panel-ov-sodimac-by-fecha-numero.component';
-import { PanelOrdenVentaSodimacSelvaByFechaNumeroComponent } from './components/panel-reportes/panel-ov-sodimac-selva-by-fecha-numero/panel-ov-sodimac-selva-by-fecha-numero.component';
+import { PanelOrdenVentaSodimacOrienteByFechaNumeroComponent } from './components/panel-reportes/panel-ov-sodimac-oriente-by-fecha-numero/panel-ov-sodimac-oriente-by-fecha-numero.component';
 
 import { PanelVentaByFechaComponent } from './components/panel-reportes/panel-venta-by-fecha/panel-venta-by-fecha.component';
 import { PanelFacturaVentaByFechaComponent } from './components/panel-reportes/panel-fv-venta-by-fecha/panel-factura-venta-by-fecha.component';
@@ -73,7 +73,7 @@ import { PanelVentaResumenByFechaGrupoComponent } from './components/panel-repor
       PanelOrdenVentaPendienteStockAlmaProdByFechaComponent,
 
       PanelOrdenVentaSodimacByFechaNumeroComponent,
-      PanelOrdenVentaSodimacSelvaByFechaNumeroComponent,
+      PanelOrdenVentaSodimacOrienteByFechaNumeroComponent,
 
       PanelVentaByFechaComponent,
       PanelFacturaVentaByFechaComponent,
