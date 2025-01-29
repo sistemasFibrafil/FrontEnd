@@ -9,9 +9,10 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 
-import { ISolicitudTraslado, ISolicitudTrasladoDetalle } from 'src/app/modulos/modulo-inventario/interfaces/solicitud-traslado.interface';
-import { SolicitudTrasladoUpdateModel } from 'src/app/modulos/modulo-inventario/models/solicitud-traslado.model';
+import { ISolicitudTraslado, ISolicitudTrasladoDetalle } from 'src/app/modulos/modulo-inventario/interfaces/web/solicitud-traslado.interface';
+import { SolicitudTrasladoUpdateModel } from 'src/app/modulos/modulo-inventario/models/web/solicitud-traslado.model';
 import { SolicitudTrasladoService } from 'src/app/modulos/modulo-inventario/services/web/solicitud-traslado.service';
+import { read } from 'xlsx';
 
 interface DocStatus {
   statusCode  : string,
@@ -145,7 +146,8 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
       'docStatus'   : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
       'docDate'     : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
       'docDueDate'  : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-      'taxDate'     : new FormControl(new Date(new Date()), Validators.compose([Validators.required]))
+      'taxDate'     : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
+      'read'        : new FormControl(true),
     });
 
     this.modeloFormCab3 = this.fb.group(
@@ -349,6 +351,12 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
   addLine()
   {
     let exiete: boolean = false;
+    if(this.modelo.docStatus !== '01')
+    {
+      this.swaCustomService.swaMsgInfo('No se puede añadir línea, ya que tiene el estado Cerrado.');
+      return;
+    }
+
     this.detalle.forEach(item=>{
       if(item.itemCode === ""){
         exiete = true;
@@ -425,6 +433,8 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
     const status = this.docStatus.find(x => x.statusCode === data.docStatus);
 
+    console.log("DATA : ", data);
+
     this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
     this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
     this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
@@ -435,6 +445,7 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );
     this.modeloFormCab2.controls['docDueDate'].setValue( data.docDueDate == null ?  null : new Date(data.docDueDate) );
     this.modeloFormCab2.controls['taxDate'].setValue( data.taxDate == null ?  null : new Date(data.taxDate) );
+    this.modeloFormCab2.controls['read'].setValue( data.read === 'Y'? true : false );
     this.modeloFormCab3.controls['whsCodeOrigen'].setValue( data.filler );
     this.modeloFormCab3.controls['whsCodeDestino'].setValue( data.toWhsCode );
     this.modeloFormOtr.controls['codTipTraslado'].setValue( data.codTipTraslado );
@@ -517,25 +528,26 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     // CAB 02: SOCIO NEGOCIO
     // CAB 02: SOLICITUD DE TRASLADO
 
-    this.modeloSave.id = this.id;
-    this.modeloSave.docEntry = this.docEntry;
-    this.modeloSave.docDate = this.modeloFormCab2.controls['docDate'].value;
-    this.modeloSave.docDueDate = this.modeloFormCab2.controls['docDueDate'].value;
-    this.modeloSave.taxDate = this.modeloFormCab2.controls['taxDate'].value;
+    this.modeloSave.id              = this.id;
+    this.modeloSave.docEntry        = this.docEntry;
+    this.modeloSave.docDate         = this.modeloFormCab2.controls['docDate'].value;
+    this.modeloSave.docDueDate      = this.modeloFormCab2.controls['docDueDate'].value;
+    this.modeloSave.taxDate         = this.modeloFormCab2.controls['taxDate'].value;
+    this.modeloSave.read            = this.modeloFormCab2.controls['read'].value === true? 'Y' : 'N';
 
     // CAB 03: SOLICITUD DE TRASLADO
-    this.modeloSave.filler = this.modeloFormCab3.controls['whsCodeOrigen'].value;
-    this.modeloSave.toWhsCode = this.modeloFormCab3.controls['whsCodeDestino'].value;
+    this.modeloSave.filler          = this.modeloFormCab3.controls['whsCodeOrigen'].value;
+    this.modeloSave.toWhsCode       = this.modeloFormCab3.controls['whsCodeDestino'].value;
 
     // OTROS
-    this.modeloSave.codTipTraslado = this.modeloFormOtr.controls['codTipTraslado'].value;
-    this.modeloSave.codMotTraslado = this.modeloFormOtr.controls['codMotTraslado'].value;
-    this.modeloSave.codTipSalida = this.modeloFormOtr.controls['codTipSalida'].value;
+    this.modeloSave.codTipTraslado  = this.modeloFormOtr.controls['codTipTraslado'].value;
+    this.modeloSave.codMotTraslado  = this.modeloFormOtr.controls['codMotTraslado'].value;
+    this.modeloSave.codTipSalida    = this.modeloFormOtr.controls['codTipSalida'].value;
 
     // PIE 01: SOLICITUD DE TRASLADO
-    this.modeloSave.slpCode= this.modeloFormPie1.controls['slpCode'].value;
-    this.modeloSave.jrnlMemo = this.modeloFormPie1.controls['jrnlMemo'].value;
-    this.modeloSave.comments = this.modeloFormPie1.controls['comments'].value;
+    this.modeloSave.slpCode         = this.modeloFormPie1.controls['slpCode'].value;
+    this.modeloSave.jrnlMemo        = this.modeloFormPie1.controls['jrnlMemo'].value;
+    this.modeloSave.comments        = this.modeloFormPie1.controls['comments'].value;
 
     this.modeloSave.idUsuarioUpdate = this.userContextService.getIdUsuario();
 

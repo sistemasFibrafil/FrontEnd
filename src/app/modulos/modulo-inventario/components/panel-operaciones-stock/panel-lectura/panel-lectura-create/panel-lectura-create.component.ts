@@ -16,7 +16,7 @@ import { AlmacenService } from 'src/app/modulos/modulo-gestion/services/sap/defi
 import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
 import { DocumentoLecturaService } from 'src/app/modulos/modulo-inventario/services/web/documento-lectura.service';
 import { DocumentoLecturaSapService } from 'src/app/modulos/modulo-inventario/services/sap/documento-lectura-sap.service';
-import { ILecturaByBaseTypeAndBaseEntryAndFiltro, ILecturaByBaseTypeBaseEntry } from 'src/app/modulos/modulo-inventario/interfaces/lectura.inteface';
+import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/web/lectura.inteface';
 
 
 
@@ -47,14 +47,14 @@ export class PanelLecturaCreateComponent implements OnInit {
   listAlmacen: SelectItem[];
   listDocumento: SelectItem[];
   listObjType: SelectItem[];
-  listLectura: ILecturaByBaseTypeBaseEntry[] = [];
-  modeloSeleted: ILecturaByBaseTypeBaseEntry;
+  listLectura: ILectura[] = [];
+  modeloSelected: ILectura;
   params: FilterRequestModel = new FilterRequestModel();
 
   // Modal
   columnasModal: any[];
-  listModal: ILecturaByBaseTypeAndBaseEntryAndFiltro[] = [];
-  modeloModalSeleted: ILecturaByBaseTypeAndBaseEntryAndFiltro;
+  listModal: ILectura[] = [];
+  modeloModalSeleted: ILectura;
   isVisualizar: boolean = false;
 
 
@@ -83,8 +83,8 @@ export class PanelLecturaCreateComponent implements OnInit {
   getListItemContextMenu() {
     this.items =
     [
-      {label: 'Visualizar',   icon: 'pi pi-eye',   command: () => this.onToView(this.modeloSeleted) },
-      {label: 'Eliminar',     icon: 'pi pi-trash',  command: () => this.onToDelete(this.modeloSeleted) }
+      {label: 'Eliminar',     icon: 'pi pi-trash',  command: () => this.onToDelete(this.modeloSelected) },
+      {label: 'Visualizar',   icon: 'pi pi-eye',   command: () => this.onToView(this.modeloSelected) },
     ];
   }
 
@@ -105,7 +105,7 @@ export class PanelLecturaCreateComponent implements OnInit {
     });
 
     this.modeloFormBusqueda = this.fb.group({
-      'filtro': new FormControl(''),
+      'text1': new FormControl(''),
     });
   }
 
@@ -123,6 +123,7 @@ export class PanelLecturaCreateComponent implements OnInit {
     [
       { field: 'itemCode',  header: 'Código' },
       { field: 'barcode',   header: 'Barcode' },
+      { field: 'quantity',  header: 'Cantidad' },
       { field: 'peso',      header: 'Peso' }
     ];
   }
@@ -236,7 +237,7 @@ export class PanelLecturaCreateComponent implements OnInit {
     }
 
     this.lecturaService.getListByBaseTypeAndBaseEntry(this.params)
-    .subscribe({next:(data: ILecturaByBaseTypeBaseEntry[]) =>
+    .subscribe({next:(data: ILectura[]) =>
     {
       this.listLectura = data;
     },error:(e)=>{
@@ -309,13 +310,15 @@ export class PanelLecturaCreateComponent implements OnInit {
     });
   }
 
-  onToView(modelo){
+  onToView(modelo: ILectura){
+    this.modeloSelected = modelo;
     this.onListar();
     this.isVisualizar = true;
   }
 
-  onToDelete(modelo)
+  onToDelete(modelo: ILectura)
   {
+    this.modeloSelected = modelo;
     this.onConfirmDelete();
   }
 
@@ -334,8 +337,8 @@ export class PanelLecturaCreateComponent implements OnInit {
 
   delete() {
     this.isDeleting = true;
-    const params: any = { baseType: this.modeloSeleted.baseType, baseEntry: this.modeloSeleted.baseEntry };
-    this.lecturaService.setDeleteMultiple(params)
+    const params: any = { id: 0, baseType: this.modeloSelected.baseType, baseEntry: this.modeloSelected.baseEntry, baseLine: this.modeloSelected.baseLine, return: this.modeloSelected.return, docStatus: this.modeloSelected.docStatus };
+    this.lecturaService.setDeleteMassive(params)
     .subscribe({ next: (resp:any)=>{
         this.getListByObjTypeAndDocEntry();
         this.isDeleting = false;
@@ -360,10 +363,10 @@ export class PanelLecturaCreateComponent implements OnInit {
   onListar() {
     this.isDisplay = true;
     this.listModal = [];
-    const filtro = this.modeloFormBusqueda.value;
-    const params: any = { id1: this.modeloSeleted.baseEntry, code1: this.modeloSeleted.baseType, textFiltro1: filtro.filtro };
-    this.lecturaService.getListByBaseTypeAndBaseEntryAndFiltro(params)
-    .subscribe({next:(data: ILecturaByBaseTypeAndBaseEntryAndFiltro[]) =>{
+    const text1 = this.modeloFormBusqueda.value;
+    const params: any = { cod1: this.modeloSelected.baseType, id1: this.modeloSelected.baseEntry, id2: this.modeloSelected.baseLine, cod2: this.modeloSelected.return, cod3: this.modeloSelected.docStatus, text1: text1.text1 };
+    this.lecturaService.getListByBaseTypeBaseEntryBaseLineFiltro(params)
+    .subscribe({next:(data: ILectura[]) =>{
         this.isDisplay = false;
         this.listModal = data;
       },error:(e)=>{
@@ -375,7 +378,7 @@ export class PanelLecturaCreateComponent implements OnInit {
     });
   }
 
-  onToSelectedDeleteRow(modelo: ILecturaByBaseTypeAndBaseEntryAndFiltro)
+  onToSelectedDeleteRow(modelo: ILectura)
   {
     this.modeloModalSeleted = modelo;
     this.onConfirmDeleteRow()
@@ -420,7 +423,8 @@ export class PanelLecturaCreateComponent implements OnInit {
 
   deleteRow() {
     this.isDeleting = true;
-    this.lecturaService.setDelete(this.modeloModalSeleted.id)
+    const params: any = { id: this.modeloModalSeleted.id };
+    this.lecturaService.setDelete(params)
     .subscribe({ next: (resp:any)=>{
         this.onListar();
         this.getListByObjTypeAndDocEntry();

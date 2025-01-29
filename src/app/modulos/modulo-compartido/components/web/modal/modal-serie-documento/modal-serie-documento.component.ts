@@ -2,13 +2,10 @@ import Swal from 'sweetalert2';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
-import { UserContextService } from 'src/app/services/user-context.service';
 
-import { ITipoDocumento } from 'src/app/modulos/modulo-gestion/interfaces/web/inicializacion-sistema/tipo-documento.interface';
-import { FilterRequestModel } from 'src/app/models/filter-request.model';
-import { TipoDocumentoService } from 'src/app/modulos/modulo-gestion/services/web/inicializacion-sistema/tipo-documento.service';
-import { SerieNumeracionService } from 'src/app/modulos/modulo-gestion/services/web/inicializacion-sistema/serie-numeracion.service';
 import { ISerieNumeracion } from 'src/app/modulos/modulo-gestion/interfaces/web/inicializacion-sistema/serie-numeracion.interface';
+import { FilterRequestModel } from 'src/app/models/filter-request.model';
+import { SerieNumeracionService } from 'src/app/modulos/modulo-gestion/services/web/inicializacion-sistema/serie-numeracion.service';
 
 
 
@@ -19,8 +16,8 @@ import { ISerieNumeracion } from 'src/app/modulos/modulo-gestion/interfaces/web/
 export class ModalSerieDocumentoComponent implements OnInit, OnChanges {
   modeloFormVisor: FormGroup;
   modeloFormBusqueda: FormGroup;
-  globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
 
+  globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
   isDisplay: Boolean = false;
   isVisualizar: Boolean = false;
 

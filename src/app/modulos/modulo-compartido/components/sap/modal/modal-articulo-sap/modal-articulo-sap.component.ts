@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
 
-import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/articulo-sap.interface';
+import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/sap/articulo-sap.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { ArticuloSapService } from 'src/app/modulos/modulo-inventario/services/sap/articulo-sap.service';
 

@@ -7,7 +7,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { ArticuloSapForSodimacBySkuModel } from 'src/app/modulos/modulo-inventario/models/articulo.model';
+import { ArticuloSapForSodimacBySkuModel } from 'src/app/modulos/modulo-inventario/models/sap/articulo.model';
 import { ArticuloSapService } from 'src/app/modulos/modulo-inventario/services/sap/articulo-sap.service';
 
 

@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
 
-import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/articulo-sap.interface';
+import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/sap/articulo-sap.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { ArticuloSapService } from 'src/app/modulos/modulo-inventario/services/sap/articulo-sap.service';
 

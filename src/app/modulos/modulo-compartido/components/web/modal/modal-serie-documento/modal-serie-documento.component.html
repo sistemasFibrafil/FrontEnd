@@ -1,7 +1,7 @@
 <form [formGroup]="modeloFormVisor">
   <div class="p-inputgroup">
     <input id="float-input-ser-documento" type="text" placeholder="Serie de documento" maxlength="50" size="100" formControlName="serDocumento" autocomplete="off" pInputText>
-    <button pButton type="button" icon="{{globalConstants.icoBuscar}}" (click)="isVisualizar = true"></button>
+    <button pButton type="button" [disabled]="isHabilitarButton" icon="{{globalConstants.icoBuscar}}" (click)="isVisualizar = true"></button>
   </div>
 </form>
 <p-dialog header="Serie de Documento" [(visible)]="isVisualizar" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">

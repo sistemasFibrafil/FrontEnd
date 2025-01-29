@@ -16,7 +16,7 @@ import { UserContextService } from 'src/app/services/user-context.service';
 import { IStatus } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/status.interface';
 import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sap.interface';
 import { IOrdenVentaSodimac, IOrdenVentaSodimacDetalle } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
-import { OrdenVentaSodimacCreateModel } from 'src/app/modulos/modulo-ventas/models/orden-venta-sodimac.model';
+import { OrdenVentaSodimacCreateModel } from 'src/app/modulos/modulo-ventas/models/web/orden-venta-sodimac.model';
 import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
 

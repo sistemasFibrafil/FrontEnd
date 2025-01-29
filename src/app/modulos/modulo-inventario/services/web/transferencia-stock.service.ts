@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { ITransferenciaStock } from '../../interfaces/transferencia-stock.interface';
+import { ITransferenciaStock } from '../../interfaces/web/transferencia-stock.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
-import { TransferenciaStockCloseModel, TransferenciaStockCreateModel, TransferenciaStockUpdateModel } from '../../models/transferencia-stock.model';
+import { TransferenciaStockCloseModel, TransferenciaStockCreateModel, TransferenciaStockUpdateModel } from '../../models/web/transferencia-stock.model';
 
 
 @Injectable({providedIn: 'root'})
@@ -32,10 +32,14 @@ export class TransferenciaStockService {
     return this.http.get<ITransferenciaStock>(`${environment.url_api_fib}TransferenciaStock/GetById/${id}`);
   }
 
-  setCreate(value: TransferenciaStockCreateModel) {
-    console.log("VALUES", value);
+  setCreate1(value: TransferenciaStockCreateModel) {
     const param: string = JSON.stringify(value);
-    return this.http.post<any[]>(`${environment.url_api_fib}TransferenciaStock/SetCreate/`, param);
+    return this.http.post<any[]>(`${environment.url_api_fib}TransferenciaStock/SetCreate1/`, param);
+  }
+
+  setCreate2(value: TransferenciaStockCreateModel) {
+    const param: string = JSON.stringify(value);
+    return this.http.post<any[]>(`${environment.url_api_fib}TransferenciaStock/SetCreate2/`, param);
   }
 
   setUpdate(value: TransferenciaStockUpdateModel) {

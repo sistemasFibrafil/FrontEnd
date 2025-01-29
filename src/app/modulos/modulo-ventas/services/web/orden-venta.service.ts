@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { IOrdenVenta } from '../../interfaces/orden-venta.interface';
-import { OrdenVentaCreateModel } from '../../models/orden-venta.model';
+import { OrdenVentaCreateModel } from '../../models/web/orden-venta.model';
 
 
 

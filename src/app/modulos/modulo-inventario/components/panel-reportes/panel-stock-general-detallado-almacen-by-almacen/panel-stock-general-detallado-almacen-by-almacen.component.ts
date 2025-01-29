@@ -11,7 +11,7 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
 import { IAlmacenSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/almacen-sap.interface';
-import { IArticuloSap } from '../../../interfaces/articulo-sap.interface';
+import { IArticuloSap } from '../../../interfaces/sap/articulo-sap.interface';
 import { AlmacenService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/inventario/almacen-sap.service';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { ArticuloSapService } from '../../../services/sap/articulo-sap.service';

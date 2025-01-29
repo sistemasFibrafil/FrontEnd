@@ -4,6 +4,7 @@ export class ButtonAcces {
     btnEliminar: boolean;
     btnGrabar: boolean;
     btnCerrar: boolean;
+    btnTransferir: boolean;
     btnArchivo: boolean;
     btnPDF: boolean;
     btnEXCEL: boolean;
@@ -40,6 +41,7 @@ export class ButtonAcces {
         this.btnEliminar = true;
         this.btnGrabar = true;
         this.btnCerrar = true;
+        this.btnTransferir = true;
         this.btnArchivo = true;
         this.btnPDF = true;
         this.btnEXCEL = true;

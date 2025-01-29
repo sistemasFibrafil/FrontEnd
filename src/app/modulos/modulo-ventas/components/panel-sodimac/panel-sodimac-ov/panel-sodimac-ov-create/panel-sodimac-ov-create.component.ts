@@ -17,7 +17,7 @@ import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service'
 import { IStatus } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/status.interface';
 import { IOrdenVentaSodimacDetalle } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
 import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sap.interface';
-import { OrdenVentaSodimacCreateModel } from 'src/app/modulos/modulo-ventas/models/orden-venta-sodimac.model';
+import { OrdenVentaSodimacCreateModel } from 'src/app/modulos/modulo-ventas/models/web/orden-venta-sodimac.model';
 import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
 

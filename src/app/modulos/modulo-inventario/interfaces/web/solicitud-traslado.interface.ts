@@ -8,6 +8,7 @@ export interface ISolicitudTraslado {
   docDate             : Date;
   docDueDate          : Date;
   taxDate             : Date;
+  read?               : string;
   cardCode?           : string;
   cardName?           : string;
   cntctCode?          : number;
@@ -38,4 +39,40 @@ export interface ISolicitudTrasladoDetalle {
   openQty             : number;
   openQtyRding        : number;
   record?             : number;
+}
+
+
+export interface ILecturaCopySolicitudTrasladoToTransferencia {
+  cardCode?             : string;
+  cardName?             : string;
+  cntctCode             : number;
+  address               : string;
+  filler                : string;
+  toWhsCode?            : string;
+  codTipTraslado        : string;
+  codMotTraslado        : string;
+  codTipSalida          : string;
+  slpCode               : number;
+  jrnlMemo              : string;
+  comments?             : string;
+  linea                 : ISolicitudTrasladoDetalleToTransferencia[];
+}
+
+export interface ISolicitudTrasladoDetalleToTransferencia {
+  id                    : number;
+  idBase                : number;
+  lineBase              : number;
+  baseType              : string;
+  baseEntry             : number;
+  baseLine              : number;
+  return                : string;
+  itemCode              : string;
+  dscription            : string;
+  barcode               : string;
+  fromWhsCod            : string;
+  whsCode?              : string;
+  codTipOperacion?      : string;
+  unitMsr               : string;
+  quantity              : number;
+  openQty               : number;
 }

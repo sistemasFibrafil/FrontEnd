@@ -7,7 +7,7 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-cardCode">Código de cliente </label>
-                <app-modal-socio-negocio-sap [title]="'Socio de Negocios'" [cardCode]="cardCode" [cardType] = "'C,S'" [transType] = "'N,Y'" (eventoAceptar)="onSelectedSocioNegocio($event)"></app-modal-socio-negocio-sap>
+                <app-modal-socio-negocio-sap [isHabilitarButton]="true" [title]="'Socio de Negocios'" [cardCode]="cardCode" [cardType] = "'C,S'" [transType] = "'N,Y'" (eventoAceptar)="onSelectedSocioNegocio($event)"></app-modal-socio-negocio-sap>
               </div>
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-cardName">Razón social o nombre </label>
@@ -17,7 +17,7 @@
               </div>
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-persona-contacto">Persona de contacto </label>
-                <app-modal-persona-contacto-sap [cardCode]="cardCode" [cntctCode]="cntctCode" (eventoAceptar)="onSelectedPersonaContacto($event)"></app-modal-persona-contacto-sap>
+                <app-modal-persona-contacto-sap [isHabilitarButton]="true" [cardCode]="cardCode" [cntctCode]="cntctCode" (eventoAceptar)="onSelectedPersonaContacto($event)"></app-modal-persona-contacto-sap>
               </div>
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-address">Dirección de destino </label>
@@ -58,11 +58,11 @@
 
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-cardCode">Tipo de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-tipo-documento [codTipoDocumento]="tipDocumento" [codSede]="codSede" [codFormulario]="4" (eventoAceptar)="onSelectedTipoDocumento($event)"></app-modal-tipo-documento>
+                <app-modal-tipo-documento [isHabilitarButton]="true" [codTipoDocumento]="tipDocumento" [codSede]="codSede" [codFormulario]="4" (eventoAceptar)="onSelectedTipoDocumento($event)"></app-modal-tipo-documento>
               </div>
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-cardCode">Serie de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-serie-documento [serDocumento]="serDocumento" [codSede]="codSede" [codFormulario]="4" [tipDocumento]="tipDocumento" (eventoAceptar)="onSelectedSerieDocumento($event)"></app-modal-serie-documento>
+                <app-modal-serie-documento [isHabilitarButton]="true" [serDocumento]="serDocumento" [codSede]="codSede" [codFormulario]="4" [tipDocumento]="tipDocumento" (eventoAceptar)="onSelectedSerieDocumento($event)"></app-modal-serie-documento>
               </div>
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-cardName">Número de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
@@ -108,11 +108,11 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-6">
                 <label class="label-custom" for="float-input-almacen-origen">Almacén de origen </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-almacen-sap [whsCode]="whsCodeOrigen" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenOrigen($event)"></app-modal-almacen-sap>
+                <app-modal-almacen-sap [isHabilitarButton]="true" [whsCode]="whsCodeOrigen" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenOrigen($event)"></app-modal-almacen-sap>
               </div>
               <div class="col-12 md:col-6">
                 <label class="label-custom" for="float-input-destino">Almacén de destino </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-almacen-sap [whsCode]="whsCodeDestino" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenDestino($event)"></app-modal-almacen-sap>
+                <app-modal-almacen-sap [isHabilitarButton]="true" [whsCode]="whsCodeDestino" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenDestino($event)"></app-modal-almacen-sap>
               </div>
             </div>
           </form>
@@ -139,7 +139,7 @@
                 [responsive]="true"
                 [contextMenu]="cm"
                 [showCurrentPageReport]="true"
-                [(contextMenuSelection)]="detalleSelected"
+                [(contextMenuSelection)]="modeloSelected"
                 styleClass="{{globalConstants.cStyleTableGridLines}}"
                 currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}">
                 <!-- Header -->
@@ -302,7 +302,7 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-empleado-ventas">Empleado de ventas </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-empleado-venta-sap [slpCode]="slpCode" (eventoAceptar)="onSelectedEmpleadoVenta($event)"></app-modal-empleado-venta-sap>
+                <app-modal-empleado-venta-sap [isHabilitarButton]="true" [slpCode]="slpCode" (eventoAceptar)="onSelectedEmpleadoVenta($event)"></app-modal-empleado-venta-sap>
               </div>
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-num-bulto">Número de bultos </label>
@@ -384,7 +384,7 @@
       <div class="grid p-fluid">
         <div class="col-12 md:col-6">
           <div class="p-inputgroup">
-            <input id="float-input-filtro" type="text" placeholder="Buscar por código de barra" maxlength="100" size="50" formControlName="filtro" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
+            <input id="float-input-text1" type="text" placeholder="Buscar por código de barra" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
           </div>
         </div>
         <div class="col-12 md:col-6">
@@ -423,7 +423,10 @@
             <span class="p-column-title">Barcode: </span> {{modelo.barcode}}
           </td>
           <td class="custom-td-numero">
-            <span class="p-column-title">Cantidad: </span> {{modelo.quentity | number: '.3':'en-EN'}}
+            <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
+          </td>
+          <td class="custom-td-numero">
+            <span class="p-column-title">Peso: </span> {{modelo.peso | number: '.3':'en-EN'}}
           </td>
         </tr>
       </ng-template>

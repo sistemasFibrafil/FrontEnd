@@ -1,4 +1,4 @@
-export class SolicitudTrasladoCreateModel {
+export class SolicitudCompraCreateModel {
   id                          : number;
   docDate                     : Date;
   docDueDate                  : Date;
@@ -12,11 +12,11 @@ export class SolicitudTrasladoCreateModel {
   codTipTraslado              : string;
   codMotTraslado              : string;
   codTipSalida                : string;
-  slpCode                     : number;
+  empId                       : number;
   jrnlMemo                    : string;
   comments                    : string;
   idUsuarioCreate             : number;
-  linea                       : SolicitudTrasladoDetalleCreateModel[];
+  linea                       : SolicitudCompraDetalleCreateModel[];
 
   constructor(){
     this.id                   = 0;
@@ -32,7 +32,7 @@ export class SolicitudTrasladoCreateModel {
     this.codTipTraslado       = '';
     this.codMotTraslado       = '';
     this.codTipSalida         = '';
-    this.slpCode              = -1;
+    this.empId                = 0;
     this.jrnlMemo             = '';
     this.comments             = '';
     this.idUsuarioCreate      = 0;
@@ -40,7 +40,7 @@ export class SolicitudTrasladoCreateModel {
   }
 }
 
-export class SolicitudTrasladoDetalleCreateModel {
+export class SolicitudCompraDetalleCreateModel {
   id                          : number;
   line                        : number;
   itemCode                    : string;
@@ -69,7 +69,7 @@ export class SolicitudTrasladoDetalleCreateModel {
 }
 
 
-export class SolicitudTrasladoUpdateModel {
+export class SolicitudCompraUpdateModel {
   id                          : number;
   docEntry                    : number;
   docDate                     : Date;
@@ -84,7 +84,7 @@ export class SolicitudTrasladoUpdateModel {
   jrnlMemo                    : string;
   comments                    : string;
   idUsuarioUpdate             : number;
-  linea                       : SolicitudTrasladoDetalleUpdateModel[];
+  linea                       : SolicitudCompraDetalleUpdateModel[];
 
   constructor(){
     this.id                   = 0;
@@ -105,7 +105,7 @@ export class SolicitudTrasladoUpdateModel {
   }
 }
 
-export class SolicitudTrasladoDetalleUpdateModel {
+export class SolicitudCompraDetalleUpdateModel {
   id                          : number;
   line                        : number;
   docEntry                    : number;
@@ -146,7 +146,7 @@ export class SolicitudTrasladoDetalleUpdateModel {
 }
 
 
-export class SolicitudTrasladoCloseModel {
+export class SolicitudCompraCloseModel {
   id                         : number;
   docEntry                    : number;
   idUsuarioClose              : number;

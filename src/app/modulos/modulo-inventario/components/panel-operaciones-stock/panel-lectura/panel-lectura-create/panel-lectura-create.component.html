@@ -6,7 +6,7 @@
           <form [formGroup]="modeloForm">
             <div class="p-formgrid grid">
               <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-objType">Tipo de documento </label>
+                <label class="label-custom" for="float-input-objType">Tipo de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <p-dropdown id="float-input-objType" [options]="listObjType" class="p dropdown-item-text" placeholder="Seleccionar el tipo de documento" formControlName="objType" [required] optionLabel="label" [showClear]="true" (onChange)="onChangeObjType()"></p-dropdown>
                 <div *ngIf="modeloForm.controls['objType'].errors && modeloForm.controls['objType'].dirty">
                   <p-message severity="error" text="El tipo de documento es requerido." *ngIf="modeloForm.controls['objType'].errors['required']"></p-message>
@@ -23,7 +23,7 @@
                 </div>
               </div>
               <div class="col-12 md:col-4">
-                <label class="label-custom" for="float-input-cardName">Razón Social o Nombre </label>
+                <label class="label-custom" for="float-input-cardName">Razón social o nombre </label>
                 <div class="p-inputgroup">
                   <input id="float-input-cardName" type="text" placeholder="Razón Social o Nombre" maxlength="100" size="50" formControlName="cardName" autocomplete="off" required pInputText [readOnly]="true">
                 </div>
@@ -38,21 +38,27 @@
           <form [formGroup]="modeloFormDetalle">
             <div class="grid p-fluid">
               <div class="col-12 md:col-3">
+                <label class="label-custom" for="float-input-documento">Documento </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <p-dropdown id="float-input-documento" [options]="listDocumento" [filter]="true" class="p dropdown-item-text" placeholder="Seleccione el documento" formControlName="documento" [required] optionLabel="label" [showClear]="true"></p-dropdown>
                 <div *ngIf="modeloFormDetalle.controls['documento'].errors && modeloFormDetalle.controls['documento'].dirty">
                   <p-message severity="error" text="El documento es requerido." *ngIf="modeloFormDetalle.controls['documento'].errors['required']"></p-message>
                 </div>
               </div>
               <div class="col-12 md:col-3">
+                <label class="label-custom" for="float-input-almacen">Alamcén </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <p-dropdown id="float-input-almacen" [options]="listAlmacen" [filter]="true" class="p dropdown-item-text" placeholder="Seleccione el Almacén" formControlName="almacen" [required] optionLabel="label" [showClear]="true"></p-dropdown>
                 <div *ngIf="modeloFormDetalle.controls['almacen'].errors && modeloFormDetalle.controls['almacen'].dirty">
                   <p-message severity="error" text="El almacén es requerido." *ngIf="modeloFormDetalle.controls['almacen'].errors['required']"></p-message>
                 </div>
               </div>
               <div class="col-12 md:col-3">
-                <input id="float-input-barcode" type="text" placeholder="Código de barra" maxlength="100" size="50" formControlName="barcode" autocomplete="off" required pInputText (keyup.enter)="onToAdd()">
+                <label class="label-custom" for="float-input-barcode">Código de barra </label><span class="label" style="font-weight: bold; color:red">*</span>
+                <div class="p-inputgroup">
+                  <input id="float-input-barcode" type="text" placeholder="Código de barra" maxlength="100" size="50" formControlName="barcode" autocomplete="off" required pInputText (keyup.enter)="onToAdd()">
+                </div>
               </div>
               <div class="col-12 md:col-3">
+                <label class="label-custom" for="float-input-barcode">&nbsp; </label>
                 <button [disabled]="!modeloFormDetalle.valid" pButton type="button" label="{{globalConstants.cAgregar}}" icon="{{globalConstants.icoAgregar}}" (click)="onToAdd()"></button>
               </div>
             </div>
@@ -69,7 +75,7 @@
             [contextMenu]="cm"
             selectionMode="single"
             [showCurrentPageReport]="true"
-            [(contextMenuSelection)]="modeloSeleted"
+            [(contextMenuSelection)]="modeloSelected"
             styleClass="{{globalConstants.cStyleTableGridLines}}"
             currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}">
             <!-- Header -->
@@ -130,7 +136,7 @@
       <div class="grid p-fluid">
         <div class="col-12 md:col-6">
           <div class="p-inputgroup">
-            <input id="float-input-filtro" type="text" placeholder="Buscar por código de barra" maxlength="100" size="50" formControlName="filtro" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
+            <input id="float-input-text1" type="text" placeholder="Buscar por código de barra" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
           </div>
         </div>
         <div class="col-12 md:col-6">
@@ -168,6 +174,9 @@
           </td>
           <td class="p-fluid">
             <span class="p-column-title">Barcode: </span> {{modelo.barcode}}
+          </td>
+          <td class="custom-td-numero">
+            <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
           </td>
           <td class="custom-td-numero">
             <span class="p-column-title">Peso: </span> {{modelo.peso | number: '.3':'en-EN'}}

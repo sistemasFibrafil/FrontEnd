@@ -16,7 +16,6 @@ export class AccesoOpcionesService {
 
   // Se tiene que mejorar el acceso a las opciones
   getObtieneOpciones(nombreFormulario: string): ButtonAcces {
-    //debugger
     this.buttonAcces = new ButtonAcces();
     this.listOpcion = [];
     if (this.sessionService.getItem('menu-opciones')){
@@ -24,6 +23,7 @@ export class AccesoOpcionesService {
       this.listOpcion  = [...data].find(x => x.nombreFormulario === nombreFormulario).listaOpciones;
 
           this.listOpcion.forEach(element => {
+            debugger
             if (element.keyOpcion === 'btn-nuevo') {
               this.buttonAcces.btnNuevo = false;
             }
@@ -38,6 +38,9 @@ export class AccesoOpcionesService {
             }
             if (element.keyOpcion === 'btn-cerrar') {
               this.buttonAcces.btnCerrar = false;
+            }
+            if (element.keyOpcion === 'btn-transferir') {
+              this.buttonAcces.btnTransferir = false;
             }
             if (element.keyOpcion === 'btn-archivo') {
               this.buttonAcces.btnArchivo = false;

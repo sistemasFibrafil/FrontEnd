@@ -6,7 +6,7 @@ export interface ILectura {
   baseType              : string;
   baseEntry             : number;
   baseNum               : number;
-  baseline              : number;
+  baseLine              : number;
   docStatus             : string;
   return                : string;
   cardCode?             : string;
@@ -19,27 +19,6 @@ export interface ILectura {
   quantity              : number;
   peso                  : number;
   idUsuarioCreate       : number;
-}
-
-
-export interface ILecturaByBaseTypeBaseEntry {
-  baseType              : string;
-  baseEntry             : number;
-  baseNum               : number;
-  itemCode?             : string;
-  dscription?           : string;
-  unitMsr?              : string;
-  quantity              : number;
-  peso                  : number;
-}
-
-export interface ILecturaByBaseTypeAndBaseEntryAndFiltro {
-  id                    : number;
-  lineBase              : number;
-  itemCode              : string;
-  barcode               : string;
-  quantity              : number;
-  peso                  : number;
 }
 
 export interface ILecturaByObject {

@@ -23,28 +23,3 @@ export class LecturaDeleteModel {
       this.baseEntry         = 0;
   }
 }
-
-export class LecturaFindModel {
-  idBase      : number;
-  baseType    : string;
-  linea       : LecturaLineaFindModel[] = [];
-
-  constructor(){
-    this.idBase = 0;
-    this.linea = [];
-  }
-}
-
-export class LecturaLineaFindModel {
-  idBase      : number;
-  lineBase    : number;
-  baseType    : string;
-  return      : string;
-
-  constructor(){
-    this.idBase   = 0;
-    this.lineBase = 0;
-    this.baseType = '';
-    this.return   = '';
-  }
-}

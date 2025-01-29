@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -9,9 +10,11 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 
-import { ITransferenciaStock, ITransferenciaStockDetalle } from 'src/app/modulos/modulo-inventario/interfaces/transferencia-stock.interface';
-import { TransferenciaStockUpdateModel } from 'src/app/modulos/modulo-inventario/models/transferencia-stock.model';
+import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/web/lectura.inteface';
+import { ITransferenciaStock, ITransferenciaStockDetalle } from 'src/app/modulos/modulo-inventario/interfaces/web/transferencia-stock.interface';
+import { TransferenciaStockUpdateModel } from 'src/app/modulos/modulo-inventario/models/web/transferencia-stock.model';
 import { TransferenciaStockService } from 'src/app/modulos/modulo-inventario/services/web/transferencia-stock.service';
+import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
 import { SerieNumeracionSapService } from 'src/app/modulos/modulo-gestion/services/sap/inicializacion-sistema/serie-numeracion-sap.service';
 
 
@@ -63,30 +66,30 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
   // MODAL: Serie de documento
   serDocumento: string = '';
 
-   // MODAL: Almacen
-   whsCodeOrigen: string = '';
-   whsCodeDestino: string = '';
-   itemCodeAlmacen: string = '';
-   demandanteAlmacen: string = 'N';
-   inactiveAlmacen: string = 'N';
+  // MODAL: Almacen
+  whsCodeOrigen: string = '';
+  whsCodeDestino: string = '';
+  itemCodeAlmacen: string = '';
+  demandanteAlmacen: string = 'N';
+  inactiveAlmacen: string = 'N';
 
-   // MODAL: Tipo de transporte
-   codTipTransporte: string = '';
+  // MODAL: Tipo de transporte
+  codTipTransporte: string = '';
 
-   // MODAL: Tipo de documento transportista
-   codTipDocTransportista: string = '';
+  // MODAL: Tipo de documento transportista
+  codTipDocTransportista: string = '';
 
-   // MODAL: Tipo de documento conductor
-   codTipDocConductor: string = '';
+  // MODAL: Tipo de documento conductor
+  codTipDocConductor: string = '';
 
-   // MODAL: Tipo de traslado
-   codTipTraslado: string = '';
+  // MODAL: Tipo de traslado
+  codTipTraslado: string = '';
 
-   // MODAL: Motivo de traslado
-   codMotTraslado: string = '';
+  // MODAL: Motivo de traslado
+  codMotTraslado: string = '';
 
-   // MODAL: Tipo de salida
-   codTipSalida: string = '';
+  // MODAL: Tipo de salida
+  codTipSalida: string = '';
 
   // DETALLE
   columnas: any[];
@@ -95,7 +98,7 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
   detalle: any[] = [];
   bardcodeList: any[];
   lectura: ITransferenciaStockDetalle[] = [];
-  detalleSelected: ITransferenciaStockDetalle;
+  modeloSelected: ITransferenciaStockDetalle;
 
   // MODAL: Almacen - Item
   itemCode: string = '';
@@ -111,19 +114,20 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
   isVisualizarAlmacenOrigen: boolean = false;
   isVisualizarAlmacenDestino: boolean = false;
 
-   // MODAL: Empleado de ventas
-   slpCode: number = 0;
+  // MODAL: Empleado de ventas
+  slpCode: number = 0;
 
 
   constructor
   (
     private router: Router,
     private fb: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly swaCustomService: SwaCustomService,
     public app: LayoutComponent,
-    public lenguageService: LanguageService,
+    private readonly route: ActivatedRoute,
     public readonly utilService: UtilService,
+    private readonly swaCustomService: SwaCustomService,
+    public lenguageService: LanguageService,
+    private lecturaService: LecturaService,
     private userContextService: UserContextService,
     private serieNumeracionSapService: SerieNumeracionSapService,
     private transferenciaStockService: TransferenciaStockService,
@@ -207,14 +211,14 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
 
     this.modeloFormBar = this.fb.group(
     {
-      'filtro' : new FormControl(''),
+      'text1' : new FormControl(''),
     });
   }
 
   getListContextMenu() {
     this.items =
     [
-      {label: 'Visualizar',   icon: 'pi pi-eye',    command: () => this.onClickVisualizar() }
+      {label: 'Visualizar',   icon: 'pi pi-eye',    command: () => this.onClickVisualizar(this.modeloSelected) }
     ];
   }
 
@@ -234,7 +238,8 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     [
       { field: 'itemCode',        header: 'Código' },
       { field: 'barcode',         header: 'Barcode' },
-      { field: 'quantity',        header: 'Cantidad' }
+      { field: 'quantity',        header: 'Cantidad' },
+      { field: 'peso',            header: 'Peso' }
     ];
   }
 
@@ -502,14 +507,34 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
   }
 
   //#region  <<< Visualizar >>>
-  onClickVisualizar()
+  onListar() {
+    this.isDisplay = true;
+    this.bardcodeList = [];
+    const text1 = this.modeloFormBar.value;
+    const params: any = { cod1: this.modeloSelected.objType, id1: this.modeloSelected.docEntry, id2: this.modeloSelected.lineNum, text1: text1.text1 };
+    this.lecturaService.getListByTargetTypeTrgetEntryTrgetLineFiltro(params)
+    .subscribe({next:(data: ILectura[]) =>{
+        this.isDisplay = false;
+        this.bardcodeList = data;
+      },error:(e)=>{
+        this.bardcodeList = [];
+        this.isDisplay = false;
+        let swalWithBootstrapButtons = Swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal') });
+        swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, e.error.resultadoDescripcion, 'error');
+      }
+    });
+  }
+
+  onClickVisualizar(value: ITransferenciaStockDetalle)
   {
+    this.modeloSelected = value;
+    this.onListar();
     this.isVisualizarBarcode = !this.isVisualizarBarcode;
   }
 
   onToBuscar()
   {
-
+    this.onListar();
   }
 
   onToSelectedDeleteRow(value: ITransferenciaStockDetalle)
@@ -604,6 +629,7 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     .subscribe({next:(data: ITransferenciaStock) => {
       setTimeout(() => {
         this.set(data);
+        console.log("DATA::: ", data);
       }, 10);
       setTimeout(() => {
         data.linea.forEach(element => {

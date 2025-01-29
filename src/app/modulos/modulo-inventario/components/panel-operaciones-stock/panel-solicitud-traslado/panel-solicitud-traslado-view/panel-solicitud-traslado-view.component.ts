@@ -8,8 +8,8 @@ import { UtilService } from 'src/app/services/util.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { LanguageService } from 'src/app/services/language.service';
 
-import { ISolicitudTraslado, ISolicitudTrasladoDetalle } from 'src/app/modulos/modulo-inventario/interfaces/solicitud-traslado.interface';
-import { SolicitudTrasladoCreateModel } from 'src/app/modulos/modulo-inventario/models/solicitud-traslado.model';
+import { ISolicitudTraslado, ISolicitudTrasladoDetalle } from 'src/app/modulos/modulo-inventario/interfaces/web/solicitud-traslado.interface';
+import { SolicitudTrasladoCreateModel } from 'src/app/modulos/modulo-inventario/models/web/solicitud-traslado.model';
 import { SolicitudTrasladoService } from 'src/app/modulos/modulo-inventario/services/web/solicitud-traslado.service';
 
 interface DocStatus {
@@ -373,6 +373,7 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
     this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );
     this.modeloFormCab2.controls['docDueDate'].setValue( data.docDueDate == null ?  null : new Date(data.docDueDate) );
     this.modeloFormCab2.controls['taxDate'].setValue( data.taxDate == null ?  null : new Date(data.taxDate) );
+    this.modeloFormCab2.controls['read'].setValue( data.read === 'Y'? true : false );
     this.modeloFormPie1.controls['jrnlMemo'].setValue( data.jrnlMemo );
     this.modeloFormPie1.controls['comments'].setValue( data.comments );
   }

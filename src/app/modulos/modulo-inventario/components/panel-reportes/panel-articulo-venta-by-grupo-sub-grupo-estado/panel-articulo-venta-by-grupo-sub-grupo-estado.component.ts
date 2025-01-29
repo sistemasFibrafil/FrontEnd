@@ -11,7 +11,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IArticuloVentaByGrupoSubGrupoEstado } from '../../../interfaces/articulo-sap.interface';
+import { IArticuloVentaByGrupoSubGrupoEstado } from '../../../interfaces/sap/articulo-sap.interface';
 import { IGrupoArticulo, ISubGrupoArticulo2, ISubGrupoArticulo } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/grupo-articulo-sap.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { ArticuloSapService } from '../../../services/sap/articulo-sap.service';

@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment.prod';
 
 
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
-import { OrdenVentaSodimacCreateModel, OrdenVentaSodimacLpnUpdateModel } from '../../models/orden-venta-sodimac.model';
+import { OrdenVentaSodimacCreateModel, OrdenVentaSodimacLpnUpdateModel } from '../../models/web/orden-venta-sodimac.model';
 import { IOrdenVentaSodimac, IOrdenVentaSodimacByFiltro, IOrdenVentaSodimacConsulta, IOrdenVentaSodimacDetalle } from '../../interfaces/orden-venta-sodimac.interface';
 
 

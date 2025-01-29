@@ -18,12 +18,6 @@ const routes: Routes = [
         loadChildren: () => import('./modulos/modulo-page-bienvenida/modulo-page-bienvenida.module').then(m => m.PageBienvenidaModule)
       },
       {
-        path: 'modulo-inv',
-        data: { breadcrumb: 'Inventario' },
-        loadChildren: () => import('./modulos/modulo-inventario/modulo-inventario.module').then(m => m.InventarioModule),
-        canActivate: [AuthGuard]
-      },
-      {
         path: 'modulo-das',
         data: { breadcrumb: 'Dashboard' },
         loadChildren: () => import('./modulos/modulo-dashboard/modulo-dashboard.module').then(m => m.DashboardModule),
@@ -36,21 +30,27 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
-        path: 'modulo-fac',
-        data: { breadcrumb: 'Facturación Electrónica' },
-        loadChildren: () => import('./modulos/modulo-facturacion-electronica/modulo-facturacion-electronica.module').then(m => m.FacturacionElectronicaModule),
+        path: 'modulo-ges',
+        data: { breadcrumb: 'Maestros' },
+        loadChildren: () => import('./modulos/modulo-gestion/modulo-gestion.module').then(m => m.GestionModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'modulo-inv',
+        data: { breadcrumb: 'Inventario' },
+        loadChildren: () => import('./modulos/modulo-inventario/modulo-inventario.module').then(m => m.InventarioModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'modulo-com',
+        data: { breadcrumb: 'Compras' },
+        loadChildren: () => import('./modulos/modulo-compras/modulo-compras.module').then(m => m.ComprasModule),
         canActivate: [AuthGuard]
       },
       {
         path: 'modulo-ban',
         data: { breadcrumb: 'Reportes' },
         loadChildren: () => import('./modulos/modulo-gestion-bancos/modulo-gestion-bancos.module').then(m => m.GestionBancosModule),
-        canActivate: [AuthGuard]
-      },
-      {
-        path: 'modulo-ges',
-        data: { breadcrumb: 'Maestros' },
-        loadChildren: () => import('./modulos/modulo-gestion/modulo-gestion.module').then(m => m.GestionModule),
         canActivate: [AuthGuard]
       },
       {
@@ -63,6 +63,12 @@ const routes: Routes = [
         path: 'modulo-ven',
         data: { breadcrumb: 'Ventas' },
         loadChildren: () => import('./modulos/modulo-ventas/modulo-ventas.module').then(m => m.VentasModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'modulo-fac',
+        data: { breadcrumb: 'Facturación Electrónica' },
+        loadChildren: () => import('./modulos/modulo-facturacion-electronica/modulo-facturacion-electronica.module').then(m => m.FacturacionElectronicaModule),
         canActivate: [AuthGuard]
       },
       {

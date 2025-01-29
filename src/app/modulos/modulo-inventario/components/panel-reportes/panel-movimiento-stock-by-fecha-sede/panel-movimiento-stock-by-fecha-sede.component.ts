@@ -12,7 +12,7 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
 import { ISedeSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/sede-sap.interface';
-import { IMovimientoStockByFechaSede } from '../../../interfaces/articulo-sap.interface';
+import { IMovimientoStockByFechaSede } from '../../../interfaces/sap/articulo-sap.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { SedeSapService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/inventario/sede-sap.service';
 import { ArticuloSapService } from '../../../services/sap/articulo-sap.service';

@@ -12,7 +12,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
-import { OrdenVentaSodimacLpnUpdateModel } from 'src/app/modulos/modulo-ventas/models/orden-venta-sodimac.model';
+import { OrdenVentaSodimacLpnUpdateModel } from 'src/app/modulos/modulo-ventas/models/web/orden-venta-sodimac.model';
 import { IOrdenVentaSodimacConsulta } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';

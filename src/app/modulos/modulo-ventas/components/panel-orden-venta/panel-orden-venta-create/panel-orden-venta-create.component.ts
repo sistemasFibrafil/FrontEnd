@@ -18,8 +18,8 @@ import { ISocioNegocio } from 'src/app/modulos/modulo-socio-negocios/interfaces/
 import { ITipoCambioSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/tipo-cambio-sap.interface';
 import { IDetalleSociedadSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/inicializacion-sistema/detalle-sociedad-sap.interface';
 import { IOrdenVenta, IOrdenVentaDetalle } from '../../../interfaces/orden-venta.interface';
-import { IArticuloDocumentoSap, IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/articulo-sap.interface';
-import { OrdenVentaCreateModel } from '../../../models/orden-venta.model';
+import { IArticuloDocumentoSap, IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/sap/articulo-sap.interface';
+import { OrdenVentaCreateModel } from '../../../models/web/orden-venta.model';
 import { OrdenVentaService } from '../../../services/web/orden-venta.service';
 import { ArticuloSapService } from 'src/app/modulos/modulo-inventario/services/sap/articulo-sap.service';
 import { ImpuestoSapService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/finanzas/impuesto-sap.service';

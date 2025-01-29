@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
@@ -9,9 +10,9 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/lectura.inteface';
-import { LecturaFindModel } from 'src/app/modulos/modulo-inventario/models/lectura.model';
+import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/web/lectura.inteface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
+import { ParamCreateTransferenciaModel } from 'src/app/modulos/modulo-inventario/models/web/solicitud-traslado.model';
 import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
 
 
@@ -21,7 +22,6 @@ interface DocStatus {
 }
 
 
-
 @Component({
   selector: 'app-inv-panel-lectura-list',
   templateUrl: './panel-lectura-list.component.html',
@@ -29,6 +29,7 @@ interface DocStatus {
 })
 export class PanelLecturaListComponent implements OnInit {
   modeloForm: FormGroup;
+  modeloFormBusqueda: FormGroup;;
 
   // Titulo del componente
   titulo = 'Lectura';
@@ -54,7 +55,13 @@ export class PanelLecturaListComponent implements OnInit {
   isDisplay: Boolean = false;
   isDeleting: boolean = false;
   params: FilterRequestModel = new FilterRequestModel();
-  paramsLectura: LecturaFindModel = new LecturaFindModel();
+  paramCreateTransferencia: ParamCreateTransferenciaModel = new ParamCreateTransferenciaModel();
+
+  // Modal
+  columnasModal: any[];
+  listModal: ILectura[] = [];
+  modeloModalSeleted: ILectura;
+  isVisualizar: boolean = false;
 
 
   constructor
@@ -89,11 +96,16 @@ export class PanelLecturaListComponent implements OnInit {
       'msDocStatus'     : new FormControl('', Validators.compose([Validators.required])),
     });
 
+    this.modeloFormBusqueda = this.fb.group({
+      'text1': new FormControl(''),
+    });
+
     this.buttonAcces = this.accesoOpcionesService.getObtieneOpciones('app-inv-panel-lectura-list');
   }
 
   onBuildColumn() {
-    this.columnas = [
+    this.columnas =
+    [
       { field: 'numBase',         header: 'Número' },
       { field: 'baseNum',         header: 'SAP' },
       { field: 'baseLine',        header: 'Línea' },
@@ -103,12 +115,20 @@ export class PanelLecturaListComponent implements OnInit {
       { field: 'quantity',        header: 'Cantidad' },
       { field: 'peso',            header: 'Peso' },
     ];
+
+    this.columnasModal =
+    [
+      { field: 'itemCode',        header: 'Código' },
+      { field: 'barcode',         header: 'Barcode' },
+      { field: 'quantity',        header: 'Cantidad' },
+      { field: 'peso',            header: 'Peso' }
+    ];
   }
 
   opcionesTabla() {
     this.opciones1 = [
-      { label: 'Visualizar',  icon: 'pi pi-eye',            command: () => {  } },
       { label: 'Eliminar',    icon: 'pi pi-trash',          command: () => { this.onToDelete() } },
+      { label: 'Visualizar',  icon: 'pi pi-eye',            command: () => { this.onToVisualizar() } },
     ];
     this.opciones2 = [
       { label: 'Despacho',    icon: 'pi pi-plus',           command: () => { this.onToCopy() } },
@@ -180,22 +200,23 @@ export class PanelLecturaListComponent implements OnInit {
 
   onToItemSelected(modelo: ILectura) {
     this.modeloSelected = modelo;
+    if(this.buttonAcces.btnEliminar || modelo.docStatus === '02' || modelo.docStatus === '03'){
+      this.opciones1.find(x => x.label == "Eliminar").visible = false;
+    } else {
+      this.opciones1.find(x => x.label == "Eliminar").visible = true;
+    }
     if(this.buttonAcces.btnVizualizar || modelo.docStatus === '03'){
       this.opciones1.find(x => x.label == "Visualizar").visible = false;
     } else {
       this.opciones1.find(x => x.label == "Visualizar").visible = true;
     }
-    if(this.buttonAcces.btnEditar || modelo.docStatus === '02' || modelo.docStatus === '03'){
-      this.opciones1.find(x => x.label == "Eliminar").visible = false;
-    } else {
-      this.opciones1.find(x => x.label == "Eliminar").visible = true;
-    }
   }
 
+  //#region <<< Delete >>>
   delete() {
     this.isDeleting = true;
-    const param: any = { objType: this.modeloSelected.baseType, docEntry: this.modeloSelected.baseEntry };
-    this.lecturaService.setDeleteMultiple(param)
+    const params: any = { id: 0, baseType: this.modeloSelected.baseType, baseEntry: this.modeloSelected.baseEntry, baseLine: this.modeloSelected.baseLine, return: this.modeloSelected.return, docStatus: this.modeloSelected.docStatus };
+    this.lecturaService.setDeleteMassive(params)
     .subscribe({ next: (resp:any)=>{
         this.onListar();
         this.isDeleting = false;
@@ -220,6 +241,108 @@ export class PanelLecturaListComponent implements OnInit {
       }
     });
   }
+  //#endregion
+
+  //#region <<< Visualizar >>>
+  onToVisualizar()
+  {
+    this.isVisualizar = !this.isVisualizar;
+    this.onModalListar();
+  }
+
+  //#region <<< Modal >>>
+  onToModalBuscar()
+  {
+    this.onModalListar();
+  }
+
+  onModalListar() {
+    this.isDisplay = true;
+    this.listModal = [];
+    const text1 = this.modeloFormBusqueda.value;
+    const params: any = { cod1: this.modeloSelected.baseType, id1: this.modeloSelected.baseEntry, id2: this.modeloSelected.baseLine, cod2: this.modeloSelected.return, cod3: this.modeloSelected.docStatus, text1: text1.text1 };
+    this.lecturaService.getListByBaseTypeBaseEntryBaseLineFiltro(params)
+    .subscribe({next:(data: ILectura[]) =>{
+        this.isDisplay = false;
+        this.listModal = data;
+      },error:(e)=>{
+        this.listModal = [];
+        this.isDisplay = false;
+        let swalWithBootstrapButtons = Swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal') });
+        swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, e.error.resultadoDescripcion, 'error');
+      }
+    });
+  }
+
+  onToSelectedDeleteRow(modelo: ILectura)
+  {
+    this.modeloModalSeleted = modelo;
+    this.onConfirmDeleteRow()
+  }
+
+  onConfirmDeleteRow()
+  {
+    this.swaConfirmation(
+      this.globalConstants.titleEliminar,
+      this.globalConstants.subTitleEliminar,
+      this.globalConstants.icoSwalQuestion
+    ).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteRow();
+      }
+    });
+  }
+
+  swaConfirmation(title: string, text: string, icon: any) {
+    let swalWithBootstrapButtons = Swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal') });
+    return swalWithBootstrapButtons.fire({
+      title: title,
+      html: text,
+      icon: icon,
+      showConfirmButton: true,
+      confirmButtonText: this.globalConstants.confirmButtonText,
+      confirmButtonColor: '#3085d6',
+      showCancelButton: true,
+      cancelButtonText: this.globalConstants.cancelButtonText,
+      cancelButtonColor: '#d33000',
+    });
+  }
+
+  swaMsgExito(msgExitoDetail: string){
+    let swalWithBootstrapButtons = Swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal') });
+    return swalWithBootstrapButtons.fire(
+      this.globalConstants.msgExitoSummary,
+      msgExitoDetail === null || msgExitoDetail === undefined || msgExitoDetail === '' ? this.globalConstants.msgExitoDetail :  msgExitoDetail,
+      this.globalConstants.icoSwalSuccess
+    );
+  }
+
+  deleteRow() {
+    this.isDeleting = true;
+    const params: any = { id: this.modeloModalSeleted.id };
+    this.lecturaService.setDelete(params)
+    .subscribe({ next: (resp:any)=>{
+      this.onListar();
+        this.onModalListar();
+        this.isDeleting = false;
+        this.swaMsgExito(null);
+      },
+      error:(e)=>{
+        this.isDeleting = false;
+        let swalWithBootstrapButtons = Swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal') });
+        swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, e.error.resultadoDescripcion, 'error');
+      }
+    });
+  }
+
+  onClickClose()
+  {
+    this.listModal = [];
+    this.modeloFormBusqueda.patchValue({ filtro : '' });
+    this.isVisualizar = false;
+  }
+  //#endregion
+  //#endregion
 
   isRowSelectable(event) {
     return !this.isOutOfStock(event.data);
@@ -227,32 +350,31 @@ export class PanelLecturaListComponent implements OnInit {
 
   isOutOfStock(data) {
     return data.docStatus === '02';
-}
+  }
 
   onToCopy()
   {
 
     if(this.lecturaSelected.length > 0)
     {
-      this.paramsLectura.idBase = this.lecturaSelected[0].idBase;
-      this.paramsLectura.baseType = this.lecturaSelected[0].baseType;
-
-      this.paramsLectura.linea = [];
+      this.paramCreateTransferencia.idBase = this.lecturaSelected[0].idBase;
+      this.paramCreateTransferencia.baseType = this.lecturaSelected[0].baseType;
+      this.paramCreateTransferencia.linea = [];
 
       for (let index = 0; index < this.lecturaSelected.length; index++) {
         if(this.lecturaSelected[index].idBase !== 0)
         {
-          this.paramsLectura.linea.push
+          this.paramCreateTransferencia.linea.push
           ({
+            baseType            : this.lecturaSelected[index].baseType,
             idBase              : this.lecturaSelected[index].idBase,
             lineBase            : this.lecturaSelected[index].lineBase,
-            baseType            : this.lecturaSelected[index].baseType,
             return              : this.lecturaSelected[index].return,
           });
         }
       }
 
-      this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', JSON.stringify(this.paramsLectura)]);
+      this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create-2', JSON.stringify(this.paramCreateTransferencia)]);
     }
   }
 }

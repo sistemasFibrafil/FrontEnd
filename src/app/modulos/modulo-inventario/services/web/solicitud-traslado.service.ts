@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { ISolicitudTraslado } from '../../interfaces/solicitud-traslado.interface';
+import { ILecturaCopySolicitudTrasladoToTransferencia, ISolicitudTraslado } from '../../interfaces/web/solicitud-traslado.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
-import { SolicitudTrasladoCloseModel, SolicitudTrasladoCreateModel, SolicitudTrasladoUpdateModel } from '../../models/solicitud-traslado.model';
+import { SolicitudTrasladoCloseModel, SolicitudTrasladoCreateModel, SolicitudTrasladoUpdateModel } from '../../models/web/solicitud-traslado.model';
 
 
 @Injectable({providedIn: 'root'})
@@ -30,6 +30,10 @@ export class SolicitudTrasladoService {
 
   getById(id: number) {
     return this.http.get<ISolicitudTraslado>(`${environment.url_api_fib}SolicitudTraslado/GetById/${id}`);
+  }
+
+  getSolicitudTrasladoToTransferencia(id: number) {
+    return this.http.get<ILecturaCopySolicitudTrasladoToTransferencia>(`${environment.url_api_fib}SolicitudTraslado/GetSolicitudTrasladoToTransferencia/${id}`);
   }
 
   setCreate(value: SolicitudTrasladoCreateModel) {

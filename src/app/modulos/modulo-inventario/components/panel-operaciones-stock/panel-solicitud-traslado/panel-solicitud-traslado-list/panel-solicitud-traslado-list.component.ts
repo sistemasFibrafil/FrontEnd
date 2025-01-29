@@ -1,6 +1,7 @@
 import { Router } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
+import { HttpEventType } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ButtonAcces } from 'src/app/models/acceso-button.model';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
@@ -9,9 +10,10 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { ISolicitudTraslado } from 'src/app/modulos/modulo-inventario/interfaces/solicitud-traslado.interface';
+import { ISolicitudTraslado } from 'src/app/modulos/modulo-inventario/interfaces/web/solicitud-traslado.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { SolicitudTrasladoService } from 'src/app/modulos/modulo-inventario/services/web/solicitud-traslado.service';
+import { SolicitudTrasladoSapService } from 'src/app/modulos/modulo-inventario/services/sap/solicitud-traslado-sap.Service';
 
 interface DocStatus {
   statusCode  : string,
@@ -33,6 +35,12 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
   // Name de los botones de accion
   globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
 
+  isDataBlob: Blob;
+  isDisplay: Boolean = false;
+  isClosing: boolean = false;
+  isDisplayVisor: boolean = false;
+  isDisplayGenerandoVisor: boolean = false;
+
   columnas: any[];
   opciones: any = [];
 
@@ -45,8 +53,6 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
   docStatusSelected: any[];
 
   params: FilterRequestModel = new FilterRequestModel();
-  isDisplay: Boolean = false;
-  isClosing: boolean = false;
 
 
   constructor
@@ -58,6 +64,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
     private readonly swaCustomService: SwaCustomService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
     private solicitudTrasladoService: SolicitudTrasladoService,
+    private solicitudTrasladoSapService: SolicitudTrasladoSapService,
   ) {}
 
 
@@ -87,6 +94,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
       { field: 'docDate',         header: 'Fecha de contabilización' },
       { field: 'docDueDate',      header: 'Fecha de entrega' },
       { field: 'taxDate',         header: 'Fecha de documento' },
+      { field: 'read',            header: '¿Lectura?' },
       { field: 'filler',          header: 'Origen' },
       { field: 'toWhsCode',       header: 'Destino' },
     ];
@@ -96,11 +104,14 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
     this.opciones = [
       { label: 'Editar',      icon: 'pi pi-pencil',      command: () => { this.onClickEditar() } },
       { label: 'Cerrar',      icon: 'pi pi-times',       command: () => { this.onClickCerrar() } },
+      { label: 'Imprimir',    icon: 'pi pi-print',       command: () => { this.onClickImprimir() } },
+      { label: 'Transferir',  icon: 'pi pi-eye',         command: () => { this.onClickTransferir() } },
       { label: 'Visualizar',  icon: 'pi pi-eye',         command: () => { this.onClickVisualizar() } },
     ];
   }
 
   onSelectedItem(modelo: ISolicitudTraslado) {
+    debugger
     this.modeloSelected = modelo;
     if(this.buttonAcces.btnEditar || modelo.docStatus === '01' || modelo.docStatus === '02'){
       this.opciones.find(x => x.label == "Editar").visible = true;
@@ -111,6 +122,16 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
       this.opciones.find(x => x.label == "Cerrar").visible = true;
     } else {
       this.opciones.find(x => x.label == "Cerrar").visible = false;
+    }
+    if(!this.buttonAcces.btnImprimir){
+      this.opciones.find(x => x.label == "Imprimir").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Imprimir").visible = false;
+    }
+    if(!this.buttonAcces.btnTransferir && modelo.docStatus === '01' && modelo.read === 'N'){
+      this.opciones.find(x => x.label == "Transferir").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Transferir").visible = false;
     }
     if(this.buttonAcces.btnVizualizar || modelo.docStatus === '01' || modelo.docStatus === '02'){
       this.opciones.find(x => x.label == "Visualizar").visible = true;
@@ -193,6 +214,30 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
         this.close();
       }
     });
+  }
+
+  onClickImprimir() {
+    this.isDisplayGenerandoVisor = true;
+    this.solicitudTrasladoSapService.getSolicitudTrasladoPdfByDocEntry(this.modeloSelected.docEntry)
+    .subscribe({next:(resp: any) => {
+      switch (resp.type) {
+        case HttpEventType.DownloadProgress:
+          break;
+        case HttpEventType.Response:
+          this.isDataBlob = new Blob([resp.body], {type: resp.body.type});
+          this.isDisplayGenerandoVisor = false;
+          this.isDisplayVisor = true;
+          break;
+      }
+      },error:(e)=>{
+        this.isDisplayGenerandoVisor = false;
+        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
+      }
+    });
+  }
+
+  onClickTransferir(){
+    this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create-1', this.modeloSelected.id]);
   }
 
   onClickVisualizar(){

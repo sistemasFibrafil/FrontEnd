@@ -84,22 +84,32 @@ $gutter: 1rem; //for primeflex grid system
 
 .custom-td-7 {
   text-align: center!important;
-  width: 16em!important;
+  width: 14em!important;
 }
 
 .custom-td-8 {
   text-align: center!important;
-  width: 18em!important;
+  width: 16em!important;
 }
 
 .custom-td-10 {
-    text-align: left;
-    width: 20em;
+  text-align: center!important;
+    width: 18em;
+}
+
+.custom-td-10-left {
+  text-align: left!important;
+    width: 18em;
 }
 
 .custom-td-15 {
-    text-align: left;
-    width: 30em;
+  text-align: center!important;
+  width: 20em;
+}
+
+.custom-td-15-left {
+  text-align: left!important;
+    width: 20em;
 }
 
 .custom-td-fecha {

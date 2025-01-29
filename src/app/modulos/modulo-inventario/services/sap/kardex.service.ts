@@ -2,8 +2,8 @@ import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { KardexSaldoInicialByPeriodoArticuloFindModel } from '../../models/kardex.model';
-import { IKardexSaldoInicialByPeriodoArticulo } from '../../interfaces/kardex.interface';
+import { KardexSaldoInicialByPeriodoArticuloFindModel } from '../../models/sap/kardex.model';
+import { IKardexSaldoInicialByPeriodoArticulo } from '../../interfaces/sap/kardex.interface';
 
 
 

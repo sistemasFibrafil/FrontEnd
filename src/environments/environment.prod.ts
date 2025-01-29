@@ -6,12 +6,12 @@ export const environment = {
 
 
   // DESARROLLO
-  // url_api_fib : 'http://192.168.1.7:8080/FibrafilBackEnd/api/',
+  // url_api_fib : 'http://192.168.1.7:8080/BackEnd/api/',
   // url_api_seg : 'http://192.168.1.7:8080/SeguridadBackEnd/api/',
 
 
   // PRODUCCION
-  // url_api_fib : 'http://192.168.1.13/FibrafilBackEnd/api/',
+  // url_api_fib : 'http://192.168.1.13/BackEnd/api/',
   // url_api_seg : 'http://192.168.1.13/SeguridadBackEnd/api/',
 
   // url_api_fib : 'http://192.168.1.6/FibrafilBackEnd/api/',

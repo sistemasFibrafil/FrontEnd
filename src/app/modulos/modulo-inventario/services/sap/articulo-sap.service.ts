@@ -4,8 +4,8 @@ import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
-import { IArticuloDocumentoSap, IArticuloSap, IArticuloVentaByGrupoSubGrupoEstado, IArticuloVentaStockByGrupoSubGrupo, IMovimientoStockByFechaSede } from '../../interfaces/articulo-sap.interface';
-import { ArticuloSapForSodimacBySkuModel } from '../../models/articulo.model';
+import { IArticuloDocumentoSap, IArticuloSap, IArticuloVentaByGrupoSubGrupoEstado, IArticuloVentaStockByGrupoSubGrupo, IMovimientoStockByFechaSede } from '../../interfaces/sap/articulo-sap.interface';
+import { ArticuloSapForSodimacBySkuModel } from '../../models/sap/articulo.model';
 
 
 @Injectable({providedIn: 'root'})

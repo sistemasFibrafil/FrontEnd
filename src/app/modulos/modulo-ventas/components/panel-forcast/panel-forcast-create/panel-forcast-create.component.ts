@@ -12,7 +12,7 @@ import { SwaCustomService } from '../../../../../services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 import { GrupoArticuloService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/inventario/grupo-articulo-sap.service';
 
-import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/articulo-sap.interface';
+import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/sap/articulo-sap.interface';
 import { IGrupoArticulo } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/grupo-articulo-sap.interface';
 import { IForcastVenta, IForcastVentaConSinOc, IForcastVentaEstado, IForcastVentaNegocio } from '../../../interfaces/forcast-venta.interface';
 import { ISocioNegocio } from 'src/app/modulos/modulo-socio-negocios/interfaces/socio-segocio.interface';

@@ -10,11 +10,11 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { LecturaFindModel } from 'src/app/modulos/modulo-inventario/models/lectura.model';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { TransferenciaStockService } from 'src/app/modulos/modulo-inventario/services/web/transferencia-stock.service';
 import { TransferenciaStockSapService } from 'src/app/modulos/modulo-inventario/services/sap/transferencia-stock-sap.service';
-import { ITransferenciaStock } from 'src/app/modulos/modulo-inventario/interfaces/transferencia-stock.interface';
+import { ITransferenciaStock } from 'src/app/modulos/modulo-inventario/interfaces/web/transferencia-stock.interface';
+import { ParamCreateTransferenciaModel } from 'src/app/modulos/modulo-inventario/models/web/solicitud-traslado.model';
 
 
 
@@ -56,7 +56,7 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   docStatusSelected: any[];
 
   params: FilterRequestModel = new FilterRequestModel();
-  paramsLectura: LecturaFindModel = new LecturaFindModel();
+  paramCreateTransferencia: ParamCreateTransferenciaModel = new ParamCreateTransferenciaModel();
 
 
   constructor
@@ -94,6 +94,7 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
     this.columnas = [
       { field: 'number',          header: 'Número' },
       { field: 'docNum',          header: 'Número de SAP' },
+      { field: 'numDocumento',    header: 'Número de SUNAT' },
       { field: 'docStatus',       header: 'Estado' },
       { field: 'docDate',         header: 'Fecha de contabilización' },
       { field: 'docDueDate',      header: 'Fecha de entrega' },
@@ -106,7 +107,6 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   opcionesTabla() {
     this.opciones = [
       { label: 'Editar',      icon: 'pi pi-pencil',      command: () => { this.onClickEditar() } },
-      { label: 'Cancelar',    icon: 'pi pi-times',       command: () => { this.onClickCancelar() } },
       { label: 'Imprimir',    icon: 'pi pi-print',       command: () => { this.onClickImprimir() } },
       { label: 'Visualizar',  icon: 'pi pi-eye',         command: () => { this.onClickVisualizar() } },
     ];
@@ -171,7 +171,7 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   }
 
   onClickCreate() {
-    this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create',JSON.stringify(this.paramsLectura)]);
+    this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create',JSON.stringify(this.paramCreateTransferencia)]);
   }
 
   onClickEditar(){
