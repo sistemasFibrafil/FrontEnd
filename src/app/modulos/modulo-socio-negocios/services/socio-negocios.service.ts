@@ -43,6 +43,6 @@ export class SocioNegocioSapService {
     params = params.append('cod2', value.cod2);
     params = params.append('text1', value.text1);
 
-    return this.http.get(`${environment.url_api_fib}SocioNegocioSap/GetLitClienteExcelBySectorEstado/`,{params: params, responseType: 'arraybuffer'});
+    return this.http.get(`${environment.url_api_fib}SocioNegocioSap/GetClienteExcelBySectorEstado/`,{params: params, responseType: 'arraybuffer'});
   }
 }

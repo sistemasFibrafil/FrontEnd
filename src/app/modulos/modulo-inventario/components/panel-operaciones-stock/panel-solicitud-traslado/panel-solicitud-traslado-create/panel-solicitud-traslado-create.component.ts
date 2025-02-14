@@ -1,4 +1,4 @@
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -48,25 +48,25 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
   cardCode: string = '';
   cntctCode: number = 0;
 
-   // MODAL: Almacen
-   whsCodeOrigen: string = '';
-   whsCodeDestino: string = '';
-   itemCodeAlmacen: string = '';
-   demandanteAlmacen: string = 'N';
-   inactiveAlmacen: string = 'N';
+  // MODAL: Almacen
+  whsCodeOrigen: string = '';
+  whsCodeDestino: string = '';
+  itemCodeAlmacen: string = '';
+  demandanteAlmacen: string = 'N';
+  inactiveAlmacen: string = 'N';
 
-   // MODAL: Tipo de traslado
-   codTipTraslado: string = '';
+  // MODAL: Tipo de traslado
+  codTipTraslado: string = '';
 
-   // MODAL: Motivo de traslado
-   codMotTraslado: string = '';
+  // MODAL: Motivo de traslado
+  codMotTraslado: string = '';
 
-   // MODAL: Tipo de salida
-   codTipSalida: string = '';
+  // MODAL: Tipo de salida
+  codTipSalida: string = '';
 
   // DETALLE
   columnas: any[];
-  items: MenuItem[];
+  opciones: any = [];
   detalle: ISolicitudTrasladoDetalle[] = [];
   detalleSelected: ISolicitudTrasladoDetalle;
 
@@ -75,16 +75,16 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
   indexArticulo: number = 0;
   isVisualizarArticulo: boolean = false;
 
-   // MODAL: Almacen - Item
-   indexAlmacenOrigen: number = 0;
-   indexAlmacenDestino: number = 0;
-   inactiveAlmacenItem: string = 'N';
-   demandanteAlmacenItem: string = 'Y';
-   isVisualizarAlmacenOrigen: boolean = false;
-   isVisualizarAlmacenDestino: boolean = false;
+  // MODAL: Almacen - Item
+  indexAlmacenOrigen: number = 0;
+  indexAlmacenDestino: number = 0;
+  inactiveAlmacenItem: string = 'N';
+  demandanteAlmacenItem: string = 'Y';
+  isVisualizarAlmacenOrigen: boolean = false;
+  isVisualizarAlmacenDestino: boolean = false;
 
-   // MODAL: Empleado de ventas
-   slpCode: number = 0;
+  // MODAL: Empleado de ventas
+  slpCode: number = 0;
 
 
   constructor
@@ -102,9 +102,8 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
   ngOnInit() {
     this.onBuildForm();
     this.onBuildColumn();
-    this.getNumber();
+    this.opcionesTabla();
     this.getListEstado();
-    this.getListContextMenu();
   }
 
   onBuildForm() {
@@ -117,13 +116,12 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'number'      : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
       'docNum'      : new FormControl({ value: '', disabled: true }),
       'docStatus'   : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'read'        : new FormControl(false),
       'docDate'     : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
       'docDueDate'  : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
       'taxDate'     : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-      'read'        : new FormControl(true)
     });
 
     this.modeloFormCab3 = this.fb.group(
@@ -149,14 +147,6 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
     this.addLine();
   }
 
-  getListContextMenu() {
-    this.items =
-    [
-      {label: 'Añadir línea', icon: 'pi pi-plus',   command: () => this.onClickAddLine() },
-      {label: 'Borrar línea', icon: 'pi pi-trash',  command: () => this.onClickDelete(this.detalleSelected) }
-    ];
-  }
-
   onBuildColumn() {
     this.columnas =
     [
@@ -167,6 +157,27 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
       { field: 'unitMsr',     header: 'UM' },
       { field: 'quantity',    header: 'Cantidad' }
     ];
+  }
+
+  opcionesTabla() {
+    this.opciones = [
+      { label: 'Añadir línea',      icon: 'pi pi-pencil',      command: () => { this.onClickAddLine() } },
+      { label: 'Borrar línea',      icon: 'pi pi-times',       command: () => { this.onClickDelete() } },
+    ];
+  }
+
+  onSelectedItem(modelo: ISolicitudTrasladoDetalle) {
+    this.detalleSelected = modelo;
+    if(this.detalle.filter(x => x.itemCode === '').length === 0){
+      this.opciones.find(x => x.label == "Añadir línea").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Añadir línea").visible = false;
+    }
+    if(this.detalle.length > 0){
+      this.opciones.find(x => x.label == "Borrar línea").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Borrar línea").visible = false;
+    }
   }
 
   //#region <<< MODAL: Cliente >>>
@@ -184,16 +195,6 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
     this.modeloFormCab1.patchValue({ 'cntctCode' : value.cntctCode });
   }
   //#endregion
-
-  getNumber() {
-    this.solicitudTrasladoService.getNumber()
-    .subscribe({next:(data: ISolicitudTraslado) =>{
-      this.modeloFormCab2.patchValue({ number: data.number });
-      },error:(e)=>{
-        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-      }
-    });
-  }
 
   getListEstado() {
     this.docStatus =
@@ -350,18 +351,7 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
 
   addLine()
   {
-    let exiete: boolean = false;
-    this.detalle.forEach(item=>{
-      if(item.itemCode === ""){
-        exiete = true;
-        return;
-      }
-    });
-
-    if(!exiete)
-    {
-      this.detalle.push({id: 0, line:0, lineStatus: '01', itemCode: '', dscription: '', fromWhsCod: '', whsCode: '', unitMsr: '', quantity: 0, openQty: 0, openQtyRding: 0 });
-    }
+    this.detalle.push({id: 0, line:0, lineStatus: '01', itemCode: '', dscription: '', fromWhsCod: '', whsCode: '', unitMsr: '', quantity: 0, openQtyRding: 0 , openQty: 0 });
   }
 
   onClickAddLine()
@@ -369,15 +359,12 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
     this.addLine();
   }
 
-  onClickDelete(value: ISolicitudTrasladoDetalle)
+  onClickDelete()
   {
-    let index = this.detalle.indexOf(value);
+    let index = this.detalle.indexOf(this.detalleSelected);
     this.detalle.splice(+index, 1);
 
-    if(this.detalle.length === 0)
-    {
-      this.addLine();
-    }
+    if(this.detalle.length === 0) this.addLine();
   }
 
   //#endregion
@@ -400,24 +387,6 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
       this.swaCustomService.swaMsgInfo('El almacén de destino no puede ser idéntico al almacén de Origen.');
       return false;
     }
-
-    // if (!this.modeloFormCab2.controls['estado'].value) {
-    //   this.isSaving = false;
-    //   this.swaCustomService.swaMsgInfo('Seleccione el estado.');
-    //   return false;
-    // }
-
-    // if (this.modeloFormCab2.controls['estado'].value) {
-    //   let itemEstado = this.modeloFormCab2.controls['estado'].value;
-    //   codEstado = itemEstado.value;
-    // }
-
-    // if (codEstado !== '01')
-    // {
-    //   this.isSaving = false;
-    //   this.swaCustomService.swaMsgInfo('El estado no es válido.');
-    //   return false;
-    // }
 
     for (let index = 0; index < this.detalle.length; index++) {
       if(this.detalle[index].itemCode === '')

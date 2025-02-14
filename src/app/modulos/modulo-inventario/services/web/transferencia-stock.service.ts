@@ -16,10 +16,6 @@ export class TransferenciaStockService {
     private datePipe: DatePipe
   ){ }
 
-  getNumber() {
-    return this.http.get<ITransferenciaStock>(`${environment.url_api_fib}TransferenciaStock/GetNumber/`);
-  }
-
   getListFiltro(value: FilterRequestModel) {
     let params = new HttpParams();
     params = params.append('dat1', this.datePipe.transform(value.dat1, 'yyyy-MM-dd'));
@@ -32,14 +28,9 @@ export class TransferenciaStockService {
     return this.http.get<ITransferenciaStock>(`${environment.url_api_fib}TransferenciaStock/GetById/${id}`);
   }
 
-  setCreate1(value: TransferenciaStockCreateModel) {
+  setCreate(value: TransferenciaStockCreateModel) {
     const param: string = JSON.stringify(value);
-    return this.http.post<any[]>(`${environment.url_api_fib}TransferenciaStock/SetCreate1/`, param);
-  }
-
-  setCreate2(value: TransferenciaStockCreateModel) {
-    const param: string = JSON.stringify(value);
-    return this.http.post<any[]>(`${environment.url_api_fib}TransferenciaStock/SetCreate2/`, param);
+    return this.http.post<any[]>(`${environment.url_api_fib}TransferenciaStock/SetCreate/`, param);
   }
 
   setUpdate(value: TransferenciaStockUpdateModel) {

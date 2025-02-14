@@ -67,6 +67,8 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
    codTipSalida: string = '';
 
   // DETALLE
+  // DETALLE
+  opciones: any = [];
   columnas: any[];
   detalle: ISolicitudTrasladoDetalle[] = [];
   detalleSelected: ISolicitudTrasladoDetalle;
@@ -103,6 +105,7 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
   ngOnInit() {
     this.onBuildForm();
     this.onBuildColumn();
+    this.opcionesTabla();
     this.getListEstado();
 
     this.route.params.subscribe((params: Params) => {
@@ -124,9 +127,9 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'number'      : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
       'docNum'      : new FormControl({ value: '', disabled: true }),
       'docStatus'   : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'read'        : new FormControl({ value: false, disabled: true}),
       'docDate'     : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
       'docDueDate'  : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
       'taxDate'     : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required]))
@@ -162,6 +165,27 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
       { field: 'unitMsr',     header: 'UM' },
       { field: 'quantity',    header: 'Cantidad' }
     ];
+  }
+
+  opcionesTabla() {
+    this.opciones = [
+      { label: 'Añadir línea',      icon: 'pi pi-pencil',      command: () => {  } },
+      { label: 'Borrar línea',      icon: 'pi pi-times',       command: () => {  } },
+    ];
+  }
+
+  onSelectedItem(modelo: ISolicitudTrasladoDetalle) {
+    this.detalleSelected = modelo;
+    if(this.detalle.filter(x => x.itemCode === '').length === 0){
+      this.opciones.find(x => x.label == "Añadir línea").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Añadir línea").visible = false;
+    }
+    if(this.detalle.length > 0 && modelo.lineStatus === '01' && (modelo.quantity === modelo.openQtyRding || modelo.quantity === modelo.openQty)){
+      this.opciones.find(x => x.label == "Borrar línea").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Borrar línea").visible = false;
+    }
   }
 
   //#region <<< MODAL: Cliente >>>
@@ -367,7 +391,6 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
 
     const status = this.docStatus.find(x => x.statusCode === data.docStatus);
 
-    this.modeloFormCab2.controls['number'].setValue( data.number );
     this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
     this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
     this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );

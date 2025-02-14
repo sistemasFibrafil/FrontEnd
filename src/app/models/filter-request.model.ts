@@ -16,6 +16,11 @@ export class FilterRequestModel {
   val3?     : number;
   val4?     : number;
   val5?     : number;
+  dec1?     : number;
+  dec2?     : number;
+  dec3?     : number;
+  dec4?     : number;
+  dec5?     : number;
   text1?    : string;
   text2?    : string;
   text3?    : string;
@@ -41,6 +46,11 @@ export class FilterRequestModel {
     this.val3     = 0;
     this.val4     = 0;
     this.val5     = 0;
+    this.dec1     = 0;
+    this.dec2     = 0;
+    this.dec3     = 0;
+    this.dec4     = 0;
+    this.dec5     = 0;
     this.text1    = '';
     this.text2    = '';
     this.text3    = '';

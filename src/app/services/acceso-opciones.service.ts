@@ -23,7 +23,6 @@ export class AccesoOpcionesService {
       this.listOpcion  = [...data].find(x => x.nombreFormulario === nombreFormulario).listaOpciones;
 
           this.listOpcion.forEach(element => {
-            debugger
             if (element.keyOpcion === 'btn-nuevo') {
               this.buttonAcces.btnNuevo = false;
             }

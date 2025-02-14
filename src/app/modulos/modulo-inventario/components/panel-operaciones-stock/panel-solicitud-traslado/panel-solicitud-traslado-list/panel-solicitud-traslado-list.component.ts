@@ -10,10 +10,12 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { ISolicitudTraslado } from 'src/app/modulos/modulo-inventario/interfaces/web/solicitud-traslado.interface';
+import { ISolicitudTraslado, ISolicitudTrasladoDetalle } from 'src/app/modulos/modulo-inventario/interfaces/web/solicitud-traslado.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
+import { ParamCreateTransferenciaModel } from 'src/app/modulos/modulo-inventario/models/web/solicitud-traslado.model';
 import { SolicitudTrasladoService } from 'src/app/modulos/modulo-inventario/services/web/solicitud-traslado.service';
 import { SolicitudTrasladoSapService } from 'src/app/modulos/modulo-inventario/services/sap/solicitud-traslado-sap.Service';
+import { CifrarDataService } from 'src/app/services/cifrar-data.service';
 
 interface DocStatus {
   statusCode  : string,
@@ -53,6 +55,8 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
   docStatusSelected: any[];
 
   params: FilterRequestModel = new FilterRequestModel();
+  modeloDetalle: ISolicitudTrasladoDetalle[] = [];
+  paramCreateTransferencia: ParamCreateTransferenciaModel = new ParamCreateTransferenciaModel();
 
 
   constructor
@@ -62,6 +66,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
     public lenguageService: LanguageService,
     private userContextService: UserContextService,
     private readonly swaCustomService: SwaCustomService,
+    private readonly cifrarDataService: CifrarDataService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
     private solicitudTrasladoService: SolicitudTrasladoService,
     private solicitudTrasladoSapService: SolicitudTrasladoSapService,
@@ -88,13 +93,12 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
 
   onBuildColumn() {
     this.columnas = [
-      { field: 'number',          header: 'Número' },
-      { field: 'docNum',          header: 'Número de SAP' },
+      { field: 'docNum',          header: 'Número' },
       { field: 'docStatus',       header: 'Estado' },
+      { field: 'read',            header: '¿Lectura?' },
       { field: 'docDate',         header: 'Fecha de contabilización' },
       { field: 'docDueDate',      header: 'Fecha de entrega' },
       { field: 'taxDate',         header: 'Fecha de documento' },
-      { field: 'read',            header: '¿Lectura?' },
       { field: 'filler',          header: 'Origen' },
       { field: 'toWhsCode',       header: 'Destino' },
     ];
@@ -102,16 +106,15 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
 
   opcionesTabla() {
     this.opciones = [
-      { label: 'Editar',      icon: 'pi pi-pencil',      command: () => { this.onClickEditar() } },
-      { label: 'Cerrar',      icon: 'pi pi-times',       command: () => { this.onClickCerrar() } },
-      { label: 'Imprimir',    icon: 'pi pi-print',       command: () => { this.onClickImprimir() } },
-      { label: 'Transferir',  icon: 'pi pi-eye',         command: () => { this.onClickTransferir() } },
-      { label: 'Visualizar',  icon: 'pi pi-eye',         command: () => { this.onClickVisualizar() } },
+      { label: 'Editar',      icon: 'pi pi-pencil',                   command: () => { this.onClickEditar() } },
+      { label: 'Cerrar',      icon: 'pi pi-times',                    command: () => { this.onClickCerrar() } },
+      { label: 'Imprimir',    icon: 'pi pi-print',                    command: () => { this.onClickImprimir() } },
+      { label: 'Transferir',  icon: 'pi pi-arrow-right-arrow-left',   command: () => { this.onClickTransferir() } },
+      { label: 'Visualizar',  icon: 'pi pi-eye',                      command: () => { this.onClickVisualizar() } },
     ];
   }
 
   onSelectedItem(modelo: ISolicitudTraslado) {
-    debugger
     this.modeloSelected = modelo;
     if(this.buttonAcces.btnEditar || modelo.docStatus === '01' || modelo.docStatus === '02'){
       this.opciones.find(x => x.label == "Editar").visible = true;
@@ -237,8 +240,49 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
   }
 
   onClickTransferir(){
-    this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create-1', this.modeloSelected.id]);
+    this.getListById(this.modeloSelected.id);
   }
+
+  getListById(id: number) {
+    this.isDisplay = true;
+    this.onSetParametro();
+    this.solicitudTrasladoService.getListById(id)
+    .subscribe({next:(data: ISolicitudTrasladoDetalle[]) =>
+    {
+      this.isDisplay = false;
+      this.modeloDetalle = data;
+
+      if(this.modeloDetalle.length > 0)
+        {
+          this.paramCreateTransferencia.idBase = this.modeloSelected.id;
+          this.paramCreateTransferencia.baseType = this.modeloSelected.objType;
+          this.paramCreateTransferencia.linea = [];
+
+          for (let index = 0; index < this.modeloDetalle.length; index++) {
+            this.paramCreateTransferencia.linea.push
+            ({
+              idBase              : this.modeloDetalle[index].id,
+              lineBase            : this.modeloDetalle[index].line,
+              baseType            : this.modeloDetalle[index].objType,
+              read                : 'N',
+              return              : 'N',
+            });
+          }
+
+          this.onTransferir(this.paramCreateTransferencia);
+        }
+    },error:(e)=>{
+      this.isDisplay = false;
+      this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
+    }
+    });
+  }
+
+  onTransferir(params: ParamCreateTransferenciaModel)
+  {
+    this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', this.cifrarDataService.encrypt(JSON.stringify(params))]);
+  }
+
 
   onClickVisualizar(){
     this.router.navigate(['/main/modulo-inv/panel-solicitud-traslado-view', this.modeloSelected.id]);

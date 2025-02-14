@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -17,11 +17,6 @@ import { TransferenciaStockService } from 'src/app/modulos/modulo-inventario/ser
 import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
 import { SerieNumeracionSapService } from 'src/app/modulos/modulo-gestion/services/sap/inicializacion-sistema/serie-numeracion-sap.service';
 
-
-interface DocStatus {
-  statusCode  : string,
-  statusName  : string
-}
 
 @Component({
   selector: 'app-inv-panel-transferencia-stock-update',
@@ -45,8 +40,7 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
   params: any;
   codSede: number = 0;
   jrnlMemo: string = 'Traslado - '
-  docStatus: DocStatus[];
-  docStatusList: SelectItem[];
+  modelo: ITransferenciaStock;
   modeloSave: TransferenciaStockUpdateModel = new TransferenciaStockUpdateModel();
 
   id      : number = 0;
@@ -93,12 +87,11 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
 
   // DETALLE
   columnas: any[];
-  columnasBarcode: any[];
-  items: MenuItem[];
+  opciones: any = [];
   detalle: any[] = [];
   bardcodeList: any[];
+  detalleSelected: ITransferenciaStockDetalle;
   lectura: ITransferenciaStockDetalle[] = [];
-  modeloSelected: ITransferenciaStockDetalle;
 
   // MODAL: Almacen - Item
   itemCode: string = '';
@@ -136,9 +129,7 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
   ngOnInit() {
     this.onBuildForm();
     this.onBuildColumn();
-    this.getNumber();
-    this.getListEstado();
-    this.getListContextMenu();
+    this.opcionesTabla();
     this.codSede = this.userContextService.getCodSede();
 
     this.route.params.subscribe((params: Params) => {
@@ -160,15 +151,13 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'number'        : new FormControl({ value: '', disabled: true  }, Validators.compose([Validators.required])),
       'docNum'        : new FormControl({ value: '', disabled: true  }),
-      'docStatus'     : new FormControl({ value: '', disabled: true  }, Validators.compose([Validators.required])),
       'tipDocumento'  : new FormControl({ value: '', disabled: false }, Validators.compose([Validators.required])),
       'serDocumento'  : new FormControl({ value: '', disabled: false }, Validators.compose([Validators.required])),
       'numDocumento'  : new FormControl({ value: '', disabled: true  }, Validators.compose([Validators.required])),
-      'docDate'       : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-      'docDueDate'    : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-      'taxDate'       : new FormControl(new Date(new Date()), Validators.compose([Validators.required]))
+      'docDate'       : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'docDueDate'    : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'taxDate'       : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
     });
 
     this.modeloFormCab3 = this.fb.group(
@@ -215,26 +204,8 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     });
   }
 
-  getListContextMenu() {
-    this.items =
-    [
-      {label: 'Visualizar',   icon: 'pi pi-eye',    command: () => this.onClickVisualizar(this.modeloSelected) }
-    ];
-  }
-
   onBuildColumn() {
     this.columnas =
-    [
-      { field: 'itemCode',        header: 'Código' },
-      { field: 'itemName',        header: 'Descripción' },
-      { field: 'fromWhsCod',      header: 'Almacén de origen' },
-      { field: 'whsCode',         header: 'Almacén de destino' },
-      { field: 'codTipOperacion', header: 'Tipo de operación' },
-      { field: 'unitMsr',         header: 'UM' },
-      { field: 'quantity',        header: 'Cantidad' }
-    ];
-
-    this.columnasBarcode =
     [
       { field: 'itemCode',        header: 'Código' },
       { field: 'barcode',         header: 'Barcode' },
@@ -242,6 +213,21 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
       { field: 'peso',            header: 'Peso' }
     ];
   }
+
+  opcionesTabla() {
+    this.opciones = [
+      { label: 'Visualizar',        icon: 'pi pi-eye',       command: () => { this.onClickVisualizar() } },
+    ];
+  }
+
+  onSelectedItem(modelo: ITransferenciaStockDetalle) {
+      this.detalleSelected = modelo;
+      if(this.detalle.filter(x => x.itemCode === '').length === 0){
+        this.opciones.find(x => x.label == "Visualizar").visible = true;
+      } else {
+        this.opciones.find(x => x.label == "Visualizar").visible = false;
+      }
+    }
 
 
   //#region <<< MODAL: Cliente >>>
@@ -259,31 +245,6 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     this.modeloFormCab1.patchValue({ 'cntctCode' : value.cntctCode });
   }
   //#endregion
-
-  getNumber() {
-    this.transferenciaStockService.getNumber()
-    .subscribe({next:(data: ITransferenciaStock) =>{
-      this.modeloFormCab2.patchValue({ number: data.number });
-      },error:(e)=>{
-        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-      }
-    });
-  }
-
-  getListEstado() {
-    this.docStatus =
-    [
-      { statusCode  : '01', statusName: 'Abierto'},
-      { statusCode  : '02', statusName: 'Cerrado'},
-    ];
-
-    this.docStatusList = [];
-    for (let item of this.docStatus) {
-      this.docStatusList.push({ label: item.statusName, value: item.statusCode });
-    }
-    const item: any = this.docStatusList.find(x=>x.value === '01');
-    this.modeloFormCab2.controls['docStatus'].setValue({ label: item.label, value: item.value });
-  }
 
   //#region <<< Datos de sunat >>>
   onSelectedTipoDocumento(value: any) {
@@ -511,7 +472,7 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     this.isDisplay = true;
     this.bardcodeList = [];
     const text1 = this.modeloFormBar.value;
-    const params: any = { cod1: this.modeloSelected.objType, id1: this.modeloSelected.docEntry, id2: this.modeloSelected.lineNum, text1: text1.text1 };
+    const params: any = { cod1: this.detalleSelected.objType, id1: this.detalleSelected.docEntry, id2: this.detalleSelected.lineNum, text1: text1.text1 };
     this.lecturaService.getListByTargetTypeTrgetEntryTrgetLineFiltro(params)
     .subscribe({next:(data: ILectura[]) =>{
         this.isDisplay = false;
@@ -525,9 +486,8 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     });
   }
 
-  onClickVisualizar(value: ITransferenciaStockDetalle)
+  onClickVisualizar()
   {
-    this.modeloSelected = value;
     this.onListar();
     this.isVisualizarBarcode = !this.isVisualizarBarcode;
   }
@@ -537,12 +497,22 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     this.onListar();
   }
 
-  onToSelectedDeleteRow(value: ITransferenciaStockDetalle)
+  onClear()
   {
+    this.bardcodeList = [];
+    this.modeloFormBar.patchValue({ 'text1' : '' });
+  }
+
+  onHide()
+  {
+    this.onClear();
   }
 
   onClickBarcodeClose()
-  {}
+  {
+    this.onClear();
+    this.isVisualizarBarcode = !this.isVisualizarBarcode;
+  }
   //#endregion
 
   onInputBulto(val)
@@ -585,15 +555,11 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
 
     }, 10);
 
-    const status = this.docStatus.find(x => x.statusCode === data.docStatus);
-
     this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
     this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
     this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
     this.modeloFormCab1.controls['address'].setValue( data.address );
-    this.modeloFormCab2.controls['number'].setValue( data.number );
     this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
-    this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
     this.modeloFormCab2.controls['tipDocumento'].setValue( data.tipDocumento );
     this.modeloFormCab2.controls['serDocumento'].setValue( data.serDocumento );
     this.modeloFormCab2.controls['numDocumento'].setValue( data.numDocumento );
@@ -628,8 +594,8 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     this.transferenciaStockService.getById(id)
     .subscribe({next:(data: ITransferenciaStock) => {
       setTimeout(() => {
-        this.set(data);
-        console.log("DATA::: ", data);
+        this.modelo = data;
+        this.set(this.modelo);
       }, 10);
       setTimeout(() => {
         data.linea.forEach(element => {

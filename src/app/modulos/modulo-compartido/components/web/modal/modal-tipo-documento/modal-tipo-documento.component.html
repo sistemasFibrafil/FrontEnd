@@ -1,6 +1,6 @@
 <form [formGroup]="modeloFormVisor">
   <div class="p-inputgroup">
-    <input id="float-input-cod" type="text" placeholder="Tipo de documento" maxlength="50" size="100" formControlName="codTipoDocumento" autocomplete="off" pInputText>
+    <input id="float-input-cod" type="text" placeholder="Tipo documento" maxlength="50" size="100" formControlName="codTipoDocumento" autocomplete="off" pInputText>
     <button pButton type="button"[disabled]="isHabilitarButton" icon="{{globalConstants.icoBuscar}}" (click)="isVisualizar = true"></button>
   </div>
 </form>

@@ -1,6 +1,5 @@
 export interface ITransferenciaStock {
   id                      : number;
-  number                  : string;
   objType                 : string;
   docEntry                : number;
   docNum                  : number;
@@ -55,6 +54,7 @@ export interface ITransferenciaStockDetalle {
   baseType?           : string;
   baseEntry?          : number;
   baseLine?           : number;
+  read                : string;
   lineStatus          : string;
   itemCode            : string;
   dscription          : string;

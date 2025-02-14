@@ -33,29 +33,26 @@
         <div class="card no-margin">
           <form [formGroup]="modeloFormCab2">
             <div class="p-formgrid grid">
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-number">Número </label><span class="label" style="font-weight: bold; color:red">*</span>
+              <div class="col-12 md:col-5">
+                <label class="label-custom" for="float-input-docNum">Número</label>
                 <div class="p-inputgroup">
-                  <input id="float-input-number" type="text" placeholder="Número de solicitud" maxlength="50" size="50" formControlName="number" autocomplete="off" required pInputText>
-                </div>
-                <div *ngIf="modeloFormCab2.controls['number'].errors && modeloFormCab2.controls['number'].dirty">
-                  <p-message severity="error" text="El número de solicitud es requerido." *ngIf="modeloFormCab2.controls['number'].errors['required']"></p-message>
+                  <input id="float-input-docNum" type="text" placeholder="Número" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText>
                 </div>
               </div>
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-docNum">Número de SAP </label>
-                <div class="p-inputgroup">
-                  <input id="float-input-docNum" type="text" placeholder="Número de SAP" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText>
-                </div>
-              </div>
-              <div class="col-12 md:col-12">
+              <div class="col-12 md:col-5">
                 <label class="label-custom" for="float-input-docStatus">Estado </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <p-dropdown id="float-input-docStatus" [options]="docStatusList" class="p dropdown-item-text" placeholder="Seleccionar el estado" formControlName="docStatus" [required] optionLabel="label" [showClear]="true"></p-dropdown>
                 <div *ngIf="modeloFormCab2.controls['docStatus'].errors && modeloFormCab2.controls['docStatus'].dirty">
                   <p-message severity="error" text="El estado es requerido." *ngIf="modeloFormCab2.controls['docStatus'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-2">
+                <label class="label-custom" for="float-input-estado">¿Lectura? </label>
+                <div class="p-inputgroup">
+                  <p-checkbox id="float-input-read" [ngStyle]="{'padding-top': '5px'}" [binary]="true" formControlName="read" styleClass="ng-invalid ng-dirty"></p-checkbox>
+                </div>
+              </div>
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-docDate">Fecha de contabilización </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-docDate" placeholder="Fecha de contabilización" formControlName="docDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -64,7 +61,7 @@
                   <p-message severity="error" text="La fecha de contabilización es requerida." *ngIf="modeloFormCab2.controls['docDate'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-docDueDate">Fecha de entrega </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-docDueDate" placeholder="Fecha de entrega" formControlName="docDueDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -73,7 +70,7 @@
                   <p-message severity="error" text="La fecha de entrega es requerida." *ngIf="modeloFormCab2.controls['docDueDate'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-taxDate">Fecha de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-taxDate" placeholder="Fecha de documento" formControlName="taxDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -126,6 +123,7 @@
                 <!-- Header -->
                 <ng-template pTemplate="header" let-columns>
                   <tr>
+                    <th class="custom-header"></th>
                     <th *ngFor="let col of columns" class="custom-header">
                       {{col.header}}
                     </th>
@@ -134,6 +132,10 @@
                 <!-- body -->
                 <ng-template pTemplate="body" let-modelo let-ri="rowIndex">
                   <tr [ngClass]="{'row-cerrado': modelo.lineStatus === '02'}">
+                    <td class="custom-td-2">
+                      <p-splitButton [disabled]="true" icon="pi pi-cog" [model] = "opciones" (onDropdownClick) = "onSelectedItem(modelo)" appendTo = "body">
+                      </p-splitButton>
+                    </td>
                     <td class="p-fluid">
                       <span class="p-column-title">Código: </span><i class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{modelo.itemCode}}
                     </td>

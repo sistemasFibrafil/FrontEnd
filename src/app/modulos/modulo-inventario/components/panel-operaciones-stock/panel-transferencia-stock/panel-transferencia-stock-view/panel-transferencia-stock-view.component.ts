@@ -1,4 +1,5 @@
-import { MenuItem, SelectItem } from 'primeng/api';
+import Swal from 'sweetalert2';
+import { SelectItem } from 'primeng/api';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -9,25 +10,20 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 
-import { ITransferenciaStock } from 'src/app/modulos/modulo-inventario/interfaces/web/transferencia-stock.interface';
-import { TransferenciaStockCreateModel } from 'src/app/modulos/modulo-inventario/models/web/transferencia-stock.model';
-import { ILecturaCopyToTransferencia, ILecturaCopyToTransferenciaDetalle } from 'src/app/modulos/modulo-inventario/interfaces/web/lectura.inteface';
-import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
+import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/web/lectura.inteface';
+import { ITransferenciaStock, ITransferenciaStockDetalle } from 'src/app/modulos/modulo-inventario/interfaces/web/transferencia-stock.interface';
+import { TransferenciaStockUpdateModel } from 'src/app/modulos/modulo-inventario/models/web/transferencia-stock.model';
 import { TransferenciaStockService } from 'src/app/modulos/modulo-inventario/services/web/transferencia-stock.service';
+import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
 import { SerieNumeracionSapService } from 'src/app/modulos/modulo-gestion/services/sap/inicializacion-sistema/serie-numeracion-sap.service';
 
 
-interface DocStatus {
-  statusCode  : string,
-  statusName  : string
-}
-
 @Component({
-  selector: 'app-inv-panel-transferencia-stock-create-2',
-  templateUrl: './panel-transferencia-stock-create-2.component.html',
-  styleUrls: ['./panel-transferencia-stock-create-2.component.css']
+  selector: 'app-inv-panel-transferencia-stock-view',
+  templateUrl: './panel-transferencia-stock-view.component.html',
+  styleUrls: ['./panel-transferencia-stock-view.component.css']
 })
-export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
+export class PanelPanelTransferenciaStockViewComponent implements OnInit {
 
   // Titulo del componente
   titulo = 'Transferencia de Stock';
@@ -44,9 +40,11 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   params: any;
   codSede: number = 0;
   jrnlMemo: string = 'Traslado - '
-  docStatus: DocStatus[];
-  docStatusList: SelectItem[];
-  modeloSave: TransferenciaStockCreateModel = new TransferenciaStockCreateModel();
+  modelo: ITransferenciaStock;
+  modeloSave: TransferenciaStockUpdateModel = new TransferenciaStockUpdateModel();
+
+  id      : number = 0;
+  docEntry: number = 0;
 
   // MODAL: Progreso
   isSaving: boolean = false;
@@ -59,39 +57,41 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   // MODAL: Tipo de documento
   tipDocumento: string = '';
 
-   // MODAL: Almacen
+  // MODAL: Serie de documento
+  serDocumento: string = '';
+
+  // MODAL: Almacen
   whsCodeOrigen: string = '';
   whsCodeDestino: string = '';
   itemCodeAlmacen: string = '';
   demandanteAlmacen: string = 'N';
   inactiveAlmacen: string = 'N';
 
-   // MODAL: Tipo de transporte
+  // MODAL: Tipo de transporte
   codTipTransporte: string = '';
 
-   // MODAL: Tipo de documento transportista
-  tipDocTransportista: string = '';
+  // MODAL: Tipo de documento transportista
+  codTipDocTransportista: string = '';
 
-   // MODAL: Tipo de documento conductor
-  tipDocConductor: string = '';
+  // MODAL: Tipo de documento conductor
+  codTipDocConductor: string = '';
 
-   // MODAL: Tipo de traslado
+  // MODAL: Tipo de traslado
   codTipTraslado: string = '';
 
-   // MODAL: Motivo de traslado
+  // MODAL: Motivo de traslado
   codMotTraslado: string = '';
 
-   // MODAL: Tipo de salida
+  // MODAL: Tipo de salida
   codTipSalida: string = '';
 
   // DETALLE
   columnas: any[];
-  columnasBarcode: any[];
-  items: MenuItem[];
+  opciones: any = [];
   detalle: any[] = [];
   bardcodeList: any[];
-  lectura: ILecturaCopyToTransferenciaDetalle[] = [];
-  detalleSelected: ILecturaCopyToTransferenciaDetalle;
+  detalleSelected: ITransferenciaStockDetalle;
+  lectura: ITransferenciaStockDetalle[] = [];
 
   // MODAL: Almacen - Item
   itemCode: string = '';
@@ -107,7 +107,7 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   isVisualizarAlmacenOrigen: boolean = false;
   isVisualizarAlmacenDestino: boolean = false;
 
-   // MODAL: Empleado de ventas
+  // MODAL: Empleado de ventas
   slpCode: number = 0;
 
 
@@ -115,13 +115,13 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   (
     private router: Router,
     private fb: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly swaCustomService: SwaCustomService,
     public app: LayoutComponent,
-    public lenguageService: LanguageService,
+    private readonly route: ActivatedRoute,
     public readonly utilService: UtilService,
-    private userContextService: UserContextService,
+    private readonly swaCustomService: SwaCustomService,
+    public lenguageService: LanguageService,
     private lecturaService: LecturaService,
+    private userContextService: UserContextService,
     private serieNumeracionSapService: SerieNumeracionSapService,
     private transferenciaStockService: TransferenciaStockService,
   ) {}
@@ -129,19 +129,14 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   ngOnInit() {
     this.onBuildForm();
     this.onBuildColumn();
-    this.getNumber();
-    this.getListEstado();
-    this.getListContextMenu();
+    this.opcionesTabla();
     this.codSede = this.userContextService.getCodSede();
 
     this.route.params.subscribe((params: Params) => {
-      this.params = JSON.parse(params["json"]);
-      if(this.params.idBase !== 0)
-      {
-        setTimeout(() => {
-          this.getListCopy(this.params);
-        },10);
-      }
+      this.id = Number(params["id"]);
+      setTimeout(() => {
+      this.getById(this.id);
+      }, 10);
     });
   }
 
@@ -156,15 +151,13 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'number'        : new FormControl({ value: '', disabled: true  }, Validators.compose([Validators.required])),
       'docNum'        : new FormControl({ value: '', disabled: true  }),
-      'docStatus'     : new FormControl({ value: '', disabled: true  }, Validators.compose([Validators.required])),
       'tipDocumento'  : new FormControl({ value: '', disabled: false }, Validators.compose([Validators.required])),
       'serDocumento'  : new FormControl({ value: '', disabled: false }, Validators.compose([Validators.required])),
       'numDocumento'  : new FormControl({ value: '', disabled: true  }, Validators.compose([Validators.required])),
-      'docDate'       : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-      'docDueDate'    : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-      'taxDate'       : new FormControl(new Date(new Date()), Validators.compose([Validators.required]))
+      'docDate'       : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'docDueDate'    : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'taxDate'       : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
     });
 
     this.modeloFormCab3 = this.fb.group(
@@ -205,40 +198,36 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
       'comments' : new FormControl(''),
     });
 
-
     this.modeloFormBar = this.fb.group(
     {
-      'filtro' : new FormControl(''),
+      'text1' : new FormControl(''),
     });
-  }
-
-  getListContextMenu() {
-    this.items =
-    [
-      {label: 'Borrar línea', icon: 'pi pi-trash',  command: () => this.onClickBorrarLinea(this.detalleSelected) },
-      {label: 'Visualizar',   icon: 'pi pi-eye',    command: () => this.onClickVisualizar(this.detalleSelected) }
-    ];
   }
 
   onBuildColumn() {
     this.columnas =
     [
       { field: 'itemCode',        header: 'Código' },
-      { field: 'itemName',        header: 'Descripción' },
-      { field: 'fromWhsCod',      header: 'Almacén de origen' },
-      { field: 'whsCode',         header: 'Almacén de destino' },
-      { field: 'codTipOperacion', header: 'Tipo de operación' },
-      { field: 'unitMsr',         header: 'UM' },
-      { field: 'quantity',        header: 'Cantidad' }
-    ];
-
-    this.columnasBarcode =
-    [
-      { field: 'itemCode',        header: 'Código' },
       { field: 'barcode',         header: 'Barcode' },
       { field: 'quantity',        header: 'Cantidad' },
+      { field: 'peso',            header: 'Peso' }
     ];
   }
+
+  opcionesTabla() {
+    this.opciones = [
+      { label: 'Visualizar',        icon: 'pi pi-eye',       command: () => { this.onClickVisualizar() } },
+    ];
+  }
+
+  onSelectedItem(modelo: ITransferenciaStockDetalle) {
+      this.detalleSelected = modelo;
+      if(this.detalle.filter(x => x.itemCode === '').length === 0){
+        this.opciones.find(x => x.label == "Visualizar").visible = true;
+      } else {
+        this.opciones.find(x => x.label == "Visualizar").visible = false;
+      }
+    }
 
 
   //#region <<< MODAL: Cliente >>>
@@ -257,31 +246,6 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   }
   //#endregion
 
-  getNumber() {
-    this.transferenciaStockService.getNumber()
-    .subscribe({next:(data: ITransferenciaStock) =>{
-      this.modeloFormCab2.patchValue({ number: data.number });
-      },error:(e)=>{
-        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-      }
-    });
-  }
-
-  getListEstado() {
-    this.docStatus =
-    [
-      { statusCode  : '01', statusName: 'Abierto'},
-      { statusCode  : '02', statusName: 'Cerrado'},
-    ];
-
-    this.docStatusList = [];
-    for (let item of this.docStatus) {
-      this.docStatusList.push({ label: item.statusName, value: item.statusCode });
-    }
-    const item: any = this.docStatusList.find(x=>x.value === '01');
-    this.modeloFormCab2.controls['docStatus'].setValue({ label: item.label, value: item.value });
-  }
-
   //#region <<< Datos de sunat >>>
   onSelectedTipoDocumento(value: any) {
     this.tipDocumento = value.codTipoDocumento;
@@ -290,7 +254,6 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
 
   onSelectedSerieDocumento(value: any) {
     this.modeloFormCab2.patchValue({ 'serDocumento' : value.serDocumento });
-    debugger
     this. getNumDocumentoByTipoAndSerie(value.tipDocumento, value.serDocumento);
   }
 
@@ -405,6 +368,7 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
     this.detalle[this.indexArticulo].unitMsr = value.invntryUom;
     this.detalle[this.indexArticulo].quantity = 1;
     this.detalle[this.indexArticulo].openQty = 1;
+    this.detalle[this.indexArticulo].openQtyRding = 1;
     this.isVisualizarArticulo = !this.isVisualizarArticulo;
   }
 
@@ -420,7 +384,7 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   //=======================================================================================================================
   //============================= INI: ALMACEN ============================================================================
   //=======================================================================================================================
-  onOpenAlmacenOrigen(value: ILecturaCopyToTransferenciaDetalle, index: number) {
+  onOpenAlmacenOrigen(value: ITransferenciaStockDetalle, index: number) {
     this.indexAlmacenOrigen = index;
     this.itemCode = value.itemCode;
     this.isVisualizarAlmacenOrigen = !this.isVisualizarAlmacenOrigen;
@@ -436,7 +400,7 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
     this.isVisualizarAlmacenOrigen = !this.isVisualizarAlmacenOrigen;
   }
 
-  onOpenAlmacenDestino(value: ILecturaCopyToTransferenciaDetalle, index: number) {
+  onOpenAlmacenDestino(value: ITransferenciaStockDetalle, index: number) {
     this.indexAlmacenDestino = index;
     this.itemCode = value.itemCode;
     this.isVisualizarAlmacenDestino = !this.isVisualizarAlmacenDestino;
@@ -458,7 +422,7 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   //=======================================================================================================================
   //============================= INI: TIPO DE OPERACION ==================================================================
   //=======================================================================================================================
-  onOpenTipoOperacion(value: ILecturaCopyToTransferenciaDetalle, index: number) {
+  onOpenTipoOperacion(value: ITransferenciaStockDetalle, index: number) {
     this.indexTipoOperacion = index;
     this.isVisualizarTipoOperacion = !this.isVisualizarTipoOperacion;
   }
@@ -488,77 +452,65 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   //============================= FIN: TIPO DE OPERACION ==================================================================
   //=======================================================================================================================
 
-  onChangeQuantity(value: ILecturaCopyToTransferenciaDetalle, index: number)
+  onChangeQuantity(value: ITransferenciaStockDetalle, index: number)
   {
       let quantity   : number = 0;
       let openQty    : number = 0;
+      let openQtyRd  : number = 0;
 
       quantity  = this.utilService.onRedondearDecimal(value.quantity, 3);
       openQty   = this.utilService.onRedondearDecimal(value.quantity, 3);
+      openQtyRd = this.utilService.onRedondearDecimal(value.quantity, 3);
 
       this.detalle[index].quantity  = value.itemCode === '' ? 0 : quantity;
       this.detalle[index].openQty   = value.itemCode === '' ? 0 : openQty;
-  }
-
-  onClickAddLine()
-  {
-  }
-
-  onClickBorrarLinea(value: ILecturaCopyToTransferenciaDetalle)
-  {
-    // Se borra el registro en el detalle
-    this.detalle.filter(x => x.idBase === value.idBase && x.lineBase === value.lineBase).forEach(x => this.detalle.splice(this.detalle.indexOf(x), 1));
-
-    // Se borra el registro de la lectura
-    this.lectura.filter(x => x.idBase === value.idBase && x.lineBase === value.lineBase).forEach(x => this.lectura.splice(this.lectura.indexOf(x), 1));
+      this.detalle[index].openQtyRding = value.itemCode === '' ? 0 : openQtyRd;
   }
 
   //#region  <<< Visualizar >>>
-  onClickVisualizar(value: ILecturaCopyToTransferenciaDetalle)
-  {
-    debugger
+  onListar() {
+    this.isDisplay = true;
     this.bardcodeList = [];
-    this.bardcodeList = this.lectura.filter(x => x.idBase === value.idBase && x.lineBase === value.lineBase);
+    const text1 = this.modeloFormBar.value;
+    const params: any = { cod1: this.detalleSelected.objType, id1: this.detalleSelected.docEntry, id2: this.detalleSelected.lineNum, text1: text1.text1 };
+    this.lecturaService.getListByTargetTypeTrgetEntryTrgetLineFiltro(params)
+    .subscribe({next:(data: ILectura[]) =>{
+        this.isDisplay = false;
+        this.bardcodeList = data;
+      },error:(e)=>{
+        this.bardcodeList = [];
+        this.isDisplay = false;
+        let swalWithBootstrapButtons = Swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal') });
+        swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, e.error.resultadoDescripcion, 'error');
+      }
+    });
+  }
+
+  onClickVisualizar()
+  {
+    this.onListar();
     this.isVisualizarBarcode = !this.isVisualizarBarcode;
   }
 
   onToBuscar()
   {
-
+    this.onListar();
   }
 
-  onToSelectedDeleteRow(value: ILecturaCopyToTransferenciaDetalle)
+  onClear()
   {
-    let quantity: number = 0;
+    this.bardcodeList = [];
+    this.modeloFormBar.patchValue({ 'text1' : '' });
+  }
 
-    // Se borra el registro en el detalle
-    this.detalle.filter(x => x.id === value.id).forEach(x => this.detalle.splice(this.detalle.indexOf(x), 1));
-
-    // Se borra el registro en el modal
-    this.bardcodeList.filter(x => x.id === value.id).forEach(x => this.bardcodeList.splice(this.bardcodeList.indexOf(x), 1));
-
-
-    // Se obtiene la lista de los registros similares a lo seleccionado
-    const lista = this.bardcodeList.filter(x => x.idBase === value.idBase && x.lineBase === value.lineBase);
-
-    // Se suma la cantidad
-    lista.forEach(x => quantity += x.quantity);
-
-    // Se le asigna el nuevo valor a la cantidad
-    for(const linea of this.detalle.filter(x => x.idBase === value.idBase && x.lineBase === value.lineBase))
-    {
-      linea.quantity = quantity;
-    }
-
-    // Si no hay mas ítems en el modal, se borra el item del detalle
-    if(lista.length === 0)
-    {
-      this.detalle.filter(x => x.idBase === value.idBase && x.lineBase === value.lineBase).forEach(x => this.detalle.splice(this.detalle.indexOf(x), 1));
-    }
+  onHide()
+  {
+    this.onClear();
   }
 
   onClickBarcodeClose()
   {
+    this.onClear();
     this.isVisualizarBarcode = !this.isVisualizarBarcode;
   }
   //#endregion
@@ -583,66 +535,80 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
     this.modeloFormPie1.patchValue({ 'slpCode' : value.slpCode });
   }
 
-  //#region <<< Copy >>>
-  set(data: ILecturaCopyToTransferencia)
+  set(data: ITransferenciaStock)
   {
     setTimeout(() => {
-      this.cardCode       = data.cardCode;
-      this.cntctCode      = data.cntctCode;
-      this.whsCodeOrigen  = data.filler;
-      this.whsCodeDestino = data.toWhsCode;
-      this.codTipTraslado = data.codTipTraslado;
-      this.codMotTraslado = data.codMotTraslado;
-      this.codTipSalida   = data.codTipSalida;
-      this.slpCode        = data.slpCode;
+      this.docEntry                 = data.docEntry;
+      this.cardCode                 = data.cardCode;
+      this.cntctCode                = data.cntctCode;
+      this.tipDocumento             = data.tipDocumento;
+      this.serDocumento             = data.serDocumento;
+      this.whsCodeOrigen            = data.filler;
+      this.whsCodeDestino           = data.toWhsCode;
+      this.codTipTransporte         = data.codTipTransporte;
+      this.codTipDocTransportista   = data.codTipDocTransportista;
+      this.codTipDocConductor       = data.codTipDocConductor;
+      this.codTipTraslado           = data.codTipTraslado;
+      this.codMotTraslado           = data.codMotTraslado;
+      this.codTipSalida             = data.codTipSalida;
+      this.slpCode                  = data.slpCode;
+
     }, 10);
 
     this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
     this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
     this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
     this.modeloFormCab1.controls['address'].setValue( data.address );
+    this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
+    this.modeloFormCab2.controls['tipDocumento'].setValue( data.tipDocumento );
+    this.modeloFormCab2.controls['serDocumento'].setValue( data.serDocumento );
+    this.modeloFormCab2.controls['numDocumento'].setValue( data.numDocumento );
+    this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );
+    this.modeloFormCab2.controls['docDueDate'].setValue( data.docDueDate == null ?  null : new Date(data.docDueDate) );
+    this.modeloFormCab2.controls['taxDate'].setValue( data.taxDate == null ?  null : new Date(data.taxDate) );
     this.modeloFormCab3.controls['whsCodeOrigen'].setValue( data.filler );
     this.modeloFormCab3.controls['whsCodeDestino'].setValue( data.toWhsCode );
+    this.modeloFormTra.controls['codTipTransporte'].setValue( data.codTipTransporte );
+    this.modeloFormTra.controls['codTipDocTransportista'].setValue( data.codTipDocTransportista );
+    this.modeloFormTra.controls['numTipoDocTransportista'].setValue( data.numTipoDocTransportista );
+    this.modeloFormTra.controls['nomTransportista'].setValue( data.nomTransportista );
+    this.modeloFormTra.controls['numPlaVehTransportista'].setValue( data.numPlaVehTransportista );
+    this.modeloFormTra.controls['codTipDocConductor'].setValue( data.codTipDocConductor );
+    this.modeloFormTra.controls['numTipoDocConductor'].setValue( data.numTipoDocConductor );
+    this.modeloFormTra.controls['nomConductor'].setValue( data.nomConductor );
+    this.modeloFormTra.controls['apeConductor'].setValue( data.apeConductor );
+    this.modeloFormTra.controls['nomComConductor'].setValue( data.nomComConductor );
+    this.modeloFormTra.controls['numLicConductor'].setValue( data.numLicConductor );
     this.modeloFormOtr.controls['codTipTraslado'].setValue( data.codTipTraslado );
     this.modeloFormOtr.controls['codMotTraslado'].setValue( data.codMotTraslado );
     this.modeloFormOtr.controls['codTipSalida'].setValue( data.codTipSalida );
+    this.modeloFormPie1.controls['slpCode'].setValue( data.slpCode );
+    this.modeloFormPie1.controls['numBulto'].setValue( data.numBulto );
+    this.modeloFormPie1.controls['totKilo'].setValue( data.totKilo );
+    this.modeloFormPie1.controls['jrnlMemo'].setValue( data.jrnlMemo );
     this.modeloFormPie1.controls['comments'].setValue( data.comments );
   }
 
-  getGroupByAndSum(data: ILecturaCopyToTransferenciaDetalle[]): { idBase: number, lineBase: number, baseType: string, baseEntry: number, baseLine: number, itemCode: string, dscription: string, fromWhsCod: string, whsCode: string, codTipOperacion: string, unitMsr: string, quantity: number } [] {
-    const result = data.reduce((acc, current) => {
-      const { idBase, lineBase, baseType, baseEntry, baseLine, itemCode, dscription, fromWhsCod, whsCode, codTipOperacion, unitMsr, quantity } = current;
-
-      const key = `${itemCode}-${dscription}`;
-
-      if (acc[key]) {
-        acc[key].quantity += quantity;
-      } else {
-        acc[key] = { idBase, lineBase, baseType, baseEntry, baseLine, itemCode, dscription, fromWhsCod, whsCode, codTipOperacion, unitMsr, quantity };
-      }
-
-      return acc;
-    }, {} as Record<string, { idBase: number, lineBase: number, baseType: string, baseEntry: number, baseLine: number, itemCode: string, dscription: string, fromWhsCod: string, whsCode: string, codTipOperacion: string, unitMsr: string, quantity: number }>);
-    return Object.values(result);
-  }
-
-  getListCopy(params: any)
-  {
-    this.lecturaService.getLecturaCopyToTransferencia(params)
-    .subscribe({next:(data: any) =>{
+  getById(id: number) {
+    this.isDisplay = true;
+    this.transferenciaStockService.getById(id)
+    .subscribe({next:(data: ITransferenciaStock) => {
       setTimeout(() => {
-        this.set(data);
+        this.modelo = data;
+        this.set(this.modelo);
       }, 10);
       setTimeout(() => {
-        this.lectura = data.linea;
-        this.detalle = this.getGroupByAndSum(this.lectura);
+        data.linea.forEach(element => {
+          this.detalle.push(element);
+        });
       }, 1000);
+      this.isDisplay = false;
       },error:(e)=>{
+        this.isDisplay = false;
         this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
       }
     });
   }
-  //#endregion
 
 
   //#region <<< Save >>>
@@ -705,25 +671,10 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
     if(!this.onValidatedSave()) return;
 
     // CAB 02: SOCIO NEGOCIO
-    this.modeloSave.cardCode                  = this.modeloFormCab1.controls['cardCode'].value;
-    this.modeloSave.cardName                  = this.modeloFormCab1.controls['cardName'].value;
-    if (this.modeloFormCab1.controls['cntctCode'].value)
-    {
-      this.modeloSave.cntctCode               = this.modeloFormCab1.controls['cntctCode'].value;
-    }
-    this.modeloSave.address                   = this.modeloFormCab1.controls['address'].value;
-
     // CAB 02: TRANSFERENCIA
-    this.modeloSave.tipDocumento              = this.modeloFormCab2.controls['tipDocumento'].value;
-    this.modeloSave.serDocumento              = this.modeloFormCab2.controls['serDocumento'].value;
-    this.modeloSave.numDocumento              = this.modeloFormCab2.controls['numDocumento'].value;
-    this.modeloSave.docDate                   = this.modeloFormCab2.controls['docDate'].value;
-    this.modeloSave.docDueDate                = this.modeloFormCab2.controls['docDueDate'].value;
-    this.modeloSave.taxDate                   = this.modeloFormCab2.controls['taxDate'].value;
-
+    this.modeloSave.id = this.id;
+    this.modeloSave.docEntry = this.docEntry;
     // CAB 03: TRANSFERENCIA
-    this.modeloSave.filler                    = this.modeloFormCab3.controls['whsCodeOrigen'].value;
-    this.modeloSave.toWhsCode                 = this.modeloFormCab3.controls['whsCodeDestino'].value;
 
     // TRANSPORTISTA
     this.modeloSave.codTipTransporte          = this.modeloFormTra.controls['codTipTransporte'].value;
@@ -741,17 +692,19 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
     this.modeloSave.numLicConductor           = this.modeloFormTra.controls['numLicConductor'].value;
 
     // OTROS
-    this.modeloSave.codTipTraslado            = this.modeloFormOtr.controls['codTipTraslado'].value;
-    this.modeloSave.codMotTraslado            = this.modeloFormOtr.controls['codMotTraslado'].value;
-    this.modeloSave.codTipSalida              = this.modeloFormOtr.controls['codTipSalida'].value;
+    this.modeloSave.codTipTraslado  = this.modeloFormOtr.controls['codTipTraslado'].value;
+    this.modeloSave.codMotTraslado  = this.modeloFormOtr.controls['codMotTraslado'].value;
+    this.modeloSave.codTipSalida    = this.modeloFormOtr.controls['codTipSalida'].value;
 
     // PIE 01: TRANSFERENCIA
-    this.modeloSave.slpCode                   = this.modeloFormPie1.controls['slpCode'].value;
-    this.modeloSave.numBulto                  = this.modeloFormPie1.controls['numBulto'].value;
-    this.modeloSave.totKilo                   = this.modeloFormPie1.controls['totKilo'].value;
-    this.modeloSave.jrnlMemo                  = this.modeloFormPie1.controls['jrnlMemo'].value;
-    this.modeloSave.comments                  = this.modeloFormPie1.controls['comments'].value;
-    this.modeloSave.idUsuarioCreate = this.userContextService.getIdUsuario();
+    this.modeloSave.slpCode         = this.modeloFormPie1.controls['slpCode'].value;
+    this.modeloSave.numBulto        = this.modeloFormPie1.controls['numBulto'].value;
+    this.modeloSave.totKilo         = this.modeloFormPie1.controls['totKilo'].value;
+    this.modeloSave.jrnlMemo        = this.modeloFormPie1.controls['jrnlMemo'].value;
+    this.modeloSave.comments        = this.modeloFormPie1.controls['comments'].value;
+
+    this.modeloSave.idUsuarioUpdate = this.userContextService.getIdUsuario();
+
     this.modeloSave.linea = [];
 
     for (let index = 0; index < this.lectura.length; index++) {
@@ -759,14 +712,10 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
       {
         this.modeloSave.linea.push
         ({
-          id                  : 0,
-          line                : 0,
-          idLectura           : this.lectura[index].id,
-          idBase              : this.lectura[index].idBase,
-          lineBase            : this.lectura[index].lineBase,
-          baseType            : this.lectura[index].baseType,
-          baseEntry           : this.lectura[index].baseEntry,
-          baseLine            : this.lectura[index].baseLine,
+          id                  : this.lectura[index].id,
+          line                : this.lectura[index].line,
+          docEntry            : this.lectura[index].docEntry,
+          lineNum             : this.lectura[index].lineNum,
           itemCode            : this.lectura[index].itemCode,
           dscription          : this.lectura[index].dscription,
           fromWhsCod          : this.lectura[index].fromWhsCod,
@@ -774,13 +723,12 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
           codTipOperacion     : this.lectura[index].codTipOperacion,
           unitMsr             : this.lectura[index].unitMsr,
           quantity            : this.lectura[index].quantity,
-          openQty             : this.lectura[index].openQty,
-          idUsuarioCreate     : this.userContextService.getIdUsuario()
+          openQty             : this.lectura[index].openQty
         });
       }
     }
 
-    this.transferenciaStockService.setCreate2(this.modeloSave)
+    this.transferenciaStockService.setUpdate(this.modeloSave)
     .subscribe({ next: (data:any)=>{
         this.isSaving = false;
         this.swaCustomService.swaMsgExito(null);
@@ -806,7 +754,6 @@ export class PanelPanelTransferenciaStockCreate2Component implements OnInit {
   }
 
   //#endregion
-
 
   onClickBack() {
     this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-list']);

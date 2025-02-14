@@ -56,7 +56,7 @@ export class BusquedaTipoOperacionSapComponent implements OnInit {
   onBuildColum() {
     this.columnas =
     [
-      { field: 'codd',    header: 'Código' },
+      { field: 'code',    header: 'Código' },
       { field: 'name',    header: 'Nombre' },
     ];
   }

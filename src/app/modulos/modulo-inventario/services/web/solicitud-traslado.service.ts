@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { ILecturaCopySolicitudTrasladoToTransferencia, ISolicitudTraslado } from '../../interfaces/web/solicitud-traslado.interface';
+import { ILecturaCopySolicitudTrasladoToTransferencia, ISolicitudTraslado, ISolicitudTrasladoDetalle } from '../../interfaces/web/solicitud-traslado.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { SolicitudTrasladoCloseModel, SolicitudTrasladoCreateModel, SolicitudTrasladoUpdateModel } from '../../models/web/solicitud-traslado.model';
 
@@ -15,10 +15,6 @@ export class SolicitudTrasladoService {
     private http: HttpClient,
     private datePipe: DatePipe
   ){ }
-
-  getNumber() {
-    return this.http.get<ISolicitudTraslado>(`${environment.url_api_fib}SolicitudTraslado/GetNumber/`);
-  }
 
   getListFiltro(value: FilterRequestModel) {
     let params = new HttpParams();
@@ -32,8 +28,19 @@ export class SolicitudTrasladoService {
     return this.http.get<ISolicitudTraslado>(`${environment.url_api_fib}SolicitudTraslado/GetById/${id}`);
   }
 
+  getListById(id: number) {
+    return this.http.get<ISolicitudTrasladoDetalle[]>(`${environment.url_api_fib}SolicitudTraslado/getListById/${id}`);
+  }
+
   getSolicitudTrasladoToTransferencia(id: number) {
     return this.http.get<ILecturaCopySolicitudTrasladoToTransferencia>(`${environment.url_api_fib}SolicitudTraslado/GetSolicitudTrasladoToTransferencia/${id}`);
+  }
+
+  getSolicitudTrasladoDetalleByIdAndLine(value: FilterRequestModel) {
+    let params = new HttpParams();
+    params = params.append('id1', value.id1);
+    params = params.append('id2', value.id2);
+    return this.http.get<ISolicitudTrasladoDetalle>(`${environment.url_api_fib}SolicitudTraslado/GetSolicitudTrasladoDetalleByIdAndLine/`,{params: params});
   }
 
   setCreate(value: SolicitudTrasladoCreateModel) {
@@ -42,7 +49,6 @@ export class SolicitudTrasladoService {
   }
 
   setUpdate(value: SolicitudTrasladoUpdateModel) {
-    debugger
     var closeList = value.linea.filter(x=>x.record === 4);
 
     if (closeList.length === 0)

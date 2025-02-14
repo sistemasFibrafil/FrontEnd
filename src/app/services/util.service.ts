@@ -225,7 +225,7 @@ export class UtilService {
   }
 
   aceptaSoloNumeros(evt, value){
-    debugger
+    // debugger
     // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
     const key = window.Event ? evt.which : evt.keyCode;
     const chark = String.fromCharCode(key);
@@ -284,7 +284,7 @@ export class UtilService {
   goOcultarParteDelCorreo(value: string) :  string{
     let chars = 3; // Cantidad de caracters visibles
     return value
-     ? value.replace(/[a-z0-9\-_.]+@/ig, (c) => c.substr(0, chars) + c.split('').slice(chars, -1).map(v => '*').join('') + '@')
-     : value;
+    ? value.replace(/[a-z0-9\-_.]+@/ig, (c) => c.substr(0, chars) + c.split('').slice(chars, -1).map(v => '*').join('') + '@')
+    : value;
   }
 }

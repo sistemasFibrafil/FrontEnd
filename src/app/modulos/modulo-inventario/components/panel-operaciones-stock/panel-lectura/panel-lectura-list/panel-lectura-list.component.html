@@ -73,10 +73,7 @@
               <p-tableCheckbox [disabled]="isOutOfStock(modelo)" [value]="modelo"></p-tableCheckbox>
             </td>
             <td class="custom-td-5">
-              <span class="p-column-title">Número: </span> {{modelo.numBase}}
-            </td>
-            <td class="custom-td-5">
-              <span class="p-column-title">SAP: </span> {{modelo.baseNum}}
+              <span class="p-column-title">Número: </span> {{modelo.baseNum}}
             </td>
             <td class="custom-td-4">
               <span class="p-column-title">Línea: </span> {{modelo.baseLine}}
@@ -87,16 +84,25 @@
             <td class="p-fluid">
               <span class="p-column-title">Descripcion: </span> {{modelo.dscription}}
             </td>
-            <td class="custom-td-5">
+            <!-- <td class="custom-td-5">
               <span class="p-column-title">Devuelto: </span>
               <span class="label" style="background:green" *ngIf="modelo.return === 'N'">No</span>
               <span class="label" style="background:red"   *ngIf="modelo.return === 'Y'">Sí</span>
+            </td> -->
+            <td class="custom-td-5">
+              <span class="p-column-title">UM: </span> {{modelo.unitMsr}}
             </td>
             <td class="custom-td-numero">
               <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
             </td>
             <td class="custom-td-numero">
-              <span class="p-column-title">Peso: </span> {{modelo.peso | number: '.3':'en-EN'}}
+              <span class="p-column-title">Pendiente: </span> {{modelo.openQty | number: '.3':'en-EN'}}
+            </td>
+            <td class="custom-td-numero">
+              <span class="p-column-title">Lectura Pendiente: </span> {{modelo.engQtyRead | number: '.3':'en-EN'}}
+            </td>
+            <td class="custom-td-numero">
+              <span class="p-column-title">Lectura Despacha: </span> {{modelo.dedQtyRead | number: '.3':'en-EN'}}
             </td>
           </tr>
         </ng-template>

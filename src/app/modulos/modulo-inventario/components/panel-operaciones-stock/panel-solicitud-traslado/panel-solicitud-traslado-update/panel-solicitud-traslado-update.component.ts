@@ -1,4 +1,4 @@
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -12,7 +12,6 @@ import { UserContextService } from 'src/app/services/user-context.service';
 import { ISolicitudTraslado, ISolicitudTrasladoDetalle } from 'src/app/modulos/modulo-inventario/interfaces/web/solicitud-traslado.interface';
 import { SolicitudTrasladoUpdateModel } from 'src/app/modulos/modulo-inventario/models/web/solicitud-traslado.model';
 import { SolicitudTrasladoService } from 'src/app/modulos/modulo-inventario/services/web/solicitud-traslado.service';
-import { read } from 'xlsx';
 
 interface DocStatus {
   statusCode  : string,
@@ -53,46 +52,47 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
   cardCode: string = '';
   cntctCode: number = 0;
 
-   // MODAL: Almacen
-   whsCodeOrigen: string = '';
-   whsCodeDestino: string = '';
-   itemCodeAlmacen: string = '';
-   demandanteAlmacen: string = 'N';
-   inactiveAlmacen: string = 'N';
+  // MODAL: Almacen
+  whsCodeOrigen: string = '';
+  whsCodeDestino: string = '';
+  itemCodeAlmacen: string = '';
+  demandanteAlmacen: string = 'N';
+  inactiveAlmacen: string = 'N';
 
-   // MODAL: Tipo de traslado
-   codTipTraslado: string = '';
+  // MODAL: Tipo de traslado
+  codTipTraslado: string = '';
 
-   // MODAL: Motivo de traslado
-   codMotTraslado: string = '';
+  // MODAL: Motivo de traslado
+  codMotTraslado: string = '';
 
-   // MODAL: Tipo de salida
-   codTipSalida: string = '';
+  // MODAL: Tipo de salida
+  codTipSalida: string = '';
 
   // DETALLE
-  columnas: any[];
-  items: MenuItem[];
+  opciones: any = [];
+
   modelo: ISolicitudTraslado;
+  modeloDetalle: ISolicitudTrasladoDetalle;
+  detalleSelected: ISolicitudTrasladoDetalle;
   detalle: ISolicitudTrasladoDetalle[] = [];
   detalleCerrar: ISolicitudTrasladoDetalle[] = [];
   detalleEliminar: ISolicitudTrasladoDetalle[] = [];
-  detalleSelected: ISolicitudTrasladoDetalle;
 
   // MODAL: Artículo
   itemCode: string = '';
   indexArticulo: number = 0;
   isVisualizarArticulo: boolean = false;
 
-   // MODAL: Almacen - Item
-   indexAlmacenOrigen: number = 0;
-   indexAlmacenDestino: number = 0;
-   inactiveAlmacenItem: string = 'N';
-   demandanteAlmacenItem: string = 'Y';
-   isVisualizarAlmacenOrigen: boolean = false;
-   isVisualizarAlmacenDestino: boolean = false;
+  // MODAL: Almacen - Item
+  indexAlmacenOrigen: number = 0;
+  indexAlmacenDestino: number = 0;
+  inactiveAlmacenItem: string = 'N';
+  demandanteAlmacenItem: string = 'Y';
+  isVisualizarAlmacenOrigen: boolean = false;
+  isVisualizarAlmacenDestino: boolean = false;
 
-   // MODAL: Empleado de ventas
-   slpCode: number = 0;
+  // MODAL: Empleado de ventas
+  slpCode: number = 0;
 
 
   constructor
@@ -110,9 +110,8 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.onBuildForm();
-    this.onBuildColumn();
+    this.opcionesTabla();
     this.getListEstado();
-    this.getListContextMenu();
 
     this.route.params.subscribe((params: Params) => {
       this.id = Number(params["id"]);
@@ -120,15 +119,6 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
       this.getById(this.id);
       }, 10);
     });
-  }
-
-  getListContextMenu() {
-    this.items =
-    [
-      {label: 'Añadir línea', icon: 'pi pi-plus',   command: () => this.addLine() },
-      {label: 'Borrar línea', icon: 'pi pi-trash',  command: () => this.onClickBorrar(this.detalleSelected) },
-      //{label: 'Cerrar línea', icon: 'pi pi-unlock', command: () => this.onClickCerrar(this.detalleSelected) }
-    ];
   }
 
   onBuildForm() {
@@ -141,7 +131,6 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'number'      : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
       'docNum'      : new FormControl({ value: '', disabled: true }),
       'docStatus'   : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
       'docDate'     : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
@@ -171,15 +160,25 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     });
   }
 
-  onBuildColumn() {
-    this.columnas = [
-      { field: 'itemCode',    header: 'Código' },
-      { field: 'itemName',    header: 'Descripción' },
-      { field: 'fromWhsCod',  header: 'Almacén de origen' },
-      { field: 'whsCode',     header: 'Almacén de destino' },
-      { field: 'unitMsr',     header: 'UM' },
-      { field: 'quantity',    header: 'Cantidad' }
+  opcionesTabla() {
+    this.opciones = [
+      { label: 'Añadir línea',      icon: 'pi pi-pencil',      command: () => { this.onClickAddLine() } },
+      { label: 'Borrar línea',      icon: 'pi pi-times',       command: () => { this.onClickDelete() } },
     ];
+  }
+
+  onSelectedItem(modelo: ISolicitudTrasladoDetalle) {
+    this.detalleSelected = modelo;
+    if(this.detalle.filter(x => x.itemCode === '').length === 0){
+      this.opciones.find(x => x.label == "Añadir línea").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Añadir línea").visible = false;
+    }
+    if(this.detalle.length > 0 && modelo.lineStatus === '01' && (modelo.quantity === modelo.openQtyRding || modelo.quantity === modelo.openQty)){
+      this.opciones.find(x => x.label == "Borrar línea").visible = true;
+    } else {
+      this.opciones.find(x => x.label == "Borrar línea").visible = false;
+    }
   }
 
   //#region <<< MODAL: Cliente >>>
@@ -335,39 +334,62 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
   onChangeQuantity(value: ISolicitudTrasladoDetalle, index: number)
   {
-      let quantity   : number = 0;
-      let openQty    : number = 0;
-      let openQtyRd  : number = 0;
+    debugger
+    if(value.record === 1)
+    {
+      this.onUpdateQuantity1(value, index);
+    }
+    else
+    {
+      this.onUpdateQuantity2(value, index);
+    }
+  }
 
-      quantity  = this.utilService.onRedondearDecimal(value.quantity, 3);
-      openQty   = this.utilService.onRedondearDecimal(value.quantity, 3);
-      openQtyRd = this.utilService.onRedondearDecimal(value.quantity, 3);
+  onUpdateQuantity1(value: ISolicitudTrasladoDetalle, index: number)
+  {
+    debugger
+    let quantity      : number = 0;
+    let openQtyRding  : number = 0;
+    let openQty       : number = 0;
 
-      this.detalle[index].quantity  = value.itemCode === '' ? 0 : quantity;
-      this.detalle[index].openQty   = value.itemCode === '' ? 0 : openQty;
-      this.detalle[index].openQtyRding = value.itemCode === '' ? 0 : openQtyRd;
+    quantity          = this.utilService.onRedondearDecimal(value.quantity, 3);
+    openQtyRding      = this.utilService.onRedondearDecimal(value.quantity, 3);
+    openQty           = this.utilService.onRedondearDecimal(value.quantity, 3);
+
+    this.detalle[index].quantity      = value.itemCode === '' ? 0 : quantity;
+    this.detalle[index].openQtyRding  = value.itemCode === '' ? 0 : openQtyRding;
+    this.detalle[index].openQty       = value.itemCode === '' ? 0 : openQty;
+  }
+
+  onUpdateQuantity2(value: ISolicitudTrasladoDetalle, index: number)
+  {
+    debugger
+    let quantity   : number = 0;
+    let read       : number = 0;
+    let earring    : number = 0;
+
+    const params  = {id1: value.id, id2: value.line};
+
+    this.solicitudTrasladoService.getSolicitudTrasladoDetalleByIdAndLine(params)
+    .subscribe({next:(data: ISolicitudTrasladoDetalle) => {
+        this.modeloDetalle = data;
+
+        quantity      = this.utilService.onRedondearDecimal(value.quantity, 3);
+        read          = this.utilService.onRedondearDecimal(this.modeloDetalle.quantity - this.modeloDetalle.openQtyRding, 3);
+        earring       = this.utilService.onRedondearDecimal(this.modeloDetalle.quantity - this.modeloDetalle.openQty, 3);
+
+        this.detalle[index].quantity      = value.itemCode === '' ? 0 : quantity;
+        this.detalle[index].openQtyRding  = value.itemCode === '' ? 0 : quantity - read;
+        this.detalle[index].openQty       = value.itemCode === '' ? 0 : quantity - earring;
+      },error:(e)=>{
+        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
+      }
+    });
   }
 
   addLine()
   {
-    let exiete: boolean = false;
-    if(this.modelo.docStatus !== '01')
-    {
-      this.swaCustomService.swaMsgInfo('No se puede añadir línea, ya que tiene el estado Cerrado.');
-      return;
-    }
-
-    this.detalle.forEach(item=>{
-      if(item.itemCode === ""){
-        exiete = true;
-        return;
-      }
-    });
-
-    if(!exiete)
-    {
-      this.detalle.push({id: 0, line: 0, lineStatus: '01', itemCode: '', dscription: '', fromWhsCod: '', whsCode: '', unitMsr: '', quantity: 0, openQty: 0, openQtyRding: 0, record: 1 });
-    }
+    this.detalle.push({id: 0, line: 0, lineStatus: '01', itemCode: '', dscription: '', fromWhsCod: '', whsCode: '', unitMsr: '', quantity: 0, openQtyRding: 0, openQty: 0, record: 1 });
   }
 
   onClickAddLine()
@@ -375,40 +397,21 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     this.addLine();
   }
 
-  onClickBorrar(value: ISolicitudTrasladoDetalle)
+  onClickDelete()
   {
-    if(value.lineStatus === '02' && value.record == 2)
-    {
-      this.swaCustomService.swaMsgInfo('No se puede borrar el ítem, ya que tiene el estado Cerrado.');
-      return;
-    }
-    if(value.record == 2)
+    if(this.detalleSelected.record == 2)
     {
       // Se define que es borrado
-      value.record = 3;
-      this.detalleEliminar.push(value);
+      this.detalleSelected.record = 3;
+      this.detalleEliminar.push(this.detalleSelected);
     }
-    let index = this.detalle.indexOf(value);
+
+    let index = this.detalle.indexOf(this.detalleSelected);
     this.detalle.splice(+index, 1);
 
     if(this.detalle.length === 0)
     {
       this.addLine();
-    }
-  }
-
-  onClickCerrar(value: ISolicitudTrasladoDetalle)
-  {
-    if(value.lineStatus === '02' && value.record == 2)
-    {
-      this.swaCustomService.swaMsgInfo('El ítem está Cerrado.');
-      return;
-    }
-    if(value.record == 2)
-    {
-      // Se define que es cerrado
-      value.record = 4;
-      this.detalleCerrar.push(value);
     }
   }
   //#endregion
@@ -433,13 +436,10 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
     const status = this.docStatus.find(x => x.statusCode === data.docStatus);
 
-    console.log("DATA : ", data);
-
     this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
     this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
     this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
     this.modeloFormCab1.controls['address'].setValue( data.address );
-    this.modeloFormCab2.controls['number'].setValue( data.number );
     this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
     this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
     this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );

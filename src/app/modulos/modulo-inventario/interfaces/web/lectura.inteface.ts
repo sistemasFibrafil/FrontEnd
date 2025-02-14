@@ -17,6 +17,10 @@ export interface ILectura {
   whsCode?              : string;
   unitMsr               : string;
   quantity              : number;
+  openQty               : number;
+  qtyRead               : number;
+  engQtyRead            : number;
+  dedQtyRead            : number;
   peso                  : number;
   idUsuarioCreate       : number;
 }
@@ -66,16 +70,18 @@ export interface ILecturaCopyToTransferencia {
   slpCode               : number;
   jrnlMemo              : string;
   comments?             : string;
-  linea                 : ILecturaCopyToTransferenciaDetalle[];
+  linea1                : ILecturaCopyToTransferenciaDetalle1[];
+  linea2                : ILecturaCopyToTransferenciaDetalle2[];
 }
 
-export interface ILecturaCopyToTransferenciaDetalle {
+export interface ILecturaCopyToTransferenciaDetalle1 {
   id                    : number;
   idBase                : number;
   lineBase              : number;
   baseType              : string;
   baseEntry             : number;
   baseLine              : number;
+  read                  : string;
   return                : string;
   itemCode              : string;
   dscription            : string;
@@ -83,7 +89,31 @@ export interface ILecturaCopyToTransferenciaDetalle {
   fromWhsCod            : string;
   whsCode?              : string;
   codTipOperacion?      : string;
+  nomTipOperacion?      : string;
   unitMsr               : string;
   quantity              : number;
   openQty               : number;
+  bulto                 : number;
+  peso                  : number;
 }
+
+export interface ILecturaCopyToTransferenciaDetalle2 {
+  idBase                : number;
+  lineBase              : number;
+  baseType              : string;
+  baseEntry             : number;
+  baseLine              : number;
+  read                  : string;
+  itemCode              : string;
+  dscription            : string;
+  fromWhsCod            : string;
+  whsCode?              : string;
+  codTipOperacion?      : string;
+  nomTipOperacion?      : string;
+  unitMsr               : string;
+  quantity              : number;
+  openQty               : number;
+  bulto                 : number;
+  peso                  : number;
+}
+

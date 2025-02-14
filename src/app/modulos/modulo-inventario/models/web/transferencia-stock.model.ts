@@ -89,6 +89,7 @@ export class TransferenciaStockDetalleCreateModel {
   baseType                    : string;
   baseEntry                   : number;
   baseLine                    : number;
+  read                        : string;
   itemCode                    : string;
   dscription                  : string;
   fromWhsCod                  : string;
@@ -105,6 +106,7 @@ export class TransferenciaStockDetalleCreateModel {
     this.baseType             = '';
     this.baseEntry            = 0;
     this.baseLine             = 0;
+    this.read                 = '';
     this.itemCode             = '';
     this.dscription           = '';
     this.fromWhsCod           = '';

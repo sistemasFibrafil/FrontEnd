@@ -14,6 +14,7 @@ import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/web/lectu
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { ParamCreateTransferenciaModel } from 'src/app/modulos/modulo-inventario/models/web/solicitud-traslado.model';
 import { LecturaService } from 'src/app/modulos/modulo-inventario/services/web/lectura.service';
+import { CifrarDataService } from 'src/app/services/cifrar-data.service';
 
 
 interface DocStatus {
@@ -55,7 +56,7 @@ export class PanelLecturaListComponent implements OnInit {
   isDisplay: Boolean = false;
   isDeleting: boolean = false;
   params: FilterRequestModel = new FilterRequestModel();
-  paramCreateTransferencia: ParamCreateTransferenciaModel = new ParamCreateTransferenciaModel();
+  paramsCreateTransferencia: ParamCreateTransferenciaModel = new ParamCreateTransferenciaModel();
 
   // Modal
   columnasModal: any[];
@@ -71,6 +72,7 @@ export class PanelLecturaListComponent implements OnInit {
     public lenguageService: LanguageService,
     private userContextService: UserContextService,
     private readonly swaCustomService: SwaCustomService,
+    private readonly cifrarDataService: CifrarDataService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
     private lecturaService: LecturaService,
   )
@@ -106,14 +108,16 @@ export class PanelLecturaListComponent implements OnInit {
   onBuildColumn() {
     this.columnas =
     [
-      { field: 'numBase',         header: 'Número' },
-      { field: 'baseNum',         header: 'SAP' },
+      { field: 'baseNum',         header: 'Número' },
       { field: 'baseLine',        header: 'Línea' },
       { field: 'itemCode',        header: 'Código' },
       { field: 'dscription',      header: 'Descripción' },
-      { field: 'return',          header: 'Devuelto' },
+      // { field: 'return',          header: 'Devuelto' },
+      { field: 'unitMsr',         header: 'UM' },
       { field: 'quantity',        header: 'Cantidad' },
-      { field: 'peso',            header: 'Peso' },
+      { field: 'openQty',         header: 'Pendiente' },
+      { field: 'engQtyRead',      header: 'Lectura Pendiente' },
+      { field: 'dedQtyRead',      header: 'Lectura Despachada' },
     ];
 
     this.columnasModal =
@@ -200,7 +204,7 @@ export class PanelLecturaListComponent implements OnInit {
 
   onToItemSelected(modelo: ILectura) {
     this.modeloSelected = modelo;
-    if(this.buttonAcces.btnEliminar || modelo.docStatus === '02' || modelo.docStatus === '03'){
+    if(this.buttonAcces.btnEliminar || modelo.docStatus === '02' || modelo.docStatus === '03' || modelo.baseType === '1250000001'){
       this.opciones1.find(x => x.label == "Eliminar").visible = false;
     } else {
       this.opciones1.find(x => x.label == "Eliminar").visible = true;
@@ -354,27 +358,27 @@ export class PanelLecturaListComponent implements OnInit {
 
   onToCopy()
   {
-
     if(this.lecturaSelected.length > 0)
     {
-      this.paramCreateTransferencia.idBase = this.lecturaSelected[0].idBase;
-      this.paramCreateTransferencia.baseType = this.lecturaSelected[0].baseType;
-      this.paramCreateTransferencia.linea = [];
+      this.paramsCreateTransferencia.idBase = this.lecturaSelected[0].idBase;
+      this.paramsCreateTransferencia.baseType = this.lecturaSelected[0].baseType;
+      this.paramsCreateTransferencia.linea = [];
 
       for (let index = 0; index < this.lecturaSelected.length; index++) {
         if(this.lecturaSelected[index].idBase !== 0)
         {
-          this.paramCreateTransferencia.linea.push
+          this.paramsCreateTransferencia.linea.push
           ({
-            baseType            : this.lecturaSelected[index].baseType,
             idBase              : this.lecturaSelected[index].idBase,
             lineBase            : this.lecturaSelected[index].lineBase,
+            baseType            : this.lecturaSelected[index].baseType,
+            read                : this.lecturaSelected[index].engQtyRead > 0? 'Y' : 'N',
             return              : this.lecturaSelected[index].return,
           });
         }
       }
 
-      this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create-2', JSON.stringify(this.paramCreateTransferencia)]);
+      this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', this.cifrarDataService.encrypt(JSON.stringify(this.paramsCreateTransferencia))]);
     }
   }
 }

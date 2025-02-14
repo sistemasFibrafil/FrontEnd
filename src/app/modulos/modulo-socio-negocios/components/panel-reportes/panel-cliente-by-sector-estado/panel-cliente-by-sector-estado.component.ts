@@ -83,12 +83,11 @@ export class PanelClienteBySectorEstadoComponent implements OnInit, OnDestroy {
     this.columnas = [
       { field: 'licTradNum',        header: 'RUC' },
       { field: 'cardName',          header: 'Nombre de Cliente' },
+      { field: 'nomStatus',         header: 'Estado' },
       { field: 'slpName',           header: 'Vendedor' },
       { field: 'nomSector',         header: 'Sector' },
-      { field: 'nomContacto',       header: 'Contacto' },
       { field: 'createDate',        header: 'Fecha de Alta' },
       { field: 'fechaUltimaVenta',  header: 'Fecha Última Venta' },
-      { field: 'nomStatus',         header: 'Estado' },
     ];
 
     this.estadoList1 =
@@ -165,22 +164,21 @@ export class PanelClienteBySectorEstadoComponent implements OnInit, OnDestroy {
   onToExcel() {
     this.isDisplay = true;
     this.onSetParametro();
-    this.subscription = new Subscription();
-    this.subscription = this.socioNegocioSapService.getLitClienteExcelBySectorEstado(this.params)
-    .subscribe((response: any) => {
-      saveAs(
-        new Blob([response],
-        {
-          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        }),
-        this.nombreArchivo + this.fecha
-      );
-      this.isDisplay = false;
-      this.swaCustomService.swaMsgExito(null);
-    },
-    (error) => {
-      this.isDisplay = false;
-      this.swaCustomService.swaMsgError(error.error.resultadoDescripcion);
+    this.socioNegocioSapService.getLitClienteExcelBySectorEstado(this.params)
+    .subscribe({next:(response: any) => {
+        saveAs(
+          new Blob([response],
+          {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          }),
+          this.nombreArchivo + this.fecha
+        );
+        this.isDisplay = false;
+        this.swaCustomService.swaMsgExito(null);
+      },error:(e)=>{
+        this.isDisplay = false;
+        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
+      }
     });
   }
 

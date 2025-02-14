@@ -7,7 +7,7 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-cardCode">Código de cliente </label>
-                <app-modal-socio-negocio-sap [title]="'Socio de Negocios'" [cardCode]="cardCode" [cardType] = "'C,S'" [transType] = "'N,Y'" (eventoAceptar)="onSelectedSocioNegocio($event)"></app-modal-socio-negocio-sap>
+                <app-modal-socio-negocio-sap [isHabilitarButton]="true" [title]="'Socio de Negocios'" [cardCode]="cardCode" [cardType] = "'C,S'" [transType] = "'N,Y'" (eventoAceptar)="onSelectedSocioNegocio($event)"></app-modal-socio-negocio-sap>
               </div>
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-cardName">Razón social o nombre </label>
@@ -17,7 +17,7 @@
               </div>
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-persona-contacto">Persona de contacto </label>
-                <app-modal-persona-contacto-sap [cardCode]="cardCode" [cntctCode]="cntctCode" (eventoAceptar)="onSelectedPersonaContacto($event)"></app-modal-persona-contacto-sap>
+                <app-modal-persona-contacto-sap [isHabilitarButton]="true" [cardCode]="cardCode" [cntctCode]="cntctCode" (eventoAceptar)="onSelectedPersonaContacto($event)"></app-modal-persona-contacto-sap>
               </div>
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-address">Dirección de destino </label>
@@ -33,45 +33,28 @@
         <div class="card no-margin">
           <form [formGroup]="modeloFormCab2">
             <div class="p-formgrid grid">
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-number">Número </label><span class="label" style="font-weight: bold; color:red">*</span>
+              <div class="col-12 md:col-3">
+                <label class="label-custom" for="float-input-docNum">Número</label>
                 <div class="p-inputgroup">
-                  <input id="float-input-number" type="text" placeholder="Número de transferencia" maxlength="50" size="50" formControlName="number" autocomplete="off" required pInputText [readOnly]="true">
-                </div>
-                <div *ngIf="modeloFormCab2.controls['number'].errors && modeloFormCab2.controls['number'].dirty">
-                  <p-message severity="error" text="El número de transferencia es requerido." *ngIf="modeloFormCab2.controls['number'].errors['required']"></p-message>
+                  <input id="float-input-docNum" type="text" placeholder="Número" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText [readOnly]="true">
                 </div>
               </div>
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-docNum">Número de SAP </label>
-                <div class="p-inputgroup">
-                  <input id="float-input-docNum" type="text" placeholder="Número de SAP" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText [readOnly]="true">
-                </div>
+              <div class="col-12 md:col-3">
+                <label class="label-custom" for="float-input-cardCode">Tipo </label><span class="label" style="font-weight: bold; color:red">*</span>
+                <app-modal-tipo-documento [isHabilitarButton]="true" [codTipoDocumento]="tipDocumento" [codSede]="codSede" [codFormulario]="4" (eventoAceptar)="onSelectedTipoDocumento($event)"></app-modal-tipo-documento>
               </div>
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-docStatus">Estado </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <p-dropdown id="float-input-docStatus" [options]="docStatusList" class="p dropdown-item-text" placeholder="Seleccionar el estado" formControlName="docStatus" [required] optionLabel="label" [showClear]="true"></p-dropdown>
-                <div *ngIf="modeloFormCab2.controls['docStatus'].errors && modeloFormCab2.controls['docStatus'].dirty">
-                  <p-message severity="error" text="El estado es requerido." *ngIf="modeloFormCab2.controls['docStatus'].errors['required']"></p-message>
+              <div class="col-12 md:col-3">
+                <label class="label-custom" for="float-input-cardCode">Serie </label><span class="label" style="font-weight: bold; color:red">*</span>
+                <app-modal-serie-documento [isHabilitarButton]="true" [serDocumento]="serDocumento" [codSede]="codSede" [codFormulario]="4" [tipDocumento]="tipDocumento" (eventoAceptar)="onSelectedSerieDocumento($event)"></app-modal-serie-documento>
+              </div>
+              <div class="col-12 md:col-3">
+                <label class="label-custom" for="float-input-cardName">Número </label><span class="label" style="font-weight: bold; color:red">*</span>
+                <div class="p-inputgroup">
+                  <input id="float-input-numero-documento" type="text" placeholder="Número documento" maxlength="100" size="50" formControlName="numDocumento" autocomplete="off" pInputText [readOnly]="true">
                 </div>
               </div>
 
-              <div class="col-12 md:col-4">
-                <label class="label-custom" for="float-input-cardCode">Tipo de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-tipo-documento [codSede]="codSede" [codFormulario]="4" (eventoAceptar)="onSelectedTipoDocumento($event)"></app-modal-tipo-documento>
-              </div>
-              <div class="col-12 md:col-4">
-                <label class="label-custom" for="float-input-cardCode">Serie de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-serie-documento [codSede]="codSede" [codFormulario]="4" [tipDocumento]="tipDocumento" (eventoAceptar)="onSelectedSerieDocumento($event)"></app-modal-serie-documento>
-              </div>
-              <div class="col-12 md:col-4">
-                <label class="label-custom" for="float-input-cardName">Número de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <div class="p-inputgroup">
-                  <input id="float-input-numero-documento" type="text" placeholder="Número  de documento" maxlength="100" size="50" formControlName="numDocumento" autocomplete="off" pInputText [readOnly]="true">
-                </div>
-              </div>
-
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-docDate">Fecha de contabilización </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-docDate" placeholder="Fecha de contabilización" formControlName="docDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -80,7 +63,7 @@
                   <p-message severity="error" text="La fecha de contabilización es requerida." *ngIf="modeloFormCab2.controls['docDate'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-docDueDate">Fecha de entrega </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-docDueDate" placeholder="Fecha de entrega" formControlName="docDueDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -89,7 +72,7 @@
                   <p-message severity="error" text="La fecha de entrega es requerida." *ngIf="modeloFormCab2.controls['docDueDate'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-taxDate">Fecha de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-taxDate" placeholder="Fecha de documento" formControlName="taxDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -108,18 +91,17 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-6">
                 <label class="label-custom" for="float-input-almacen-origen">Almacén de origen </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-almacen-sap [whsCode]="whsCodeOrigen" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenOrigen($event)"></app-modal-almacen-sap>
+                <app-modal-almacen-sap [isHabilitarButton]="true" [whsCode]="whsCodeOrigen" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenOrigen($event)"></app-modal-almacen-sap>
               </div>
               <div class="col-12 md:col-6">
                 <label class="label-custom" for="float-input-destino">Almacén de destino </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-almacen-sap [whsCode]="whsCodeDestino" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenDestino($event)"></app-modal-almacen-sap>
+                <app-modal-almacen-sap [isHabilitarButton]="true" [whsCode]="whsCodeDestino" [demandante]="demandanteAlmacen" [itemCode]="itemCodeAlmacen" [inactive]="inactiveAlmacen" (eventoAceptar)="onSelectedAlmacenDestino($event)"></app-modal-almacen-sap>
               </div>
             </div>
           </form>
         </div>
       </div>
 
-      <p-contextMenu #cm [model]="items"></p-contextMenu>
 
       <div class="col-12">
         <div class="card no-margin">
@@ -131,48 +113,54 @@
               </ng-template>
               <p-table
                 [value]="detalle"
-                [columns]="columnas"
                 dataKey="line"
                 editMode="row"
                 [rowHover]="true"
                 [autoLayout]="true"
                 [responsive]="true"
-                [contextMenu]="cm"
                 [showCurrentPageReport]="true"
-                [(contextMenuSelection)]="detalleSelected"
                 styleClass="{{globalConstants.cStyleTableGridLines}}"
                 currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}">
                 <!-- Header -->
                 <ng-template pTemplate="header" let-columns>
                   <tr>
-                    <th *ngFor="let col of columns" class="custom-header">
-                      {{col.header}}
-                    </th>
+                    <th class="custom-header"></th>
+                    <th class="custom-header">Código</th>
+                    <th class="custom-header">Descripción</th>
+                    <th class="custom-header">Almacén de origen</th>
+                    <th class="custom-header">Almacén de destino</th>
+                    <th class="custom-header">Tipo de operación</th>
+                    <th class="custom-header">UM</th>
+                    <th class="custom-header">Cantidad</th>
                   </tr>
                 </ng-template>
                 <!-- body -->
-                <ng-template pTemplate="body" let-modelo let-ri="rowIndex">
-                  <tr [pContextMenuRow]="modelo">
-                    <td class="p-fluid">
-                      <span class="p-column-title">Código: </span><i class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{modelo.itemCode}}
+                <ng-template pTemplate="body" let-linea let-ri="rowIndex">
+                  <tr [ngClass]="{'row-cerrado': linea?.lineStatus === '01'}">
+                    <td class="custom-td-2">
+                      <p-splitButton [disabled]="true" icon="pi pi-cog" [model] = "opciones" (onDropdownClick) = "onSelectedItem(linea)" appendTo = "body">
+                      </p-splitButton>
                     </td>
                     <td class="p-fluid">
-                        <span class="p-column-title">Descripción: </span> {{modelo.dscription}}
+                      <span class="p-column-title">Código: </span> {{linea.itemCode}}
                     </td>
                     <td class="p-fluid">
-                      <span class="p-column-title">Almacén de origen: </span><i *ngIf="modelo.itemCode !== ''" class="pi pi-search" (click)="onOpenAlmacenOrigen(modelo, ri)" ></i> {{modelo.fromWhsCod}}
+                        <span class="p-column-title">Descripción: </span> {{linea.dscription}}
                     </td>
                     <td class="p-fluid">
-                      <span class="p-column-title">Almacén de destino: </span><i *ngIf="modelo.itemCode !== ''" class="pi pi-search" (click)="onOpenAlmacenDestino(modelo, ri)"></i> {{modelo.whsCode}}
+                      <span class="p-column-title">Almacén de origen: </span> {{linea.fromWhsCod}}
                     </td>
                     <td class="p-fluid">
-                      <span class="p-column-title">Tipo de operación: </span><i *ngIf="modelo.itemCode !== ''" class="pi pi-search" (click)="onOpenTipoOperacion(modelo, ri)"></i> {{modelo.codTipOperacion}}
+                      <span class="p-column-title">Almacén de destino: </span> {{linea.whsCode}}
+                    </td>
+                    <td class="p-fluid">
+                      <span class="p-column-title">Tipo de operación: </span> {{linea.nomTipOperacion}}
                     </td>
                     <td class="custom-td-3">
-                      <span class="p-column-title">UM: </span> {{modelo.unitMsr}}
+                      <span class="p-column-title">UM: </span> {{linea.unitMsr}}
                     </td>
                     <td class="custom-td-numero">
-                      <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
+                      <span class="p-column-title">Cantidad: </span> {{linea.quantity | number: '.3':'en-EN'}}
                     </td>
                   </tr>
                 </ng-template>
@@ -196,11 +184,11 @@
                       <div class="p-fluid p-formgrid grid">
                         <div class="col-12 md:col-12">
                           <label class="label-custom" for="float-input-tipo-transporte">Tipo de transporte </label>
-                          <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Transporte'" [fldValue]="codTipTransporte" [placeholder]="'Tipo de transporte'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIP_TRANS'" (eventoAceptar)="onSelectedTipoTransporte($event)"></app-modal-tabla-definida-usuario-sap>
+                          <app-modal-tabla-definida-usuario-sap [isHabilitarButton]="true" [title]="'Tipo de Transporte'" [fldValue]="codTipTransporte" [placeholder]="'Tipo de transporte'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIP_TRANS'" (eventoAceptar)="onSelectedTipoTransporte($event)"></app-modal-tabla-definida-usuario-sap>
                         </div>
                         <div class="col-12 md:col-4">
                           <label class="label-custom" for="float-input-tip-doc-transportista">Tipo de documento </label>
-                          <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Documento'" [fldValue]="tipDocTransportista" [placeholder]="'Tipo de documento'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIPDOC_TRA'" (eventoAceptar)="onSelectedTipoDocumentoTransportista($event)"></app-modal-tabla-definida-usuario-sap>
+                          <app-modal-tabla-definida-usuario-sap [isHabilitarButton]="true" [title]="'Tipo de Documento'" [fldValue]="codTipDocTransportista" [placeholder]="'Tipo de documento'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIPDOC_TRA'" (eventoAceptar)="onSelectedTipoDocumentoTransportista($event)"></app-modal-tabla-definida-usuario-sap>
                         </div>
                         <div class="col-12 md:col-2">
                           <label class="label-custom" for="float-input-ruc-transportista">RUC </label>
@@ -229,7 +217,7 @@
                       <div class="p-fluid p-formgrid grid">
                         <div class="col-12 md:col-12">
                           <label class="label-custom" for="float-input-tip-doc-conductor">Tipo de documento </label>
-                          <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Documento'" [fldValue]="tipDocConductor" [placeholder]="'Tipo de documento'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIPDOC_COND'" (eventoAceptar)="onSelectedTipoDocumentoConductor($event)"></app-modal-tabla-definida-usuario-sap>
+                          <app-modal-tabla-definida-usuario-sap [isHabilitarButton]="true" [title]="'Tipo de Documento'" [fldValue]="codTipDocConductor" [placeholder]="'Tipo de documento'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIPDOC_COND'" (eventoAceptar)="onSelectedTipoDocumentoConductor($event)"></app-modal-tabla-definida-usuario-sap>
                         </div>
                         <div class="col-12 md:col-3">
                           <label class="label-custom" for="float-input-num-doc-conductor">Número de documento </label>
@@ -278,15 +266,15 @@
                 <div class="p-fluid p-formgrid grid">
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-tipo-traslado">Tipo de traslado </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Traslado'" [fldValue]="codTipTraslado" [placeholder]="'Tipo de traslado'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIP_TRAS'" (eventoAceptar)="onSelectedTipoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [isHabilitarButton]="true" [title]="'Tipo de Traslado'" [fldValue]="codTipTraslado" [placeholder]="'Tipo de traslado'" [nomTabla]="'OWTR'" [nomCampo]="'FIB_TIP_TRAS'" (eventoAceptar)="onSelectedTipoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-motivo-traslado">Motivo de traslado </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Motivo de Traslado'" [fldValue]="codMotTraslado" [placeholder]="'Motivo de traslado'" [nomTabla]="'OWTR'" [nomCampo]="'BPP_MDMT'" (eventoAceptar)="onSelectedMotivoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [isHabilitarButton]="true" [title]="'Motivo de Traslado'" [fldValue]="codMotTraslado" [placeholder]="'Motivo de traslado'" [nomTabla]="'OWTR'" [nomCampo]="'BPP_MDMT'" (eventoAceptar)="onSelectedMotivoTraslado($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                   <div class="col-12 md:col-4">
                     <label class="label-custom" for="float-input-tipo-salida">Tipo de salida </label><span class="label" style="font-weight: bold; color:red">*</span>
-                    <app-modal-tabla-definida-usuario-sap [title]="'Tipo de Salida'" [fldValue]="codTipSalida" [placeholder]="'Tipo de salida'" [nomTabla]="'OWTR'" [nomCampo]="'BPP_MDTS'" (eventoAceptar)="onSelectedTipoSalida($event)"></app-modal-tabla-definida-usuario-sap>
+                    <app-modal-tabla-definida-usuario-sap [isHabilitarButton]="true" [title]="'Tipo de Salida'" [fldValue]="codTipSalida" [placeholder]="'Tipo de salida'" [nomTabla]="'OWTR'" [nomCampo]="'BPP_MDTS'" (eventoAceptar)="onSelectedTipoSalida($event)"></app-modal-tabla-definida-usuario-sap>
                   </div>
                 </div>
               </form>
@@ -302,7 +290,7 @@
             <div class="p-formgrid grid">
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-empleado-ventas">Empleado de ventas </label><span class="label" style="font-weight: bold; color:red">*</span>
-                <app-modal-empleado-venta-sap [slpCode]="slpCode" (eventoAceptar)="onSelectedEmpleadoVenta($event)"></app-modal-empleado-venta-sap>
+                <app-modal-empleado-venta-sap [isHabilitarButton]="true" [slpCode]="slpCode" (eventoAceptar)="onSelectedEmpleadoVenta($event)"></app-modal-empleado-venta-sap>
               </div>
               <div class="col-12 md:col-4">
                 <label class="label-custom" for="float-input-num-bulto">Número de bultos </label>
@@ -337,7 +325,7 @@
     <p-footer>
       <div class="grid p-fluid">
         <div class="col-12 md:col-6">
-          <button pButton type="submit" [disabled]="!modeloFormCab2.valid || !modeloFormCab3.valid || !modeloFormOtr.valid || !modeloFormPie1.valid || detalle?.length <= 0" label="{{globalConstants.cGrabar}}" icon="{{globalConstants.icoGrabar}}" (click)="onClickSave()"></button>
+          <button pButton type="submit" [disabled]="true" label="{{globalConstants.cGrabar}}" icon="{{globalConstants.icoGrabar}}" (click)="onClickSave()"></button>
         </div>
         <div class="col-12 md:col-6">
           <button pButton type="button" label="{{globalConstants.cRegresar}}" icon="{{globalConstants.icoRegresar}}" (click)="onClickBack()" class="{{globalConstants.cStyleButtonDanger}}"></button>
@@ -378,13 +366,13 @@
 </p-dialog>
 
 
-<p-dialog *ngIf="isVisualizarBarcode" header="Código de barra" [(visible)]="isVisualizarBarcode" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
+<p-dialog header="Código de barra" [(visible)]="isVisualizarBarcode" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true" (onHide)="onHide()">
   <p-panel id="modal" header="Opciones de búsqueda" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
     <form [formGroup]="modeloFormBar">
       <div class="grid p-fluid">
         <div class="col-12 md:col-6">
           <div class="p-inputgroup">
-            <input id="float-input-filtro" type="text" placeholder="Buscar por código de barra" maxlength="100" size="50" formControlName="filtro" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
+            <input id="float-input-text1" type="text" placeholder="Buscar por código de barra" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
           </div>
         </div>
         <div class="col-12 md:col-6">
@@ -396,7 +384,7 @@
   <p-panel header="Lista de códigos de barras" [toggleable]="true">
     <p-table
     [value]="bardcodeList"
-    [columns]="columnasBarcode"
+    [columns]="columnas"
     [rowHover]="true"
     [autoLayout]="true"
     [responsive]="true"
@@ -411,7 +399,6 @@
             <p-sortIcon field="{{col.field}}"></p-sortIcon>
             {{col.header}}
           </th>
-          <th class="custom-header"></th>
         </tr>
       </ng-template>
       <!-- body -->
@@ -426,8 +413,8 @@
           <td class="custom-td-numero">
             <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
           </td>
-          <td class="custom-td-2">
-            <button pButton icon="{{globalConstants.icoEliminar}}" class="{{globalConstants.cStyleButtonDanger}}" (click)="onToSelectedDeleteRow(modelo)"></button>
+          <td class="custom-td-numero">
+            <span class="p-column-title">Peso: </span> {{modelo.peso | number: '.3':'en-EN'}}
           </td>
         </tr>
       </ng-template>

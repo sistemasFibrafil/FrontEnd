@@ -164,13 +164,11 @@ export class SolicitudTrasladoCloseModel {
 
 
 export class ParamCreateTransferenciaModel {
-  id          : number;
   idBase      : number;
   baseType    : string;
   linea       : ParamCreateTransferenciaLineaModel[] = [];
 
   constructor(){
-    this.id       = 0;
     this.idBase   = 0;
     this.baseType = '';
     this.linea    = [];
@@ -178,15 +176,17 @@ export class ParamCreateTransferenciaModel {
 }
 
 export class ParamCreateTransferenciaLineaModel {
-  baseType    : string;
   idBase      : number;
   lineBase    : number;
+  baseType    : string;
+  read        : string;
   return      : string;
 
   constructor(){
     this.baseType = '';
     this.idBase   = 0;
     this.lineBase = 0;
+    this.read     = '';
     this.return   = '';
   }
 }

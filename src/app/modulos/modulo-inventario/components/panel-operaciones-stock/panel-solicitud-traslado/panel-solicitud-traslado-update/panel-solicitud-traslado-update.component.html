@@ -22,7 +22,7 @@
               <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-address">Dirección de destino </label>
                 <div class="p-inputgroup">
-                  <textarea id="float-area-address" formControlName="address" autocomplete="off" placeholder="Dirección de destino" maxlength="254" rows="3" pInputText [readOnly]="true"></textarea>
+                  <textarea id="float-area-address" formControlName="address" autocomplete="off" placeholder="Dirección de destino" maxlength="254" rows="1" pInputText [readOnly]="true"></textarea>
                 </div>
               </div>
             </div>
@@ -33,29 +33,26 @@
         <div class="card no-margin">
           <form [formGroup]="modeloFormCab2">
             <div class="p-formgrid grid">
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-number">Número </label><span class="label" style="font-weight: bold; color:red">*</span>
+              <div class="col-12 md:col-5">
+                <label class="label-custom" for="float-input-docNum">Número</label>
                 <div class="p-inputgroup">
-                  <input id="float-input-number" type="text" placeholder="Número de solicitud" maxlength="50" size="50" formControlName="number" autocomplete="off" required pInputText [readOnly]="true">
-                </div>
-                <div *ngIf="modeloFormCab2.controls['number'].errors && modeloFormCab2.controls['number'].dirty">
-                  <p-message severity="error" text="El número de solicitud es requerido." *ngIf="modeloFormCab2.controls['number'].errors['required']"></p-message>
+                  <input id="float-input-docNum" type="text" placeholder="Número" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText [readOnly]="true">
                 </div>
               </div>
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-docNum">Número de SAP </label>
-                <div class="p-inputgroup">
-                  <input id="float-input-docNum" type="text" placeholder="Número de SAP" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText [readOnly]="true">
-                </div>
-              </div>
-              <div class="col-12 md:col-12">
+              <div class="col-12 md:col-5">
                 <label class="label-custom" for="float-input-docStatus">Estado </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <p-dropdown id="float-input-docStatus" [options]="docStatusList" class="p dropdown-item-text" placeholder="Seleccionar el estado" formControlName="docStatus" [required] optionLabel="label" [showClear]="true"></p-dropdown>
                 <div *ngIf="modeloFormCab2.controls['docStatus'].errors && modeloFormCab2.controls['docStatus'].dirty">
                   <p-message severity="error" text="El estado es requerido." *ngIf="modeloFormCab2.controls['docStatus'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-2">
+                <label class="label-custom" for="float-input-estado">¿Lectura? </label>
+                <div class="p-inputgroup">
+                  <p-checkbox id="float-input-read" [ngStyle]="{'padding-top': '5px'}" [binary]="true" formControlName="read" styleClass="ng-invalid ng-dirty"></p-checkbox>
+                </div>
+              </div>
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-docDate">Fecha de contabilización </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-docDate" [disabled]="modelo === undefined?false : modelo.docStatus === '01'? false : true" placeholder="Fecha de contabilización" formControlName="docDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -64,7 +61,7 @@
                   <p-message severity="error" text="La fecha de contabilización es requerida." *ngIf="modeloFormCab2.controls['docDate'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-docDueDate">Fecha de entrega </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-docDueDate" [disabled]="modelo === undefined?false : modelo.docStatus === '01'? false : true" placeholder="Fecha de entrega" formControlName="docDueDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
@@ -73,18 +70,13 @@
                   <p-message severity="error" text="La fecha de entrega es requerida." *ngIf="modeloFormCab2.controls['docDueDate'].errors['required']"></p-message>
                 </div>
               </div>
-              <div class="col-12 md:col-4">
+              <div class="col-12 md:col-12">
                 <label class="label-custom" for="float-input-taxDate">Fecha de documento </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-calendar id="float-calendar-taxDate" [disabled]="modelo === undefined?false : modelo.docStatus === '01'? false : true" placeholder="Fecha de documento" formControlName="taxDate" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
                 </div>
                 <div *ngIf="modeloFormCab2.controls['taxDate'].errors && modeloFormCab2.controls['taxDate'].dirty">
                   <p-message severity="error" text="La fecha de documento es requerida." *ngIf="modeloFormCab2.controls['taxDate'].errors['required']"></p-message>
-                </div>
-              </div>
-              <div class="col-12 md:col-12">
-                <div class="p-inputgroup">
-                  <p-checkbox id="float-input-read" label="¿Lectura?" [binary]="true" [disabled]="modelo === undefined?false : modelo.docStatus === '01'? false : true" formControlName="read" styleClass="ng-invalid ng-dirty"></p-checkbox>
                 </div>
               </div>
             </div>
@@ -108,8 +100,6 @@
         </div>
       </div>
 
-      <p-contextMenu #cm [model]="items" [hidden]="detalleCerrar === undefined? true : detalleCerrar.length>0? true : false"></p-contextMenu>
-
       <div class="col-12">
         <div class="card no-margin">
           <p-tabView styleClass="tabview-custom">
@@ -120,13 +110,11 @@
               </ng-template>
               <p-table
                 [value]="detalle"
-                [columns]="columnas"
                 dataKey="line"
                 editMode="row"
                 [rowHover]="true"
                 [autoLayout]="true"
                 [responsive]="true"
-                [contextMenu]="cm"
                 [showCurrentPageReport]="true"
                 [(contextMenuSelection)]="detalleSelected"
                 styleClass="{{globalConstants.cStyleTableGridLines}}"
@@ -134,49 +122,67 @@
                 <!-- Header -->
                 <ng-template pTemplate="header" let-columns>
                   <tr>
-                    <th *ngFor="let col of columns" class="custom-header">
-                      {{col.header}}
-                    </th>
+                    <th class="custom-header" *ngIf="modelo?.docStatus === '01'"></th>
+                    <th class="custom-header">Código</th>
+                    <th class="custom-header">Descripción</th>
+                    <th class="custom-header">Almacén de origen</th>
+                    <th class="custom-header">Almacén de destino</th>
+                    <th class="custom-header">UM</th>
+                    <th class="custom-header">Cantidad</th>
+                    <th class="custom-header" *ngIf="modelo?.read === 'Y'">Pendiente de lectura</th>
+                    <th class="custom-header">Pendiente de despacho</th>
                   </tr>
                 </ng-template>
                 <!-- body -->
-                <ng-template pTemplate="body" let-modelo let-ri="rowIndex">
-                  <tr [pContextMenuRow]="modelo" [ngClass]="{'row-cerrado': modelo.lineStatus === '02'}">
-                    <td class="p-fluid">
-                      <span class="p-column-title">Código: </span><i *ngIf="modelo.lineStatus === '01'" class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{modelo.itemCode}}
+                <ng-template pTemplate="body" let-linea let-ri="rowIndex">
+                  <tr [ngClass]="{'row-cerrado': linea?.lineStatus === '02'}">
+                    <td class="custom-td-2" *ngIf="modelo?.docStatus === '01'">
+                      <p-splitButton icon="pi pi-cog" [model] = "opciones" (onDropdownClick) = "onSelectedItem(linea)" appendTo = "body">
+                      </p-splitButton>
                     </td>
                     <td class="p-fluid">
-                        <span class="p-column-title">Descripción: </span> {{modelo.dscription}}
+                      <span class="p-column-title">Código: </span><i *ngIf="linea?.lineStatus === '01'" class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{linea.itemCode}}
+                    </td>
+                    <td class="p-fluid">
+                        <span class="p-column-title">Descripción: </span> {{linea.dscription}}
                     </td>
 
                     <td class="p-fluid">
-                      <span class="p-column-title">Almacén de origen: </span><i *ngIf="modelo.itemCode !== '' && modelo.lineStatus === '01'" class="pi pi-search" (click)="onOpenAlmacenOrigen(modelo, ri)" ></i> {{modelo.fromWhsCod}}
+                      <span class="p-column-title">Almacén de origen: </span><i *ngIf="linea?.itemCode !== '' && linea?.lineStatus === '01'" class="pi pi-search" (click)="onOpenAlmacenOrigen(linea, ri)" ></i> {{linea.fromWhsCod}}
                     </td>
                     <td class="p-fluid">
-                      <span class="p-column-title">Almacén de destino: </span><i *ngIf="modelo.itemCode !== '' && modelo.lineStatus === '01'" class="pi pi-search" (click)="onOpenAlmacenDestino(modelo, ri)"></i> {{modelo.whsCode}}
+                      <span class="p-column-title">Almacén de destino: </span><i *ngIf="linea?.itemCode !== '' && linea?.lineStatus === '01'" class="pi pi-search" (click)="onOpenAlmacenDestino(linea, ri)"></i> {{linea.whsCode}}
                     </td>
                     <td class="custom-td-3">
-                      <span class="p-column-title">UM: </span> {{modelo.unitMsr}}
+                      <span class="p-column-title">UM: </span> {{linea.unitMsr}}
                     </td>
-                    <td class="custom-td-numero" *ngIf="modelo.lineStatus === '02'">
-                      <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}
+                    <td class="custom-td-numero" *ngIf="linea?.lineStatus === '02'">
+                      <span class="p-column-title">Cantidad: </span> {{linea.quantity | number: '.3':'en-EN'}}
                     </td>
-                    <td class="custom-td-numero" pEditableColumn *ngIf="modelo.lineStatus === '01'">
+                    <td class="custom-td-numero" pEditableColumn *ngIf="linea?.lineStatus === '01'">
                       <span class="p-column-title">Cantidad: </span>
                       <p-cellEditor>
                         <ng-template pTemplate="input">
-                          <input id="cantidad" type="text" autocomplete="off" [(ngModel)]="modelo.quantity" maxlength="9" (ngModelChange)="onChangeQuantity(modelo,ri)" pInputText (keypress)="this.utilService.aceptaSoloNumeros($event,modelo.quantity)">
+                          <input id="cantidad" type="text" autocomplete="off" [(ngModel)]="linea.quantity" maxlength="9" (ngModelChange)="onChangeQuantity(linea,ri)" pInputText (keypress)="this.utilService.aceptaSoloNumeros($event,linea.quantity)">
                         </ng-template>
                         <ng-template pTemplate="output">
-                          {{modelo.quantity | number: '.3':'en-EN'}}
+                          {{linea.quantity | number: '.3':'en-EN'}}
                         </ng-template>
                       </p-cellEditor>
+                    </td>
+                    <td class="custom-td-numero" *ngIf="modelo?.read === 'Y'">
+                      <span class="p-column-title">Pendiente de lectura: </span> {{linea.openQtyRding | number: '.3':'en-EN'}}
+                    </td>
+                    <td class="custom-td-numero">
+                      <span class="p-column-title">Pendiente de despacho: </span> {{linea.openQty | number: '.3':'en-EN'}}
                     </td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
                   <tr>
-                    <td colspan="7">{{globalConstants.currentTableEmptyMessage}}</td>
+                    <td colspan="7" *ngIf="modelo?.docStatus === '02' && modelo?.read === 'N'">{{globalConstants.currentTableEmptyMessage}}</td>
+                    <td colspan="8" *ngIf="modelo?.docStatus === '01' && modelo?.read === 'N'">{{globalConstants.currentTableEmptyMessage}}</td>
+                    <td colspan="9" *ngIf="modelo?.docStatus === '01' && modelo?.read === 'Y'">{{globalConstants.currentTableEmptyMessage}}</td>
                   </tr>
                 </ng-template>
               </p-table>

@@ -1,0 +1,11 @@
+i {
+  cursor: pointer;
+}
+
+::ng-deep .input-number input {
+  text-align: right;
+}
+
+:host ::ng-deep .row-cerrado {
+  background-color: rgba(0,0,0,.15) !important;
+}

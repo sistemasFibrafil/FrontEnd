@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PanelPanelTransferenciaStockCreate2Component } from './panel-transferencia-stock-create-2.component';
+import { PanelPanelTransferenciaStockCreateComponent } from './panel-transferencia-stock-create.component';
 
 describe('PanelPanelTransferenciaStockCreate2Component', () => {
-  let component: PanelPanelTransferenciaStockCreate2Component;
-  let fixture: ComponentFixture<PanelPanelTransferenciaStockCreate2Component>;
+  let component: PanelPanelTransferenciaStockCreateComponent;
+  let fixture: ComponentFixture<PanelPanelTransferenciaStockCreateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PanelPanelTransferenciaStockCreate2Component ]
+      declarations: [ PanelPanelTransferenciaStockCreateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PanelPanelTransferenciaStockCreate2Component);
+    fixture = TestBed.createComponent(PanelPanelTransferenciaStockCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

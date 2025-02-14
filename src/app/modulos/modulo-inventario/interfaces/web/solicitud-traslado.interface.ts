@@ -1,6 +1,6 @@
 export interface ISolicitudTraslado {
   id                  : number;
-  number              : string;
+  objType             : string;
   docEntry            : number;
   docNum              : number;
   docStatus           : string;
@@ -27,6 +27,7 @@ export interface ISolicitudTraslado {
 export interface ISolicitudTrasladoDetalle {
   id                  : number;
   line                : number;
+  objType?            : string;
   docEntry?           : number;
   lineNum?            : number;
   lineStatus          : string;
@@ -36,8 +37,8 @@ export interface ISolicitudTrasladoDetalle {
   whsCode             : string;
   unitMsr             : string;
   quantity            : number;
-  openQty             : number;
   openQtyRding        : number;
+  openQty             : number;
   record?             : number;
 }
 

@@ -166,7 +166,7 @@ export class PanelStockGeneralByAlmacenComponent implements OnInit {
           {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           }),
-          this.nombreArchivo
+          this.nombreArchivo + this.fecha
         );
         this.isDisplay = false;
         this.swaCustomService.swaMsgExito(null);

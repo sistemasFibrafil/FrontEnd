@@ -92,10 +92,8 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
 
   onBuildColumn() {
     this.columnas = [
-      { field: 'number',          header: 'Número' },
-      { field: 'docNum',          header: 'Número de SAP' },
-      { field: 'numDocumento',    header: 'Número de SUNAT' },
-      { field: 'docStatus',       header: 'Estado' },
+      { field: 'docNum',          header: 'Número' },
+      { field: 'numDocumento',    header: 'Guía' },
       { field: 'docDate',         header: 'Fecha de contabilización' },
       { field: 'docDueDate',      header: 'Fecha de entrega' },
       { field: 'taxDate',         header: 'Fecha de documento' },
@@ -119,10 +117,10 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
     } else {
       this.opciones.find(x => x.label == "Editar").visible = false;
     }
-    if(this.buttonAcces.btnCerrar || modelo.docStatus === '01'){
-      this.opciones.find(x => x.label == "Cancelar").visible = true;
+    if(!this.buttonAcces.btnImprimir){
+      this.opciones.find(x => x.label == "Imprimir").visible = true;
     } else {
-      this.opciones.find(x => x.label == "Cancelar").visible = false;
+      this.opciones.find(x => x.label == "Imprimir").visible = false;
     }
     if(this.buttonAcces.btnVizualizar || modelo.docStatus === '01' || modelo.docStatus === '02'){
       this.opciones.find(x => x.label == "Visualizar").visible = true;
@@ -175,7 +173,6 @@ export class PanelPanelTransferenciaStockListComponent implements OnInit {
   }
 
   onClickEditar(){
-    console.log("SELECTED: ", this.modeloSelected);
     this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-update', this.modeloSelected.id]);
   }
 

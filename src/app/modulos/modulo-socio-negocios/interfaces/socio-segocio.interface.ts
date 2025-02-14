@@ -18,6 +18,6 @@ export interface ISocioNegocio {
   createDate        : Date;
   lowDate?          : Date;
   fechaUltimaVenta  : Date;
-  codStatus2        : string;
+  codStatus         : string;
   nomStatus         : string;
 }
