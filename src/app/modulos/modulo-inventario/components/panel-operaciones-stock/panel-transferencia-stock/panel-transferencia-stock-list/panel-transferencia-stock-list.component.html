@@ -11,8 +11,11 @@
           <div class="col-12 md:col-2">
             <p-calendar formControlName="dat2" placeholder="Seleccionar fecha final" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
           </div>
-          <div class="col-12 md:col-4">
+          <div class="col-12 md:col-2">
             <p-multiSelect [options]="docStatusList" [(ngModel)]="docStatusSelected" formControlName="msDocStatus" defaultLabel="Seleccione el Estado" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-6">
+            <input id="float-input-text1" type="text" placeholder="Buscar por número o guía" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onClickBuscar()">
           </div>
         </div>
       </form>
@@ -79,13 +82,20 @@
                 <span class="p-column-title">Fecha de entrega</span> {{modelo.docDueDate | date: 'dd/MM/yyyy'}}
               </td>
               <td class="p-fluid">
-                <span class="p-column-title">Fecha de documento</span> {{modelo.taxDate | date: 'dd/MM/yyyy'}}
-              </td>
-              <td class="p-fluid">
                 <span class="p-column-title">Origen</span> {{modelo.filler}}
               </td>
               <td class="p-fluid">
                 <span class="p-column-title">Destino</span> {{modelo.toWhsCode}}
+              </td>
+              <td class="p-fluid">
+                <span [ngSwitch] = "modelo.codStatusSunat">
+                  <span class="label" style="background:Blue"      *ngSwitchCase = "0">{{modelo.nomStatusSunat}}</span>
+                  <span class="label" style="background:SkyBlue"   *ngSwitchCase = "1">{{modelo.nomStatusSunat}}</span>
+                  <span class="label" style="background:green"     *ngSwitchCase = "2">{{modelo.nomStatusSunat}}</span>
+                  <span class="label" style="background:red"       *ngSwitchCase = "3">{{modelo.nomStatusSunat}}</span>
+                  <span class="label" style="background:OrangeRed" *ngSwitchCase = "4">{{modelo.nomStatusSunat}}</span>
+                  <span class="label" *ngSwitchDefault></span>
+                </span>
               </td>
             </tr>
           </ng-template>

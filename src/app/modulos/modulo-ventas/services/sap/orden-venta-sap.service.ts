@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment.prod';
 
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { IPickingVentaItem } from '../../interfaces/picking-venta.interface';
-import { IOrdenVentaPendienteByFecha, IOrdenVentaSapPendienteByFiltro, IOrdenVentaSeguimientoByFecha, IOrdenVentaSeguimientoDetalladoByFecha } from '../../interfaces/orden-venta-sap.interface';
+import { IOrdenVentaPendienteByFecha, IOrdenVentaSapPendienteByFiltro, IOrdenVentaSeguimientoByFecha, IOrdenVentaSeguimientoDetalladoByFecha } from '../../interfaces/sap/orden-venta-sap.interface';
 
 
 @Injectable({providedIn: 'root'})
@@ -44,6 +44,7 @@ export class OrdenVentaSapService {
     params = params.append('cod1', value.cod1);
     params = params.append('cod2', value.cod2);
     params = params.append('cod3', value.cod3);
+    params = params.append('cod4', value.cod4);
     params = params.append('text1', value.text1);
 
     return this.http.get<IOrdenVentaSeguimientoByFecha[]>(`${environment.url_api_fib}OrdenVentaSap/GetListOrdenVentaSeguimientoByFecha/`,{params: params});
@@ -56,6 +57,7 @@ export class OrdenVentaSapService {
     params = params.append('cod1', value.cod1);
     params = params.append('cod2', value.cod2);
     params = params.append('cod3', value.cod3);
+    params = params.append('cod4', value.cod4);
     params = params.append('text1', value.text1);
 
     return this.http.get(`${environment.url_api_fib}OrdenVentaSap/GetOrdenVentaSeguimientoExcelByFecha/`,{params: params, responseType: 'arraybuffer'});
@@ -68,6 +70,7 @@ export class OrdenVentaSapService {
     params = params.append('cod1', value.cod1);
     params = params.append('cod2', value.cod2);
     params = params.append('cod3', value.cod3);
+    params = params.append('cod4', value.cod4);
     params = params.append('text1', value.text1);
 
     return this.http.get<IOrdenVentaSeguimientoDetalladoByFecha[]>(`${environment.url_api_fib}OrdenVentaSap/GetListOrdenVentaSeguimientoDetalladoByFecha/`,{params: params});
@@ -80,6 +83,7 @@ export class OrdenVentaSapService {
     params = params.append('cod1', value.cod1);
     params = params.append('cod2', value.cod2);
     params = params.append('cod3', value.cod3);
+    params = params.append('cod4', value.cod4);
     params = params.append('text1', value.text1);
 
     return this.http.get(`${environment.url_api_fib}OrdenVentaSap/GetOrdenVentaSeguimientoDetalladoExcelByFecha/`,{params: params, responseType: 'arraybuffer'});
@@ -129,6 +133,9 @@ export class OrdenVentaSapService {
   }
 
   getOrdenVentaSodimacPendienteByDocEntry(docEntry: number) {
-    return this.http.get<IOrdenVentaSapPendienteByFiltro>(`${environment.url_api_fib}OrdenVentaSap/GetOrdenVentaSodimacPendienteByDocEntry/${docEntry}`);
+    debugger
+    let params = new HttpParams();
+    params = params.append('id1', docEntry.toString());
+    return this.http.get<IOrdenVentaSapPendienteByFiltro>(`${environment.url_api_fib}OrdenVentaSap/GetOrdenVentaSodimacPendienteById/`,{params: params});
   }
 }

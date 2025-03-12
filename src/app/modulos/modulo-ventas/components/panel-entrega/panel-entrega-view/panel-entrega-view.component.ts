@@ -10,7 +10,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from '../../../../../services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IOrdenVentaSap } from '../../../interfaces/orden-venta-sap.interface';
+import { IOrdenVentaSap } from '../../../interfaces/sap/orden-venta-sap.interface';
 
 import { IAlmacenSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/almacen-sap.interface';
 import { IPickingVentaItem, IPickingVentaByIdPicking, IPickingVentaItemGrilla } from '../../../interfaces/picking-venta.interface';

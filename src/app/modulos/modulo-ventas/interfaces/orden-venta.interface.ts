@@ -1,6 +1,5 @@
 export interface IOrdenVenta {
   idOrdenVenta        : number;
-  numero              : string;
   docNum              : number;
   docStatus           : string;
   nomEstado           : string;

@@ -121,6 +121,6 @@
 <p-dialog *ngIf="isVisualizarAlmacen" header="Almacén" [(visible)]="isVisualizarAlmacen" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-almacen-stock-sap [whsCode]="whsCode" [itemCode]="itemCode"></app-busqueda-almacen-stock-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickAlmacenClose()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickAlmacenClose()"></p-button>
   </ng-template>
 </p-dialog>

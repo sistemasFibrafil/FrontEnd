@@ -39,6 +39,11 @@ export interface ITransferenciaStock {
   totKilo                 : number;
   jrnlMemo                : string;
   comments                : string;
+  codStatusSunat          : string;
+  nomdStatusSunat         : string;
+  desSunat                : string;
+  notSunat                : string;
+  qtyRding                : number;
 
   linea                   : ITransferenciaStockDetalle[];
 }

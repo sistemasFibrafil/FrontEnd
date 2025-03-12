@@ -107,7 +107,7 @@ export class PanelOrdenVentaListComponent implements OnInit {
   }
 
   onToCreate() {
-    this.router.navigate(['/main/modulo-ve/panel-orden-venta-create']);
+    this.router.navigate(['/main/modulo-ven/panel-orden-venta-create']);
   }
 
   onToItemSelected(modelo: IPickingVentaByFiltro) {
@@ -126,11 +126,11 @@ export class PanelOrdenVentaListComponent implements OnInit {
   }
 
   ver(){
-    this.router.navigate(['/main/modulo-ve/panel-orden-venta-view', this.modeloSelected.idPicking]);
+    this.router.navigate(['/main/modulo-ven/panel-orden-venta-view', this.modeloSelected.idPicking]);
   }
 
   editar(){
-    this.router.navigate(['/main/modulo-ve/panel-orden-venta-update', this.modeloSelected.idPicking]);
+    this.router.navigate(['/main/modulo-ven/panel-orden-venta-update', this.modeloSelected.idPicking]);
   }
 
   onToDelete() {

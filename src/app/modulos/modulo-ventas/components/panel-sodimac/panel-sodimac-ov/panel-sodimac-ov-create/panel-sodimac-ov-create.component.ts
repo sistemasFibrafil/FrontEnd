@@ -15,8 +15,8 @@ import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
 import { IStatus } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/status.interface';
-import { IOrdenVentaSodimacDetalle } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
-import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sap.interface';
+import { IOrdenVentaSodimacDetalle } from 'src/app/modulos/modulo-ventas/interfaces/web/orden-venta-sodimac.interface';
+import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/sap/orden-venta-sap.interface';
 import { OrdenVentaSodimacCreateModel } from 'src/app/modulos/modulo-ventas/models/web/orden-venta-sodimac.model';
 import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
@@ -51,8 +51,8 @@ export class PanelSodimacOrdenVentaCreateComponent implements OnInit {
   isSaving: boolean = false;
 
   // DETALLE
-  columnas: any[];
-  detail: IOrdenVentaSodimacDetalle[] = [];
+   detalle: IOrdenVentaSodimacDetalle[] = [];
+   detalleSelected: IOrdenVentaSodimacDetalle[] = [];
   selectedItem: IOrdenVentaSodimacDetalle;
 
 
@@ -72,7 +72,6 @@ export class PanelSodimacOrdenVentaCreateComponent implements OnInit {
 
   ngOnInit() {
     this.onBuildForm();
-    this.onBuildColumn();
     this.getListStatus();
   }
 
@@ -95,18 +94,6 @@ export class PanelSodimacOrdenVentaCreateComponent implements OnInit {
       'docDueDate'        : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
       'taxDate'           : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
     });
-  }
-
-  onBuildColumn() {
-    this.columnas = [
-      { field: 'line', header: '#' },
-      { field: 'itemCode', header: 'Código' },
-      { field: 'sku', header: 'Sku' },
-      { field: 'dscription', header: 'Descripción' },
-      { field: 'dscriptionLarga', header: 'Descripción larga' },
-      { field: 'nomLocal', header: 'Local' },
-      { field: 'quantity', header: 'Cantidad' }
-    ];
   }
 
   getListStatus() {
@@ -169,8 +156,8 @@ export class PanelSodimacOrdenVentaCreateComponent implements OnInit {
 
   onToSelectedFile(data)
   {
-    this.detail = [];
-    this.detail = data;
+    this.detalle = [];
+    this.detalle = data;
     this.isImport = !this.isImport;
   }
 
@@ -180,7 +167,6 @@ export class PanelSodimacOrdenVentaCreateComponent implements OnInit {
   }
 
   onToValidatedSave(){
-    debugger
     if(!this.modeloFormCab1.controls['cardCode'].value)
     {
       this.swaCustomService.swaMsgInfo('El código de cliente no es válido.');
@@ -235,9 +221,26 @@ export class PanelSodimacOrdenVentaCreateComponent implements OnInit {
   }
 
   onToSave() {
-    debugger
     this.isSaving = true;
     if(!this.onToValidatedSave()) return;
+
+    // Colomos true a los registros seleccionados
+    for (let linea1 of this.detalleSelected) {
+      this.detalle.forEach(linea2 => {
+        if(linea1.line1 === linea2.line1)
+        {
+          linea2.isOriente = true;
+        }
+      });
+    }
+
+    // Si no hay registro seleccionado, todos le volvemos falso
+    if(this.detalleSelected.length === 0)
+    {
+      this.detalle.forEach(linea => {
+        linea.isOriente = false;
+      });
+    }
 
     // CAB 01: SOCIO NEGOCIO
     this.modeloSave.cardCode = this.modeloFormCab1.controls['cardCode'].value;
@@ -264,19 +267,20 @@ export class PanelSodimacOrdenVentaCreateComponent implements OnInit {
 
     // DETALLE
     this.modeloSave.item = [];
-    for (let index = 0; index < this.detail.length; index++) {
+    for (let index = 0; index < this.detalle.length; index++) {
       this.modeloSave.item.push
       ({
         id                  : 0,
-        line                : this.detail[index].line,
-        numLocal            : this.detail[index].numLocal,
-        lineStatus          : this.detail[index].lineStatus,
-        itemCode            : this.detail[index].itemCode,
-        sku                 : this.detail[index].sku,
-        dscription          : this.detail[index].dscription,
-        dscriptionLarga     : this.detail[index].dscriptionLarga,
-        ean                 : this.detail[index].ean,
-        quantity            : this.detail[index].quantity
+        line2               : this.detalle[index].line2,
+        numLocal            : this.detalle[index].numLocal,
+        isOriente           : this.detalle[index].isOriente,
+        lineStatus          : this.detalle[index].lineStatus,
+        itemCode            : this.detalle[index].itemCode,
+        sku                 : this.detalle[index].sku,
+        dscription          : this.detalle[index].dscription,
+        dscriptionLarga     : this.detalle[index].dscriptionLarga,
+        ean                 : this.detalle[index].ean,
+        quantity            : this.detalle[index].quantity
       });
     }
 

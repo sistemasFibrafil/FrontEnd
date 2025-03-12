@@ -12,7 +12,7 @@ import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service'
 
 import { SelectItem } from 'primeng/api';
 import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
-import { IOrdenVentaSodimacByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
+import { IOrdenVentaSodimacByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/web/orden-venta-sodimac.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
 
@@ -101,8 +101,9 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
 
   opcionesTabla() {
     this.opciones = [
-      { label: 'Vizualizar',  icon: 'pi pi-eye',            command: () => { this.ver() } },
-      { label: 'Eliminar',    icon: 'pi pi-trash',          command: () => { this.eliminar() } },
+      { label: 'Editar',      icon: 'pi pi-eye',            command: () => { this.onClickEdit() } },
+      { label: 'Visualizar',  icon: 'pi pi-eye',            command: () => { this.onClickView() } },
+      { label: 'Eliminar',    icon: 'pi pi-trash',          command: () => { this.onClickDelete() } },
     ];
   }
 
@@ -152,41 +153,35 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
   }
 
   onToItemSelected(modelo: IOrdenVentaSodimacByFiltro) {
+    debugger
     this.modeloSelected = modelo;
 
-    // if(this.buttonAcces.btnEditar || modelo.codEstado === '02' || modelo.codEstado === '03'){
-    //   this.opciones.find(x => x.label == "Editar").visible = false;
-    // } else {
-    //   this.opciones.find(x => x.label == "Editar").visible = true;
-    // }
+    if(this.buttonAcces.btnEditar){
+      this.opciones.find(x => x.label == "Editar").visible = false;
+    } else {
+      this.opciones.find(x => x.label == "Editar").visible = true;
+    }
 
-    if(this.buttonAcces.btnEditar || modelo.docStatus === '02' || modelo.docStatus === '03'){
+    if(this.buttonAcces.btnVizualizar){
       this.opciones.find(x => x.label == "Visualizar").visible = false;
     } else {
       this.opciones.find(x => x.label == "Visualizar").visible = true;
     }
 
-    if(this.buttonAcces.btnEliminar || modelo.docStatus === '02' || modelo.docStatus === '03'){
+    if(this.buttonAcces.btnEliminar){
       this.opciones.find(x => x.label == "Eliminar").visible = false;
     } else {
       this.opciones.find(x => x.label == "Eliminar").visible = true;
     }
   }
 
-  // onToRowSelectView(modelo: IPickingVentaByFiltro){
-  //   this.router.navigate(['/main/modulo-ve/picking-venta-view', modelo.idPicking]);
-  // }
-
-  ver(){
-    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-view', this.modeloSelected.id]);
+  onClickEdit(){
+    debugger
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-update', this.modeloSelected.id]);
   }
 
-  // onToRowSelectEdit(modelo: IPickingVentaByFiltro){
-  //   this.router.navigate(['/main/modulo-ve/picking-venta-edit', modelo.idPicking]);
-  // }
-
-  editar(){
-    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-update', this.modeloSelected.id]);
+  onClickView(){
+    this.router.navigate(['/main/modulo-ven/panel-sodimac-ov-view', this.modeloSelected.id]);
   }
 
   onToDelete() {
@@ -205,13 +200,7 @@ export class PanelSodimacOrdenVentaListComponent implements OnInit {
     // });
   }
 
-  // onToRowSelectDelte(modelo: IPickingVentaByFiltro)
-  // {
-  //   this.modeloDelete = modelo;
-  //   this.onConfirmDelete();
-  // }
-
-  eliminar()
+  onClickDelete()
   {
     this.swaCustomService.swaConfirmation(
       this.globalConstants.titleEliminar,

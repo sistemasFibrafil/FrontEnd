@@ -25,17 +25,17 @@
                 <label class="label-custom" for="float-input-persona-contacto">Persona de contacto </label>
                 <app-modal-persona-contacto-sap [cardCode]="cardCode" [cntctCode]="cntctCode"></app-modal-persona-contacto-sap>
               </div>
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-numOrdCom">Número de órden de compra </label>
+              <div class="col-12 md:col-4">
+                <label class="label-custom" for="float-input-numOrdCom">Número de OC </label>
                 <div class="p-inputgroup">
-                  <input id="float-input-numOrdCom" type="text" placeholder="Número de órden de compra" maxlength="100" size="50" formControlName="numOrdCom" autocomplete="off" pInputText>
+                  <input id="float-input-num-ord-com" type="text" placeholder="Número de OC" maxlength="50" size="50" formControlName="numOrdCom" autocomplete="off" pInputText>
                 </div>
               </div>
-              <div class="col-12 md:col-6">
+              <div [ngClass]="socioNegocio?.currency === null? 'col-12 md:col-8': socioNegocio?.currency === '##'? 'col-12 md:col-8' : socioNegocio?.currency === mainCurncy? 'col-12 md:col-8' : 'col-12 md:col-4'">
                 <label class="label-custom" for="float-input-moneda">Moneda </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <app-modal-moneda-sap [cardCode]="cardCode" [currCode]="currCode" [mainCurncy] = "mainCurncy" (eventoAceptar)="onSelectedMoneda($event)"></app-modal-moneda-sap>
               </div>
-              <div class="col-12 md:col-6">
+              <div class="col-12 md:col-4" *ngIf="socioNegocio?.currency === null? false : socioNegocio?.currency === '##'? false : socioNegocio?.currency === mainCurncy? false : true">
                 <label class="label-custom" for="float-input-tipo-cambio">Tipo de cambio </label><span class="label" style="font-weight: bold; color:red">*</span>
                 <div class="p-inputgroup">
                   <p-inputNumber id="float-input-tipo-cambio" styleClass="input-number" placeholder="Tipo de cambio" formControlName="docRate" autocomplete="off" mode="decimal" locale="en-EN" [minFractionDigits]="3" [maxFractionDigits]="3"></p-inputNumber>
@@ -51,18 +51,9 @@
           <form [formGroup]="modeloFormCab2">
             <div class="p-fluid p-formgrid grid">
               <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-numero">Número </label><span class="label" style="font-weight: bold; color:red">*</span>
+                <label class="label-custom" for="float-input-docNum">Número</label>
                 <div class="p-inputgroup">
-                  <input id="float-input-numero" type="text" placeholder="Número" maxlength="50" size="50" formControlName="numero" autocomplete="off" required pInputText [readOnly]="true">
-                </div>
-                <div *ngIf="modeloFormCab2.controls['numero'].errors && modeloFormCab2.controls['numero'].dirty">
-                  <p-message severity="error" text="El número de solicitud es requerido." *ngIf="modeloFormCab2.controls['numero'].errors['required']"></p-message>
-                </div>
-              </div>
-              <div class="col-12 md:col-12">
-                <label class="label-custom" for="float-input-docNum">Número de SAP </label>
-                <div class="p-inputgroup">
-                  <input id="float-input-docNum" type="text" placeholder="Número de SAP" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText [readOnly]="true">
+                  <input id="float-input-docNum" type="text" placeholder="Número" maxlength="50" size="50" formControlName="docNum" autocomplete="off" pInputText [readOnly]="true">
                 </div>
               </div>
               <div class="col-12 md:col-12">
@@ -105,8 +96,6 @@
         </div>
       </div>
 
-      <p-contextMenu #cm [model]="items"></p-contextMenu>
-
       <div class="col-12 md:col-12">
         <div class="card no-margin">
           <p-tabView styleClass="tabview-custom">
@@ -122,13 +111,13 @@
                 [rowHover]="true"
                 [autoLayout]="true"
                 [responsive]="true"
-                [contextMenu]="cm"
                 [showCurrentPageReport]="true"
                 styleClass="{{globalConstants.cStyleTableGridLines}}"
                 currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}">
                 <!-- Header -->
                 <ng-template pTemplate="header" let-columns>
                   <tr>
+                    <th class="custom-header"></th>
                     <th *ngFor="let col of columns" class="custom-header">
                       {{col.header}}
                     </th>
@@ -136,7 +125,11 @@
                 </ng-template>
                 <!-- body -->
                 <ng-template pTemplate="body" let-modelo let-editing="editing" let-ri="rowIndex">
-                  <tr [pContextMenuRow]="modelo">
+                  <tr>
+                    <td class="custom-td-2">
+                      <p-splitButton icon="pi pi-cog" [model] = "opciones" (onDropdownClick) = "onSelectedItem(modelo)" appendTo = "body">
+                      </p-splitButton>
+                    </td>
                     <td class="p-fluid">
                       <span class="p-column-title">Código: </span><i *ngIf="cardCode !== ''" class="pi pi-search" (click)="onOpenArticulo(ri)"></i> {{modelo.itemCode}}
                     </td>
@@ -425,21 +418,21 @@
 <p-dialog *ngIf="isVisualizarArticulo" header="Artículo" [(visible)]="isVisualizarArticulo" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-articulo-sap [artInv]="'Y,N'" [artVen]="'Y'" [artCom]="'Y,N'" (eventoAceptar)="onSelectedArticulo($event)"></app-busqueda-articulo-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onCloseArticulo()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onCloseArticulo()"></p-button>
   </ng-template>
 </p-dialog>
 
 <p-dialog *ngIf="isVisualizarAlmacen" header="Almacén" [(visible)]="isVisualizarAlmacen" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-almacen-sap [demandante]="demandanteAlmacenItem" [itemCode]="itemCode" [inactive]="inactiveAlmacenItem" (eventoAceptar)="onToAlmacenSelected($event)"></app-busqueda-almacen-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onCloseAlmacen()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onCloseAlmacen()"></p-button>
   </ng-template>
 </p-dialog>
 
 <p-dialog *ngIf="isVisualizarImpuesto" header="Impuesto" [(visible)]="isVisualizarImpuesto" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-impuesto-sap  (eventoAceptar)="onSelectedImpuesto($event)"></app-busqueda-impuesto-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onCloseImpuesto()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onCloseImpuesto()"></p-button>
   </ng-template>
 </p-dialog>
 

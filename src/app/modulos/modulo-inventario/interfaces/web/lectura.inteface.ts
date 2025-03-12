@@ -9,6 +9,8 @@ export interface ILectura {
   baseLine              : number;
   docStatus             : string;
   return                : string;
+  docDate               : Date;
+  docDueDate            : Date;
   cardCode?             : string;
   cardName?             : string;
   itemCode?             : string;

@@ -14,12 +14,11 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 
 import { IStatus } from 'src/app/modulos/modulo-gestion/interfaces/web/definiciones/general/status.interface';
-import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sap.interface';
-import { IOrdenVentaSodimac, IOrdenVentaSodimacDetalle } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
+import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/sap/orden-venta-sap.interface';
+import { IOrdenVentaSodimac, IOrdenVentaSodimacDetalle } from 'src/app/modulos/modulo-ventas/interfaces/web/orden-venta-sodimac.interface';
 import { OrdenVentaSodimacCreateModel } from 'src/app/modulos/modulo-ventas/models/web/orden-venta-sodimac.model';
 import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
-
 
 
 @Component({
@@ -28,39 +27,34 @@ import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services
   styleUrls: ['./panel-sodimac-ov-view.component.css']
 })
 export class PanelSodimacOrdenVentaViewComponent implements OnInit {
-
   // Titulo del componente
-  titulo = 'Órden de Venta';
+  titulo              = 'Órden de Venta';
 
-  modeloFormCab1: FormGroup;
-  modeloFormCab2: FormGroup;
-  buttonAcces: ButtonAcces = new ButtonAcces();
-  globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
+  modeloFormCab1      : FormGroup;
+  modeloFormCab2      : FormGroup;
+  buttonAcces         : ButtonAcces = new ButtonAcces();
+  globalConstants     : GlobalsConstantsForm = new GlobalsConstantsForm();
 
-  docEntry: number = 0;
-  idOrdenVentaSodimac: number = 0;
+  docEntry            : number = 0;
+  idOrdenVentaSodimac : number = 0;
 
-  modeloSave: OrdenVentaSodimacCreateModel = new OrdenVentaSodimacCreateModel();
-  listEstado: SelectItem[];
-
+  modeloSave          : OrdenVentaSodimacCreateModel = new OrdenVentaSodimacCreateModel();
+  listEstado          : SelectItem[];
   //MODAL:
-  isImport: Boolean = false;
-
+  isImport            : Boolean = false;
   // MODAL: Progreso
-  isDisplay: boolean = false;
-  isSaving: boolean = false;
-
+  isDisplay           : boolean = false;
+  isSaving            : boolean = false;
   // DETALLE
-  columnas: any[];
-  detail: IOrdenVentaSodimacDetalle[] = [];
-  selectedItem: IOrdenVentaSodimacDetalle;
+  columnas            : any[];
+  detalle             : IOrdenVentaSodimacDetalle[] = [];
+  selectedItem        : IOrdenVentaSodimacDetalle;
 
 
   constructor
   (
     private router: Router,
     private fb: FormBuilder,
-    private userContextService: UserContextService,
     public app: LayoutComponent,
     public lenguageService: LanguageService,
     private readonly route: ActivatedRoute,
@@ -86,33 +80,34 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
   onBuildForm() {
     this.modeloFormCab1 = this.fb.group(
     {
-      'cardCode'        : new FormControl({ value: '', disabled: true }),
-      'cardName'        : new FormControl({ value: '', disabled: true }),
-      'cntctCode'       : new FormControl({ value: '', disabled: true }),
-      'cntctName'       : new FormControl({ value: '', disabled: true }),
-      'address'         : new FormControl({ value: '', disabled: true })
+      'cardCode'                  : new FormControl({ value: '', disabled: true }),
+      'cardName'                  : new FormControl({ value: '', disabled: true }),
+      'cntctCode'                 : new FormControl({ value: '', disabled: true }),
+      'cntctName'                 : new FormControl({ value: '', disabled: true }),
+      'address'                   : new FormControl({ value: '', disabled: true })
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'docEntry'          : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'docNum'            : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'numOrdenCompra'    : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'estado'            : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'docDate'           : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
-      'docDueDate'        : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
-      'taxDate'           : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
+      'docEntry'                  : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'docNum'                    : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'numOrdenCompra'            : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'estado'                    : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'docDate'                   : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
+      'docDueDate'                : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
+      'taxDate'                   : new FormControl({ value: null, disabled: true }, Validators.compose([Validators.required])),
     });
   }
 
   onBuildColumn() {
     this.columnas = [
-      { field: 'line', header: '#' },
-      { field: 'itemCode', header: 'Código' },
-      { field: 'sku', header: 'Sku' },
-      { field: 'dscription', header: 'Descripción' },
+      { field: 'line1',           header: '#' },
+      { field: 'itemCode',        header: 'Código' },
+      { field: 'sku',             header: 'Sku' },
+      { field: 'dscription',      header: 'Descripción' },
       { field: 'dscriptionLarga', header: 'Descripción larga' },
-      { field: 'nomLocal', header: 'Local' },
-      { field: 'quantity', header: 'Cantidad' }
+      { field: 'nomLocal',        header: 'Local' },
+      { field: 'isOriente',       header: '¿Oriente?' },
+      { field: 'quantity',        header: 'Cantidad' }
     ];
   }
 
@@ -134,13 +129,14 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
 
   onToOrdenVentaSelected(value: IOrdenVentaSapPendienteByFiltro)
   {
+    this.docEntry         = value.docEntry;
     this.modeloFormCab1.patchValue
     ({
-        cardCode    : value.cardCode,
-        cardName    : value.cardName,
-        cntctCode   : value.cntctCode,
-        cntctName   : value.cntctName,
-        address     : value.address2
+        cardCode          : value.cardCode,
+        cardName          : value.cardName,
+        cntctCode         : value.cntctCode,
+        cntctName         : value.cntctName,
+        address           : value.address2
     });
 
     this.modeloFormCab2.patchValue
@@ -157,7 +153,7 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
   set(value: IOrdenVentaSodimac)
   {
     this.docEntry = value.docEntry;
-    this.detail = value.item;
+    this.detalle   = value.item;
   }
 
   getById(id: number) {
@@ -195,8 +191,8 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
 
   onToSelectedFile(data)
   {
-    this.detail = [];
-    this.detail = data;
+    this.detalle  = [];
+    this.detalle  = data;
     this.isImport = !this.isImport;
   }
 
@@ -260,60 +256,6 @@ export class PanelSodimacOrdenVentaViewComponent implements OnInit {
   }
 
   onToSave() {
-    this.isSaving = true;
-    if(!this.onToValidatedSave()) return;
-
-    // CAB 01: SOCIO NEGOCIO
-    this.modeloSave.cardCode = this.modeloFormCab1.controls['cardCode'].value;
-    this.modeloSave.cardName = this.modeloFormCab1.controls['cardName'].value;
-    if (this.modeloFormCab1.controls['cntctCode'].value)
-    {
-      this.modeloSave.cntctCode = this.modeloFormCab1.controls['cntctCode'].value;
-    }
-    this.modeloSave.address = this.modeloFormCab1.controls['address'].value;
-
-    // CAB 02: ORDEN DE VENTA
-    this.modeloSave.docNum = this.modeloFormCab2.controls['docNum'].value;
-    this.modeloSave.numOrdenCompra = this.modeloFormCab2.controls['numOrdenCompra'].value;
-
-    if (this.modeloFormCab2.controls['estado'].value) {
-      let itemEstado = this.modeloFormCab2.controls['estado'].value;
-      this.modeloSave.docStatus = itemEstado.value;
-    }
-    this.modeloSave.docDate = this.modeloFormCab2.controls['docDate'].value;
-    this.modeloSave.docDueDate = this.modeloFormCab2.controls['docDueDate'].value;
-    this.modeloSave.taxDate = this.modeloFormCab2.controls['taxDate'].value;
-    this.modeloSave.idUsuarioCreate = this.userContextService.getIdUsuario();
-
-    // DETALLE
-    this.modeloSave.item = [];
-    for (let index = 0; index < this.detail.length; index++) {
-      this.modeloSave.item.push
-      ({
-        id                  : 0,
-        line                : this.detail[index].line,
-        numLocal            : this.detail[index].numLocal,
-        lineStatus          : this.detail[index].lineStatus,
-        itemCode            : this.detail[index].itemCode,
-        sku                 : this.detail[index].sku,
-        dscription          : this.detail[index].dscription,
-        dscriptionLarga     : this.detail[index].dscriptionLarga,
-        ean                 : this.detail[index].ean,
-        quantity            : this.detail[index].quantity
-      });
-    }
-
-    this.ordenVentaSodimacService.setCreate(this.modeloSave)
-    .subscribe({ next: (data:any)=>{
-      this.isSaving = false;
-      this.swaCustomService.swaMsgExito(null);
-      this.back();
-    },
-    error:(e)=>{
-      this.isSaving = false;
-      this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-    }
-    });
   }
 
   onClickSave() {

@@ -11,7 +11,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IOrdenVentaSodimacConsulta } from '../../../interfaces/orden-venta-sodimac.interface';
+import { IOrdenVentaSodimacConsulta } from '../../../interfaces/web/orden-venta-sodimac.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { OrdenVentaSodimacService } from '../../../services/web/orden-venta-sodimac.service';
 

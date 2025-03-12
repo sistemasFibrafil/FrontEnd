@@ -12,7 +12,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IForcastVentaByFecha } from '../../../interfaces/forcast-venta.interface';
+import { IForcastVentaByFecha } from '../../../interfaces/web/forcast-venta.interface';
 import { ForCastVentaService } from '../../../services/web/forcast-venta.service';
 
 

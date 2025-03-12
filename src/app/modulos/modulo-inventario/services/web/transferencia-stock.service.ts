@@ -21,6 +21,7 @@ export class TransferenciaStockService {
     params = params.append('dat1', this.datePipe.transform(value.dat1, 'yyyy-MM-dd'));
     params = params.append('dat2', this.datePipe.transform(value.dat2, 'yyyy-MM-dd'));
     params = params.append('cod1', value.cod1);
+    params = params.append('text1', value.text1);
     return this.http.get<ITransferenciaStock[]>(`${environment.url_api_fib}TransferenciaStock/GetListFiltro/`,{params: params});
   }
 

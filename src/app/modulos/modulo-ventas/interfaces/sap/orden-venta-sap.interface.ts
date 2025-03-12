@@ -33,6 +33,8 @@ export interface IOrdenVentaSeguimientoByFecha {
 
 
 export interface IOrdenVentaSeguimientoDetalladoByFecha {
+  docEntry                  : number;
+  lineNum                   : number;
   nomTipDocumento           : string;
   numeroDocumento           : number;
   numeroPedido              : number;
@@ -44,11 +46,16 @@ export interface IOrdenVentaSeguimientoDetalladoByFecha {
   nomStatus                 : string;
   cardCode                  : string;
   cardName                  : string;
+  origenCliente             : string;
+  slpCode                   : number;
   slpName                   : string;
   itemCode                  : string;
   itemName                  : string;
+  nomLinNegocio             : string;
+  nomGrupoArticulo          : string;
   whsCode                   : string;
   whsName                   : string;
+  salUnitMsr                : string;
   stock                     : number;
   pendiente                 : number;
   solicitado                : number;
@@ -63,17 +70,19 @@ export interface IOrdenVentaSeguimientoDetalladoByFecha {
   toneladaPedida            : number;
   openQty                   : number;
   rolloPendiente            : number;
+  pesoPromedioKg            : number;
   kgPendiente               : number;
   toneladaPendiente         : number;
   delivrdQty                : number;
   price                     : number;
+  lineTotEarring            : number;
   totalSumSy                : number;
 }
 
 
 export interface IOrdenVentaPendienteByFecha {
-  nomTipDocumento           : string;
   docEntry                  : number;
+  nomTipDocumento           : string;
   numeroPedido              : number;
   numeroFactura?            : number;
   docDate                   : Date;

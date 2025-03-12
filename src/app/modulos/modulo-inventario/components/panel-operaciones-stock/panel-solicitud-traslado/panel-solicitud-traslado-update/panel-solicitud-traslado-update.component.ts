@@ -213,27 +213,31 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
   }
 
   onSelectedAlmacenOrigen(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
+    this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
+
+    if(this.detalle.length > 0)
+    {
       this.detalle.forEach(x => {
         if(x.itemCode !== '')
         {
           x.fromWhsCod = value.whsCode;
         }
       });
-    }, 10);
+    }
   }
 
   onSelectedAlmacenDestino(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
+    this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
+
+    if(this.detalle.length > 0)
+    {
       this.detalle.forEach(x => {
         if(x.itemCode !== '')
         {
           x.whsCode = value.whsCode;
         }
       });
-    }, 10);
+    }
   }
 
   onSelectedTipoTraslado(value: any) {
@@ -334,7 +338,6 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
   onChangeQuantity(value: ISolicitudTrasladoDetalle, index: number)
   {
-    debugger
     if(value.record === 1)
     {
       this.onUpdateQuantity1(value, index);
@@ -347,7 +350,6 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
   onUpdateQuantity1(value: ISolicitudTrasladoDetalle, index: number)
   {
-    debugger
     let quantity      : number = 0;
     let openQtyRding  : number = 0;
     let openQty       : number = 0;
@@ -363,7 +365,6 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
   onUpdateQuantity2(value: ISolicitudTrasladoDetalle, index: number)
   {
-    debugger
     let quantity   : number = 0;
     let read       : number = 0;
     let earring    : number = 0;
@@ -420,56 +421,53 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
     this.modeloFormPie1.patchValue({ 'slpCode' : value.slpCode });
   }
 
-  set(data: ISolicitudTraslado)
+  set(value: ISolicitudTraslado)
   {
     setTimeout(() => {
-      this.docEntry       = data.docEntry;
-      this.cardCode       = data.cardCode;
-      this.cntctCode      = data.cntctCode;
-      this.whsCodeOrigen  = data.filler;
-      this.whsCodeDestino = data.toWhsCode;
-      this.codTipTraslado = data.codTipTraslado;
-      this.codMotTraslado = data.codMotTraslado;
-      this.codTipSalida   = data.codTipSalida;
-      this.slpCode        = data.slpCode;
-    }, 10);
+      this.docEntry       = value.docEntry;
+      this.cardCode       = value.cardCode;
+      this.cntctCode      = value.cntctCode;
+      this.whsCodeOrigen  = value.filler;
+      this.whsCodeDestino = value.toWhsCode;
+      this.codTipTraslado = value.codTipTraslado;
+      this.codMotTraslado = value.codMotTraslado;
+      this.codTipSalida   = value.codTipSalida;
+      this.slpCode        = value.slpCode;
 
-    const status = this.docStatus.find(x => x.statusCode === data.docStatus);
+      const status = this.docStatus.find(x => x.statusCode === value.docStatus);
 
-    this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
-    this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
-    this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
-    this.modeloFormCab1.controls['address'].setValue( data.address );
-    this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
-    this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
-    this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );
-    this.modeloFormCab2.controls['docDueDate'].setValue( data.docDueDate == null ?  null : new Date(data.docDueDate) );
-    this.modeloFormCab2.controls['taxDate'].setValue( data.taxDate == null ?  null : new Date(data.taxDate) );
-    this.modeloFormCab2.controls['read'].setValue( data.read === 'Y'? true : false );
-    this.modeloFormCab3.controls['whsCodeOrigen'].setValue( data.filler );
-    this.modeloFormCab3.controls['whsCodeDestino'].setValue( data.toWhsCode );
-    this.modeloFormOtr.controls['codTipTraslado'].setValue( data.codTipTraslado );
-    this.modeloFormOtr.controls['codMotTraslado'].setValue( data.codMotTraslado );
-    this.modeloFormOtr.controls['codTipSalida'].setValue( data.codTipSalida );
-    this.modeloFormPie1.controls['slpCode'].setValue( data.slpCode );
-    this.modeloFormPie1.controls['jrnlMemo'].setValue( data.jrnlMemo );
-    this.modeloFormPie1.controls['comments'].setValue( data.comments );
+      this.modeloFormCab1.controls['cardCode'].setValue( value.cardCode );
+      this.modeloFormCab1.controls['cardName'].setValue( value.cardName );
+      this.modeloFormCab1.controls['cntctCode'].setValue( value.cntctCode );
+      this.modeloFormCab1.controls['address'].setValue( value.address );
+      this.modeloFormCab2.controls['docNum'].setValue( value.docNum );
+      this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
+      this.modeloFormCab2.controls['docDate'].setValue( value.docDate == null ?  null : new Date(value.docDate) );
+      this.modeloFormCab2.controls['docDueDate'].setValue( value.docDueDate == null ?  null : new Date(value.docDueDate) );
+      this.modeloFormCab2.controls['taxDate'].setValue( value.taxDate == null ?  null : new Date(value.taxDate) );
+      this.modeloFormCab2.controls['read'].setValue( value.read === 'Y'? true : false );
+      this.modeloFormCab3.controls['whsCodeOrigen'].setValue( value.filler );
+      this.modeloFormCab3.controls['whsCodeDestino'].setValue( value.toWhsCode );
+      this.modeloFormOtr.controls['codTipTraslado'].setValue( value.codTipTraslado );
+      this.modeloFormOtr.controls['codMotTraslado'].setValue( value.codMotTraslado );
+      this.modeloFormOtr.controls['codTipSalida'].setValue( value.codTipSalida );
+      this.modeloFormPie1.controls['slpCode'].setValue( value.slpCode );
+      this.modeloFormPie1.controls['jrnlMemo'].setValue( value.jrnlMemo );
+      this.modeloFormPie1.controls['comments'].setValue( value.comments );
+    }, 20);
+
+    setTimeout(() => {
+      this.detalle = value.linea;
+    }, 550);
   }
 
   getById(id: number) {
     this.isDisplay = true;
     this.solicitudTrasladoService.getById(id)
     .subscribe({next:(data: ISolicitudTraslado) => {
-      this.modelo = data;
-      setTimeout(() => {
-        this.set(this.modelo);
-      }, 10);
-      setTimeout(() => {
-        this.modelo.linea.forEach(element => {
-          this.detalle.push(element);
-        });
-      }, 1000);
       this.isDisplay = false;
+      this.modelo = data;
+      this.set(this.modelo);
       },error:(e)=>{
         this.isDisplay = false;
         this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
@@ -530,9 +528,9 @@ export class PanelSolicitudTrasladoUpdateComponent implements OnInit {
 
     this.modeloSave.id              = this.id;
     this.modeloSave.docEntry        = this.docEntry;
-    this.modeloSave.docDate         = this.modeloFormCab2.controls['docDate'].value;
-    this.modeloSave.docDueDate      = this.modeloFormCab2.controls['docDueDate'].value;
-    this.modeloSave.taxDate         = this.modeloFormCab2.controls['taxDate'].value;
+    this.modeloSave.docDate         = new Date(this.modeloFormCab2.controls['docDate'].value);
+    this.modeloSave.docDueDate      = new Date(this.modeloFormCab2.controls['docDueDate'].value);
+    this.modeloSave.taxDate         = new Date(this.modeloFormCab2.controls['taxDate'].value);
     this.modeloSave.read            = this.modeloFormCab2.controls['read'].value === true? 'Y' : 'N';
 
     // CAB 03: SOLICITUD DE TRASLADO

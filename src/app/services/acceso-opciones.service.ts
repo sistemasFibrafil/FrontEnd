@@ -98,8 +98,11 @@ export class AccesoOpcionesService {
             if (element.keyOpcion === 'btn-asignar') {
               this.buttonAcces.btnAsignar = false;
             }
-            if (element.keyOpcion === 'btn-imprimir') {
-              this.buttonAcces.btnImprimir = false;
+            if (element.keyOpcion === 'btn-imprimir1') {
+              this.buttonAcces.btnImprimir1 = false;
+            }
+            if (element.keyOpcion === 'btn-imprimir2') {
+              this.buttonAcces.btnImprimir2 = false;
             }
             if (element.keyOpcion === 'btn-enviar-sap') {
               this.buttonAcces.btnEnviarSAP = false;

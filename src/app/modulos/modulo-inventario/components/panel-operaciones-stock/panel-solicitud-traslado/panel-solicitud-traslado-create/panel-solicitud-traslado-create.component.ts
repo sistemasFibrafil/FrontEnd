@@ -438,9 +438,9 @@ export class PanelSolicitudTrasladoCreateComponent implements OnInit {
     this.modeloSave.address         = this.modeloFormCab1.controls['address'].value;
 
     // CAB 02: SOLICITUD DE TRASLADO
-    this.modeloSave.docDate         = this.modeloFormCab2.controls['docDate'].value;
-    this.modeloSave.docDueDate      = this.modeloFormCab2.controls['docDueDate'].value;
-    this.modeloSave.taxDate         = this.modeloFormCab2.controls['taxDate'].value;
+    this.modeloSave.docDate         = new Date(this.modeloFormCab2.controls['docDate'].value);
+    this.modeloSave.docDueDate      = new Date(this.modeloFormCab2.controls['docDueDate'].value);
+    this.modeloSave.taxDate         = new Date(this.modeloFormCab2.controls['taxDate'].value);
     this.modeloSave.read            = this.modeloFormCab2.controls['read'].value === true? 'Y' : 'N';
 
     // CAB 03: SOLICITUD DE TRASLADO

@@ -32,6 +32,7 @@ export class GlobalsConstantsForm {
     cProcesar: string;
     cSalir: string;
     cAlternatico: string;
+    cCopiar: string;
     cCerrar: string;
     cAnular: string;
     cFiltro: string;
@@ -79,6 +80,7 @@ export class GlobalsConstantsForm {
     icoLimpiar: string;
     icoCancelar: string;
     icoCerrar: string;
+    icoCopiar: string;
     icoRegresar: string;
     icoPDF: string;
     icoCerrado: string;
@@ -195,6 +197,7 @@ export class GlobalsConstantsForm {
         this.cSalir = 'Salir';
         this.cAlternatico = 'Ver Alternativo';
         this.cReceta = 'Receta';
+        this.cCopiar = 'Copiar';
         this.cCerrar = 'Cerrar';
         this.cAnular = 'Anular';
         this.cFiltro = 'Limpiar';
@@ -238,6 +241,7 @@ export class GlobalsConstantsForm {
         this.icoLimpiar = 'pi pi-trash'
         this.icoAnular = 'pi pi-trash';
         this.icoCancelar = 'pi pi-times';
+        this.icoCopiar = 'pi pi-copy';
         this.icoCerrar = 'pi pi-times';
         this.icoRegresar = 'pi pi-sign-out';
         this.icoFirmaUsuario = 'fa fa-user-circle-o'
@@ -288,7 +292,7 @@ export class GlobalsConstantsForm {
         this.subTitleEliminar = '¿Seguro de Eliminar el registro seleccionado?';
 
         this.titleCerrar = 'Confirmación de Cerrar';
-        this.subTitleEliminar = '¿Seguro de Cerrar el registro seleccionado?';
+        this.subTitleCerrar = '¿Seguro de Cerrar el registro seleccionado?';
 
         this.titleAnular = 'Confirmación de Anulación';
         this.subTitleAnular = '¿Seguro de Anular el registro seleccionado?';

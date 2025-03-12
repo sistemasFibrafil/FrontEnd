@@ -16,6 +16,7 @@ export class TipoCambioSapService {
   ) { }
 
   getByFechaCode(value: FilterRequestModel) {
+    debugger
     let params = new HttpParams();
     params = params.append('dat1', this.datePipe.transform(value.dat1, 'yyyy-MM-dd'));
     params = params.append('cod1', value.cod1);

@@ -11,7 +11,7 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IForcastVenta } from '../../../interfaces/forcast-venta.interface';
+import { IForcastVenta } from '../../../interfaces/web/forcast-venta.interface';
 import { ForcastventaImportModel } from '../../../models/web/forcast-venta.model';
 import { ForCastVentaService } from '../../../services/web/forcast-venta.service';
 

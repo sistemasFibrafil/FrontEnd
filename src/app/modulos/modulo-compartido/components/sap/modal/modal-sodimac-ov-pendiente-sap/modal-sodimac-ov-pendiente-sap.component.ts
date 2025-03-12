@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
 
-import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sap.interface';
+import { IOrdenVentaSapPendienteByFiltro } from 'src/app/modulos/modulo-ventas/interfaces/sap/orden-venta-sap.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { OrdenVentaSapService } from 'src/app/modulos/modulo-ventas/services/sap/orden-venta-sap.service';
 
@@ -40,7 +40,9 @@ export class ModalSodimacOvPendienteSapComponent implements OnInit, OnChanges {
     private ordenVentaSapService: OrdenVentaSapService
   ) { }
 
-  ngOnChanges(changes: SimpleChanges): void{
+  ngOnChanges(changes: SimpleChanges): void {
+    debugger
+    console.log("DOCENTRY: ", this.doEntry);
     if (this.doEntry === undefined || this.doEntry === null || this.doEntry === 0) {
       return;
     }
@@ -102,8 +104,10 @@ export class ModalSodimacOvPendienteSapComponent implements OnInit, OnChanges {
   }
 
   getById(docEntry: number) {
+    debugger
     this.ordenVentaSapService.getOrdenVentaSodimacPendienteByDocEntry(docEntry)
     .subscribe({next:(value: IOrdenVentaSapPendienteByFiltro) =>{
+      console.log("DATA POR DOCENTRY: ", value);
         this.modeloFormVisor.patchValue({
           'docNum': value.docNum
         });

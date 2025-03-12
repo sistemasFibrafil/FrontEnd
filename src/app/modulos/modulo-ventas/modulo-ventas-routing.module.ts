@@ -6,6 +6,7 @@ import { PanelOrdenVentaListComponent } from './components/panel-orden-venta/pan
 
 import { PanelSodimacOrdenVentaListComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-list/panel-sodimac-ov-list.component';
 import { PanelSodimacOrdenVentaCreateComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-create/panel-sodimac-ov-create.component';
+import { PanelSodimacOrdenVentaUpdateComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-update/panel-sodimac-ov-update.component';
 import { PanelSodimacOrdenVentaViewComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-view/panel-sodimac-ov-view.component';
 
 import { PanelSodimacPalletListComponent } from './components/panel-sodimac/panel-sodimac-pallet/panel-sodimac-pallet-list/panel-sodimac-pallet-list.component';
@@ -21,6 +22,9 @@ import { PanelEntregaUpdateComponent } from './components/panel-entrega/panel-en
 import { PanelForcastListComponent } from './components/panel-forcast/panel-forcast-list/panel-forcast-list.component';
 import { PanelForcastCreateComponent } from './components/panel-forcast/panel-forcast-create/panel-forcast-create.component';
 import { PanelForcastUpdateComponent } from './components/panel-forcast/panel-forcast-update/panel-forcast-update.component';
+
+import { PanelSopListComponent } from './components/panel-sop/panel-sop-list/panel-sop-list.component';
+import { PanelSopUpdateComponent } from './components/panel-sop/panel-sop-update/panel-sop-update.component';
 
 import { PanelOrdenVentaProgramcionByFechaComponent } from './components/panel-reportes/panel-ov-programacion-by-fecha/panel-ov-programacion-by-fecha.component';
 import { PanelOrdenVentaSeguimientoByFechaComponent } from './components/panel-reportes/panel-ov-seguimiento-by-fecha/panel-ov-seguimiento-by-fecha.component';
@@ -41,6 +45,7 @@ const routes: Routes = [
 
   { path: 'panel-sodimac-ov-list',                              data: { breadcrumb: 'Orden de Venta' }, component: PanelSodimacOrdenVentaListComponent },
   { path: 'panel-sodimac-ov-create',                            data: { breadcrumb: 'Orden de Venta' }, component: PanelSodimacOrdenVentaCreateComponent },
+  { path: 'panel-sodimac-ov-update/:id',                        data: { breadcrumb: 'Orden de Venta' }, component: PanelSodimacOrdenVentaUpdateComponent },
   { path: 'panel-sodimac-ov-view/:id',                          data: { breadcrumb: 'Orden de Venta' }, component: PanelSodimacOrdenVentaViewComponent },
 
   { path: 'panel-sodimac-pallet-list',                          data: { breadcrumb: 'Pallet' }, component: PanelSodimacPalletListComponent },
@@ -56,6 +61,9 @@ const routes: Routes = [
   { path: 'panel-forcast-list',                                 data: { breadcrumb: 'Proyección de Venta' }, component: PanelForcastListComponent },
   { path: 'panel-forcast-create',                               data: { breadcrumb: 'Proyección de Venta' }, component: PanelForcastCreateComponent },
   { path: 'panel-forcast-update/:id',                           data: { breadcrumb: 'Proyección de Venta' }, component: PanelForcastUpdateComponent },
+
+  { path: 'panel-sop-list',                                     data: { breadcrumb: 'S&OP' }, component: PanelSopListComponent },
+  { path: 'panel-sop-update/:id',                               data: { breadcrumb: 'S&OP' }, component: PanelSopUpdateComponent },
 
   { path: 'panel-ov-seguimiento-by-fecha',                      data: { breadcrumb: 'Reporte - Órdenes de Venta - Seguimiento' }, component: PanelOrdenVentaSeguimientoByFechaComponent },
   { path: 'panel-ov-programacion-by-fecha',                     data: { breadcrumb: 'Reporte - Órdenes de Venta - Programación' }, component: PanelOrdenVentaProgramcionByFechaComponent },

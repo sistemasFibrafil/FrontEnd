@@ -11,6 +11,7 @@ import { PanelOrdenVentaCreateComponent } from './components/panel-orden-venta/p
 
 import { PanelSodimacOrdenVentaCreateComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-create/panel-sodimac-ov-create.component';
 import { PanelSodimacOrdenVentaListComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-list/panel-sodimac-ov-list.component';
+import { PanelSodimacOrdenVentaUpdateComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-update/panel-sodimac-ov-update.component';
 import { PanelSodimacOrdenVentaViewComponent } from './components/panel-sodimac/panel-sodimac-ov/panel-sodimac-ov-view/panel-sodimac-ov-view.component';
 
 import { PanelSodimacPalletAsignacionComponent } from './components/panel-sodimac/panel-sodimac-pallet/panel-sodimac-pallet-asignacion/panel-sodimac-pallet-asignacion.component';
@@ -27,6 +28,9 @@ import { PanelForcastListComponent } from './components/panel-forcast/panel-forc
 import { PanelForcastImportComponent } from './components/panel-forcast/panel-forcast-import/panel-forcast-import.component';
 import { PanelForcastCreateComponent } from './components/panel-forcast/panel-forcast-create/panel-forcast-create.component';
 import { PanelForcastUpdateComponent } from './components/panel-forcast/panel-forcast-update/panel-forcast-update.component';
+
+import { PanelSopListComponent } from './components/panel-sop/panel-sop-list/panel-sop-list.component';
+import { PanelSopUpdateComponent } from './components/panel-sop/panel-sop-update/panel-sop-update.component';
 
 import { PanelOrdenVentaProgramcionByFechaComponent } from './components/panel-reportes/panel-ov-programacion-by-fecha/panel-ov-programacion-by-fecha.component';
 import { PanelOrdenVentaSeguimientoByFechaComponent } from './components/panel-reportes/panel-ov-seguimiento-by-fecha/panel-ov-seguimiento-by-fecha.component';
@@ -50,6 +54,7 @@ import { PanelVentaResumenByFechaGrupoComponent } from './components/panel-repor
 
       PanelSodimacOrdenVentaListComponent,
       PanelSodimacOrdenVentaCreateComponent,
+      PanelSodimacOrdenVentaUpdateComponent,
       PanelSodimacOrdenVentaViewComponent,
 
       PanelSodimacPalletAsignacionComponent,
@@ -66,6 +71,9 @@ import { PanelVentaResumenByFechaGrupoComponent } from './components/panel-repor
       PanelForcastImportComponent,
       PanelForcastCreateComponent,
       PanelForcastUpdateComponent,
+
+      PanelSopListComponent,
+      PanelSopUpdateComponent,
 
       PanelOrdenVentaProgramcionByFechaComponent,
       PanelOrdenVentaSeguimientoByFechaComponent,

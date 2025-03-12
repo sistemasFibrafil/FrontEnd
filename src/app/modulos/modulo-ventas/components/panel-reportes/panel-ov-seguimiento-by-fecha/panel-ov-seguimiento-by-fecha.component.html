@@ -11,16 +11,19 @@
           <div class="col-12 md:col-2">
             <p-calendar formControlName="dat2" placeholder="Seleccionar fecha final" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="grupoClienteSapList" [(ngModel)]="grupoClienteSelected" formControlName="msGrupoCliente" defaultLabel="Seleccione el Grupo de Cliente" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
+            <p-multiSelect [options]="empleadoVentaList" [(ngModel)]="empleadoVentaSelected" formControlName="msEmpleadoVentaSap" defaultLabel="Seleccione el Vendedor" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="tipDocumentoList" [(ngModel)]="tipDocumentoSelected" formControlName="msTipDocumento" defaultLabel="Seleccione el Tipo de Documento" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="statusList" [(ngModel)]="statusSelected" formControlName="msStatus" defaultLabel="Seleccione el Estado" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
             <input id="float-input-text1" type="text" placeholder="Buscar por nombre de cliente" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
           </div>
         </div>
@@ -95,6 +98,9 @@
                 <span class="label" *ngSwitchDefault>{{modelo.nomStatus}}</span>
               </span>
             </td>
+            <td class="p-fluid">
+              <span class="p-column-title">Vendedor</span> {{modelo.slpName}}
+            </td>
             <td class="custom-td-numero">
               <span class="p-column-title">Total USD</span> {{modelo.docTotalSy | number: '.2':'en-EN'}}
             </td>
@@ -103,7 +109,7 @@
         <!-- emptymessage -->
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td style="width: 1690px" colspan="9">{{globalConstants.currentTableEmptyMessage}}</td>
+            <td colspan="10">{{globalConstants.currentTableEmptyMessage}}</td>
           </tr>
         </ng-template>
       </p-table>

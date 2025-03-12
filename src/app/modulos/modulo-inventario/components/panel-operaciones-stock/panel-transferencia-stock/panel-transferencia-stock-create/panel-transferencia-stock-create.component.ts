@@ -115,7 +115,6 @@ export class PanelPanelTransferenciaStockCreateComponent implements OnInit {
     public app: LayoutComponent,
     public lenguageService: LanguageService,
     public readonly utilService: UtilService,
-    private readonly cifrarDataService: CifrarDataService,
     private userContextService: UserContextService,
     private lecturaService: LecturaService,
     private serieNumeracionSapService: SerieNumeracionSapService,
@@ -129,8 +128,7 @@ export class PanelPanelTransferenciaStockCreateComponent implements OnInit {
     this.codSede = this.userContextService.getCodSede();
 
     this.route.params.subscribe((params: Params) => {
-      this.params = JSON.parse(this.cifrarDataService.decrypt(params["json"]));
-      console.log("PARAMS: ", this.params);
+      this.params = JSON.parse(params["json"]);
       if(this.params.idBase !== 0)
       {
         setTimeout(() => {
@@ -290,27 +288,31 @@ export class PanelPanelTransferenciaStockCreateComponent implements OnInit {
 
 
   onSelectedAlmacenOrigen(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
+    this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
+
+    if(this.detalleCopy.length > 0)
+    {
       this.detalleCopy.forEach(x => {
         if(x.itemCode !== '')
         {
           x.fromWhsCod = value.whsCode;
         }
       });
-    }, 10);
+    }
   }
 
   onSelectedAlmacenDestino(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
+    this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
+
+    if(this.detalleCopy.length > 0)
+    {
       this.detalleCopy.forEach(x => {
         if(x.itemCode !== '')
         {
           x.whsCode = value.whsCode;
         }
       });
-    }, 10);
+    }
   }
 
   //#region <<< Transportista >>>
@@ -451,14 +453,16 @@ export class PanelPanelTransferenciaStockCreateComponent implements OnInit {
     this.detalleCopy[this.indexTipoOperacion].codTipOperacion = value.code;
     this.detalleCopy[this.indexTipoOperacion].nomTipOperacion = value.name;
 
-    setTimeout(() => {
+    if(this.lecturaCopy.length > 0)
+    {
       this.lecturaCopy.forEach(x => {
         if(x.baseEntry === baseEntry && x.baseLine === baseLine)
         {
           x.codTipOperacion = value.code;
         }
       });
-    }, 10);
+    }
+
     this.isVisualizarTipoOperacion = !this.isVisualizarTipoOperacion;
   }
 
@@ -601,55 +605,56 @@ export class PanelPanelTransferenciaStockCreateComponent implements OnInit {
   }
 
   //#region <<< Copy >>>
-  getTotalBulto(data: ILecturaCopyToTransferenciaDetalle2[]) {
-    this.onInputBulto(data.filter(x => x.bulto > 0).reduce((acumulador, x) => acumulador + x.bulto, 0));
+  getTotalBulto(value: ILecturaCopyToTransferenciaDetalle2[]) {
+    this.onInputBulto(value.filter(x => x.bulto > 0).reduce((acumulador, x) => acumulador + x.bulto, 0));
   }
 
-  getTotalKilo(data: ILecturaCopyToTransferenciaDetalle2[]) {
-    this.onInpuKilo(data.filter(x => x.peso > 0).reduce((acumulador, x) => acumulador + x.peso, 0))
+  getTotalKilo(value: ILecturaCopyToTransferenciaDetalle2[]) {
+    this.onInpuKilo(value.filter(x => x.peso > 0).reduce((acumulador, x) => acumulador + x.peso, 0))
   }
 
-  set(data: ILecturaCopyToTransferencia)
+  set(value: ILecturaCopyToTransferencia)
   {
     setTimeout(() => {
-      this.cardCode       = data.cardCode;
-      this.cntctCode      = data.cntctCode;
-      this.whsCodeOrigen  = data.filler;
-      this.whsCodeDestino = data.toWhsCode;
-      this.codTipTraslado = data.codTipTraslado;
-      this.codMotTraslado = data.codMotTraslado;
-      this.codTipSalida   = data.codTipSalida;
-      this.slpCode        = data.slpCode;
-    }, 10);
+      this.cardCode       = value.cardCode;
+      this.cntctCode      = value.cntctCode;
+      this.whsCodeOrigen  = value.filler;
+      this.whsCodeDestino = value.toWhsCode;
+      this.codTipTraslado = value.codTipTraslado;
+      this.codMotTraslado = value.codMotTraslado;
+      this.codTipSalida   = value.codTipSalida;
+      this.slpCode        = value.slpCode;
 
-    this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
-    this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
-    this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
-    this.modeloFormCab1.controls['address'].setValue( data.address );
-    this.modeloFormCab3.controls['whsCodeOrigen'].setValue( data.filler );
-    this.modeloFormCab3.controls['whsCodeDestino'].setValue( data.toWhsCode );
-    this.modeloFormOtr.controls['codTipTraslado'].setValue( data.codTipTraslado );
-    this.modeloFormOtr.controls['codMotTraslado'].setValue( data.codMotTraslado );
-    this.modeloFormOtr.controls['codTipSalida'].setValue( data.codTipSalida );
-    this.modeloFormPie1.controls['comments'].setValue( data.comments );
+      this.modeloFormCab1.controls['cardCode'].setValue( value.cardCode );
+      this.modeloFormCab1.controls['cardName'].setValue( value.cardName );
+      this.modeloFormCab1.controls['cntctCode'].setValue( value.cntctCode );
+      this.modeloFormCab1.controls['address'].setValue( value.address );
+      this.modeloFormCab3.controls['whsCodeOrigen'].setValue( value.filler );
+      this.modeloFormCab3.controls['whsCodeDestino'].setValue( value.toWhsCode );
+      this.modeloFormOtr.controls['codTipTraslado'].setValue( value.codTipTraslado );
+      this.modeloFormOtr.controls['codMotTraslado'].setValue( value.codMotTraslado );
+      this.modeloFormOtr.controls['codTipSalida'].setValue( value.codTipSalida );
+      this.modeloFormPie1.controls['comments'].setValue( value.comments );
+      this.getTotalBulto(value.linea2);
+      this.getTotalKilo(value.linea2);
+    }, 20);
 
-    this.getTotalBulto(data.linea2);
-    this.getTotalKilo(data.linea2);
+    setTimeout(() => {
+      this.lecturaCopy = value.linea1;
+      this.detalleCopy = value.linea2;
+    }, 550);
   }
 
   getListCopy(params: any)
   {
+    this.isDisplay = true;
     this.lecturaService.getLecturaCopyToTransferencia(params)
     .subscribe({next:(data: ILecturaCopyToTransferencia) =>{
+      this.isDisplay = false;
       this.modeloCopy = data;
-      setTimeout(() => {
-        this.set(this.modeloCopy);
-      }, 10);
-      setTimeout(() => {
-        this.lecturaCopy = this.modeloCopy.linea1;
-        this.detalleCopy = this.modeloCopy.linea2;
-      }, 1000);
+      this.set(this.modeloCopy);
       },error:(e)=>{
+        this.isDisplay = false;
         this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
       }
     });
@@ -729,9 +734,9 @@ export class PanelPanelTransferenciaStockCreateComponent implements OnInit {
     this.modeloSave.tipDocumento              = this.modeloFormCab2.controls['tipDocumento'].value;
     this.modeloSave.serDocumento              = this.modeloFormCab2.controls['serDocumento'].value;
     this.modeloSave.numDocumento              = this.modeloFormCab2.controls['numDocumento'].value;
-    this.modeloSave.docDate                   = this.modeloFormCab2.controls['docDate'].value;
-    this.modeloSave.docDueDate                = this.modeloFormCab2.controls['docDueDate'].value;
-    this.modeloSave.taxDate                   = this.modeloFormCab2.controls['taxDate'].value;
+    this.modeloSave.docDate                   = new Date(this.modeloFormCab2.controls['docDate'].value);
+    this.modeloSave.docDueDate                = new Date(this.modeloFormCab2.controls['docDueDate'].value);
+    this.modeloSave.taxDate                   = new Date(this.modeloFormCab2.controls['taxDate'].value);
 
     // CAB 03: TRANSFERENCIA
     this.modeloSave.filler                    = this.modeloFormCab3.controls['whsCodeOrigen'].value;
@@ -791,6 +796,8 @@ export class PanelPanelTransferenciaStockCreateComponent implements OnInit {
           idUsuarioCreate     : this.userContextService.getIdUsuario()
         });
       }
+
+      console.log("CREATE :", this.modeloSave);
     }
 
     this.transferenciaStockService.setCreate(this.modeloSave)

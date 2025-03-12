@@ -41,6 +41,7 @@ export class LecturaService {
     params = params.append('dat2', this.datePipe.transform(value.dat2, 'yyyy-MM-dd'));
     params = params.append('cod1', value.cod1);
     params = params.append('cod2', value.cod2);
+    params = params.append('text1', value.text1);
 
     return this.http.get<ILectura[]>(`${environment.url_api_fib}Lectura/GetListByFiltro/`,{params: params});
   }
@@ -68,5 +69,12 @@ export class LecturaService {
   getLecturaCopyToTransferencia(value: any) {
     const param: string = JSON.stringify(value);
     return this.http.post<ILecturaCopyToTransferencia>(`${environment.url_api_fib}Lectura/GetLecturaCopyToTransferencia/`, param);
+  }
+
+  getPackingListPdfByTargetTypeTrgetEntry(value: FilterRequestModel) {
+    var params = new HttpParams();
+    params = params.append('cod1', value.cod1);
+    params = params.append('id1', value.id1);
+    return this.http.get(`${environment.url_api_fib}Lectura/GetPackingListPdfByTargetTypeTrgetEntry/`, {params: params, responseType: 'blob',  observe: 'response', reportProgress: true });
   }
 }

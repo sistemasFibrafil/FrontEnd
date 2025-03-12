@@ -2,7 +2,7 @@ export const environment = {
   production: true,
 
   // LOCAL
-     url_api_fib : 'http://localhost:52109/api/',
+  url_api_fib : 'http://localhost:52109/api/',
 
 
   // DESARROLLO

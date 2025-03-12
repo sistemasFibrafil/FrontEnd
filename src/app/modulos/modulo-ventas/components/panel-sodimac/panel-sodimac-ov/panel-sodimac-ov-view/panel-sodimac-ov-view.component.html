@@ -81,9 +81,8 @@
           </div>
 
           <p-table
-            [value]="detail"
+            [value]="detalle"
             [columns]="columnas"
-            dataKey="line"
             editMode="row"
             [rowHover]="true"
             [autoLayout]="true"
@@ -103,7 +102,7 @@
             <ng-template pTemplate="body" let-modelo let-ri="rowIndex">
               <tr>
                 <td class="custom-td-2">
-                  <span class="p-column-title">Línea: </span>{{modelo.line}}
+                  <span class="p-column-title">Línea: </span>{{modelo.line1}}
                 </td>
                 <td class="p-fluid">
                   <span class="p-column-title">Código: </span> {{modelo.itemCode}}
@@ -119,6 +118,10 @@
                 </td>
                 <td class="p-fluid">
                   <span class="p-column-title">Local: </span> {{modelo.nomLocal}}
+                </td>
+                <td class="custom-td-4">
+                  <span class="p-column-title">¿Oriente?</span>
+                  <p-checkbox [(ngModel)]="modelo.isOriente" [binary]="true" [disabled]="true"></p-checkbox>
                 </td>
                 <td class="custom-td-numero">
                   <span class="p-column-title">Cantidad: </span> {{modelo.quantity | number: '.3':'en-EN'}}

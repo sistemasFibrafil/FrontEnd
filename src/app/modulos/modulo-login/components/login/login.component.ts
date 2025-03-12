@@ -66,6 +66,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.modeloLogin = new LoginModel();
     this.instanciarFormulario();
+    //this.onDeshabilitarControlesLogin(true);
   }
 
   instanciarFormulario() {
@@ -203,8 +204,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.sessionService.setItemEncrypt('nombre', res.nombre);
     this.sessionService.setItemEncrypt('usuario', res.usuario);
     this.sessionService.setItemEncrypt('email', res.email);
-    this.sessionService.setItemEncrypt('moneda-local', res.monedaLocal);
-    this.sessionService.setItemEncrypt('moneda-sistema', res.monedaSistema);
+    this.sessionService.setItemEncrypt('compnyName', res.compnyName);
+    this.sessionService.setItemEncrypt('compnyAddr', res.compnyAddr);
+    this.sessionService.setItemEncrypt('printHeadr', res.printHeadr);
+    this.sessionService.setItemEncrypt('taxIdNum', res.taxIdNum);
+    this.sessionService.setItemEncrypt('phone1', res.phone1);
+    this.sessionService.setItemEncrypt('phone2', res.phone2);
+    this.sessionService.setItemEncrypt('mainCurncy', res.mainCurncy);
+    this.sessionService.setItemEncrypt('sysCurrncy', res.sysCurrncy);
     this.userContextService.setUser(res.usuario);
     this.onFinalizaProceso();
   }

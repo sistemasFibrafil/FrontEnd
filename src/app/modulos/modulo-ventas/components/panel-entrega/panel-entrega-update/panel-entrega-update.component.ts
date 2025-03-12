@@ -11,7 +11,7 @@ import { UserContextService } from 'src/app/services/user-context.service';
 import { SwaCustomService } from '../../../../../services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IOrdenVentaSap } from '../../../interfaces/orden-venta-sap.interface';
+import { IOrdenVentaSap } from '../../../interfaces/sap/orden-venta-sap.interface';
 import { IAlmacenSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/almacen-sap.interface';
 import { IPickingVenta, IPickingVentaByIdPicking, IPickingVentaItem, IPickingVentaItemGrilla } from '../../../interfaces/picking-venta.interface';
 

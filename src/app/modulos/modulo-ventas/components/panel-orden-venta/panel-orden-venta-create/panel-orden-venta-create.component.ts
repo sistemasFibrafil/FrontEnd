@@ -16,8 +16,7 @@ import { IAlmacenSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/defin
 import { IImpuestoSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/finanzas/impuesto-sap.iterface';
 import { ISocioNegocio } from 'src/app/modulos/modulo-socio-negocios/interfaces/socio-segocio.interface';
 import { ITipoCambioSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/tipo-cambio-sap.interface';
-import { IDetalleSociedadSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/inicializacion-sistema/detalle-sociedad-sap.interface';
-import { IOrdenVenta, IOrdenVentaDetalle } from '../../../interfaces/orden-venta.interface';
+import { IOrdenVentaDetalle } from '../../../interfaces/orden-venta.interface';
 import { IArticuloDocumentoSap, IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/sap/articulo-sap.interface';
 import { OrdenVentaCreateModel } from '../../../models/web/orden-venta.model';
 import { OrdenVentaService } from '../../../services/web/orden-venta.service';
@@ -25,7 +24,7 @@ import { ArticuloSapService } from 'src/app/modulos/modulo-inventario/services/s
 import { ImpuestoSapService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/finanzas/impuesto-sap.service';
 import { TipoCambioSapService } from 'src/app/modulos/modulo-gestion/services/sap/tipo-cambio-sap.service';
 import { StatusService } from 'src/app/modulos/modulo-gestion/services/web/definiciones/general/status.service';
-import { DetalleSociedadSapService } from 'src/app/modulos/modulo-gestion/services/sap/inicializacion-sistema/detalle-sociedad-sap.service';
+import { ButtonAcces } from 'src/app/models/acceso-button.model';
 
 
 
@@ -37,6 +36,9 @@ import { DetalleSociedadSapService } from 'src/app/modulos/modulo-gestion/servic
 export class PanelOrdenVentaCreateComponent implements OnInit {
   // Titulo del componente
   titulo = 'Órden de Venta';
+  // Acceso de botones
+  buttonAcces: ButtonAcces = new ButtonAcces();
+  globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
 
   modeloFormCab1: FormGroup;
   modeloFormCab2: FormGroup;
@@ -47,7 +49,6 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
   modeloFormOtr: FormGroup;
   modeloFormPie1: FormGroup;
   modeloFormPie2: FormGroup;
-  globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
 
   fecha         : Date = new Date();
 
@@ -66,11 +67,10 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
   codTipVenta   : string = '';
   codTipFlete   : string = '';
 
-  items: MenuItem[];
   listEstado: SelectItem[];
   listMoneda: SelectItem[];
   listCondicionPago: SelectItem[];
-  detSociedadSap: IDetalleSociedadSap;
+  socioNegocio: ISocioNegocio;
   modeloSave: OrdenVentaCreateModel = new OrdenVentaCreateModel();
 
   // Progreso
@@ -81,6 +81,7 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
   isVisualizarArticulo: boolean = false;
 
   // DETALLE
+  opciones: any = [];
   indexAlmacen: number = 0;
   indexImpuesto: number = 0;
   indexArticulo: number = 0;
@@ -90,7 +91,7 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
 
   columnas: any[];
   detalle: IOrdenVentaDetalle[] = [];
-  detalleSelected: IOrdenVentaDetalle;
+  modeloSelected: IOrdenVentaDetalle;
 
 
   constructor
@@ -109,25 +110,16 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
     private ordenVentaService: OrdenVentaService,
     private articuloSapService: ArticuloSapService,
     private tipoCambioSapService: TipoCambioSapService,
-    private detalleSociedadSapService: DetalleSociedadSapService,
   ) {}
 
   ngOnInit() {
     this.onBuildForm();
     this.onBuildColumn();
-    this.getNumero();
+    this.opcionesTabla();
     this.getListEstado();
-    this.getListContextMenu();
-    this.getDetalleSociedad();
     this.addNewLine();
-  }
 
-  getListContextMenu() {
-    this.items =
-    [
-      {label: 'Añadir línea', icon: 'pi pi-plus',   command: () => this.addNewLine() },
-      {label: 'Borrar línea', icon: 'pi pi-trash',  command: () => this.delete(this.detalleSelected) }
-    ];
+    console.log("MainCurncy: ", this.mainCurncy);
   }
 
   onBuildForm() {
@@ -137,14 +129,13 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
       'licTradNum'            : new FormControl({ value: '', disabled: false }, Validators.compose([Validators.required])),
       'cardName'              : new FormControl({ value: '', disabled: false }, Validators.compose([Validators.required])),
       'cntctCode'             : new FormControl({ value: '', disabled: false }),
-      'numOrdCom'             : new FormControl({ value: '', disabled: false }),
+      'numOrdCom'             : new FormControl(''),
       'docCur'                : new FormControl('', Validators.compose([Validators.required])),
       'docRate'               : new FormControl('', Validators.compose([Validators.required])),
     });
 
     this.modeloFormCab2 = this.fb.group(
     {
-      'numero'                : new FormControl({ value: '',  disabled: false }, Validators.compose([Validators.required])),
       'docNum'                : new FormControl({ value: '',  disabled: false }),
       'docStatus'             : new FormControl({ value: '',  disabled: true  }, Validators.compose([Validators.required])),
       'docDate'               : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
@@ -202,6 +193,15 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
       'vatSum'                : new FormControl({ value: '', disabled: false }),
       'docTotal'              : new FormControl({ value: '', disabled: false }),
     });
+
+    this.mainCurncy = this.userContextService.getMainCurncy();
+  }
+
+  opcionesTabla() {
+    this.opciones = [
+      { label: 'Añadir línea',      icon: 'pi pi-plus',                   command: () => { } },
+      { label: 'Borrar línea',      icon: 'pi pi-trash',                  command: () => { } },
+    ];
   }
 
   onBuildColumn() {
@@ -213,48 +213,38 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
       { field: 'onHand',      header: 'Stock' },
       { field: 'quantity',    header: 'Cantidad' },
       { field: 'PriceBefDi',  header: 'Precio' },
-      // { field: 'discPrcnt',   header: '% descuento' },
-      // { field: 'price',       header: 'Precio tras el descuento' },
       { field: 'TaxCode',     header: 'Impuesto' },
       { field: 'lineTotal',   header: 'Total' },
     ];
   }
 
-  getNumero() {
-    this.ordenVentaService.getNumero()
-    .subscribe({next:(data: IOrdenVenta) =>{
-      this.modeloFormCab2.patchValue({ 'numero': data.numero });
-      },error:(e)=>{
-        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-      }
-    });
-  }
-
-  getDetalleSociedad() {
-    this.detalleSociedadSapService.getDetalleSociedad()
-    .subscribe({next:(data: IDetalleSociedadSap) =>{
-      this.detSociedadSap = data;
-      },error:(e)=>{
-        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
-      }
-    });
+  onSelectedItem(modelo: IOrdenVentaDetalle) {
   }
 
   getTipoCambio() {
-    const docCur = this.modeloFormCab1.controls['docCur'].value;
-    if(docCur === this.detSociedadSap.mainCurncy || docCur === '##')
-    {
-      this.modeloFormCab1.patchValue({ 'docRate': 1 });
-      return;
-    }
-    const params: any = { fecha1: this.fecha, code1: docCur };
+    const params: any = { dat1: this.fecha, cod1: this.modeloFormCab1.controls['docCur'].value };
     this.tipoCambioSapService.getByFechaCode(params)
     .subscribe({next:(data: ITipoCambioSap) =>{
       this.modeloFormCab1.patchValue({ 'docRate': data.rate });
+      if (!this.valTipoCambio()) return;
       },error:(e)=>{
         this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
       }
     });
+  }
+
+  valTipoCambio()
+  {
+    const currency  : string = this.modeloFormCab1.controls['docCur'].value;
+    const rate      : number = Number(this.modeloFormCab1.controls['docRate'].value);
+
+    if(currency !== this.mainCurncy && rate === 0)
+    {
+      this.swaCustomService.swaMsgInfo('Ingrese el tipo de cambio.');
+      return false;
+    }
+
+    return true;
   }
 
   //#region <<< MODAL: CLIENTE >>>
@@ -274,15 +264,15 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
 
   onSelectedCliente(value: ISocioNegocio) {
     this.limpiarSocioNegocio();
+    this.socioNegocio = value;
     this.cardCode   = value.cardCode;
     this.cntctCode  = value.cntctCode;
     this.currCode   = value.currency;
-    this.mainCurncy = this.detSociedadSap.mainCurncy;
     this.shipToCode = value.shipToDef;
     this.payToCode  = value.billToDef;
     this.groupNum   = value.groupNum;
     this.slpCode    = value.slpCode;
-    this.modeloFormCab1.patchValue({ 'cardCode': value.cardCode, 'licTradNum': value.licTradNum, 'cardName': value.cardName, 'cntctCode': value.cntctCode, 'docCur': value.currency === '##' ? this.detSociedadSap.mainCurncy : value.currency });
+    this.modeloFormCab1.patchValue({ 'cardCode': value.cardCode, 'licTradNum': value.licTradNum, 'cardName': value.cardName, 'cntctCode': value.cntctCode, 'docCur': value?.currency === '##' ? this.mainCurncy : value.currency });
     this.modeloFormLog.patchValue({ 'shipToCode': value.shipToDef,'address2': value.address2, 'payToCode': value.billToDef, 'address': value.address });
     this.modeloFormFin.patchValue({ 'groupNum': value.groupNum });
     this.modeloFormPie1.patchValue({ 'slpCode': value.slpCode });
@@ -290,6 +280,8 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
   }
 
   onSelectedMoneda(value) {
+    // Para el [ngClass] se actualiza la moneda
+    this.socioNegocio.currency = value.currCode;
     this.modeloFormCab1.patchValue({ 'docCur': value.currCode });
     this.getTipoCambio();
 
@@ -385,13 +377,16 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
   }
 
   onOpenArticulo(index: number) {
+    if (!this.valTipoCambio()) return;
     this.indexArticulo = index;
     this.isVisualizarArticulo = !this.isVisualizarArticulo;
   }
+
   onSelectedArticulo(value: IArticuloSap) {
     this.getArticuloVentaByCode(value.itemCode, this.indexArticulo);
     this.isVisualizarArticulo = !this.isVisualizarArticulo;
   }
+
   getArticuloVentaByCode(itemCode: string, index: number) {
     this.isDisplay = true;
     const params = { code1: this.modeloFormCab1.controls['cardCode'].value, code2: this.modeloFormCab1.controls['docCur'].value, code3: itemCode ,  id1: this.modeloFormPie1.controls['slpCode'].value };
@@ -704,6 +699,6 @@ export class PanelOrdenVentaCreateComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/main/modulo-ve/panel-orden-venta-list']);
+    this.router.navigate(['/main/modulo-ven/panel-orden-venta-list']);
   }
 }

@@ -38,8 +38,7 @@
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th pSortableColumn="{{col.field}}" *ngFor="let col of columns" class="custom-header">
-                        <p-sortIcon field="{{col.field}}"></p-sortIcon>
-                        {{col.header}}
+                        <p-sortIcon field="{{col.field}}"></p-sortIcon> {{col.header}}
                     </th>
                     <th colspan="2" class="custom-header">Acciones</th>
                 </tr>

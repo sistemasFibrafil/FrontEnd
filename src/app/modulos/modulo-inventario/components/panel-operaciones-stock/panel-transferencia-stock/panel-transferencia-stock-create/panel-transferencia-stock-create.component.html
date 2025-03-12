@@ -347,7 +347,7 @@
 <p-dialog *ngIf="isVisualizarArticulo" header="Artículo" [(visible)]="isVisualizarArticulo" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-articulo-sap [artInv] = "'Y'" [artVen] = "'Y,N'" [artCom] = "'Y,N'" (eventoAceptar)="onSelectedArticulo($event)"></app-busqueda-articulo-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickCloseArticulo()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickCloseArticulo()"></p-button>
   </ng-template>
 </p-dialog>
 
@@ -355,21 +355,21 @@
 <p-dialog *ngIf="isVisualizarAlmacenOrigen" header="Almacén" [(visible)]="isVisualizarAlmacenOrigen" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-almacen-sap [demandante]="demandanteAlmacenItem" [itemCode]="itemCode" [inactive]="inactiveAlmacenItem" (eventoAceptar)="onSelectedAlmacenOrigenItem($event)"></app-busqueda-almacen-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickCloseAlmacenOrigen()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickCloseAlmacenOrigen()"></p-button>
   </ng-template>
 </p-dialog>
 
 <p-dialog *ngIf="isVisualizarAlmacenDestino" header="Almacén" [(visible)]="isVisualizarAlmacenDestino" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-almacen-sap [demandante]="demandanteAlmacenItem" [itemCode]="itemCode" [inactive]="inactiveAlmacenItem" (eventoAceptar)="onSelectedAlmacenDestinoItem($event)"></app-busqueda-almacen-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickCloseAlmacenDestino()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickCloseAlmacenDestino()"></p-button>
   </ng-template>
 </p-dialog>
 
 <p-dialog *ngIf="isVisualizarTipoOperacion" header="Tipo de operación" [(visible)]="isVisualizarTipoOperacion" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-tipo-operacion-sap [title]="'Tipo de Operación'" [fldValue]="codTipTraslado" [placeholder]="'Tipo de operación'" [nomTabla]="'OWTR'" [nomCampo]="'U_tipoOpT12'" (eventoAceptar)="onSelectedTipoOperacionItem($event)"></app-busqueda-tipo-operacion-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickCloseTipoOperacion()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickCloseTipoOperacion()"></p-button>
   </ng-template>
 </p-dialog>
 
@@ -430,7 +430,7 @@
     </p-table>
   </p-panel>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickBarcodeClose()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickBarcodeClose()"></p-button>
   </ng-template>
 </p-dialog>
 

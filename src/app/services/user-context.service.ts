@@ -80,6 +80,14 @@ export class UserContextService {
     this.user$.next(user);
   }
 
+  public getMainCurncy() {
+    return this.sessionService.getItemDecrypt('mainCurncy');
+  }
+
+  public getSysCurrncy() {
+    return this.sessionService.getItemDecrypt('sysCurrncy');
+  }
+
   public logout()
   {
     this.sessionService.logout();

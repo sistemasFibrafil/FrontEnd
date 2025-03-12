@@ -1,7 +1,6 @@
 import swal from 'sweetalert2';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
 
 import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/sap/articulo-sap.interface';
@@ -35,7 +34,6 @@ export class BusquedaArticuloSapComponent implements OnInit {
   constructor
   (
     private readonly fb: FormBuilder,
-    private readonly swaCustomService: SwaCustomService,
     private articuloSapService: ArticuloSapService
   ) { }
 
@@ -86,6 +84,7 @@ export class BusquedaArticuloSapComponent implements OnInit {
   }
 
   onToSelected(value: IArticuloSap) {
+    debugger
     this.setClearFiltro();
     this.eventoAceptar.emit(value);
   }

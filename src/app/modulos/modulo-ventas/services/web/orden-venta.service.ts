@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { IOrdenVenta } from '../../interfaces/orden-venta.interface';
 import { OrdenVentaCreateModel } from '../../models/web/orden-venta.model';
 
 
@@ -15,10 +14,6 @@ export class OrdenVentaService {
     private http: HttpClient,
     private datePipe: DatePipe
   ){ }
-
-  getNumero() {
-    return this.http.get<IOrdenVenta>(`${environment.url_api_fib}OrdenVenta/GetNumero/`);
-  }
 
   setCreate(value: OrdenVentaCreateModel) {
     const param: string = JSON.stringify(value);

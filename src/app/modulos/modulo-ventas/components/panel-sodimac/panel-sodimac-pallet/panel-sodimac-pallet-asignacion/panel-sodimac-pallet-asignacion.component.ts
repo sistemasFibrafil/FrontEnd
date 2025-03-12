@@ -13,7 +13,7 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 import { OrdenVentaSodimacLpnUpdateModel } from 'src/app/modulos/modulo-ventas/models/web/orden-venta-sodimac.model';
-import { IOrdenVentaSodimacConsulta } from 'src/app/modulos/modulo-ventas/interfaces/orden-venta-sodimac.interface';
+import { IOrdenVentaSodimacConsulta } from 'src/app/modulos/modulo-ventas/interfaces/web/orden-venta-sodimac.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { OrdenVentaSodimacService } from 'src/app/modulos/modulo-ventas/services/web/orden-venta-sodimac.service';
 
@@ -143,7 +143,7 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
   onClickAceptOrdenVenta()
   {
     let existe = false;
-    let line: number = 0;
+    let line1: number = 0;
     let sku: string = '';
     let nomLocal: string = '';
 
@@ -155,12 +155,12 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
     }
 
     this.selected.forEach(element => {
-      const reg = this.detail.filter(x => x.line === element.line && x.numLocal === element.numLocal);
+      const reg = this.detail.filter(x => x.line1 === element.line1 && x.numLocal === element.numLocal);
 
       if(reg.length > 0)
       {
         existe = true;
-        line = element.line;
+        line1 = element.line1;
         sku = element.sku;
         nomLocal = element.nomLocal;
         return;
@@ -169,7 +169,7 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
 
     if(existe)
     {
-      swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, 'El registro: Línea ' + line.toString() + '. Sku ' + sku + '. Local ' + nomLocal + '. Existe.', 'info');
+      swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, 'El registro: Línea ' + line1.toString() + '. Sku ' + sku + '. Local ' + nomLocal + '. Existe.', 'info');
       return;
     }
 
@@ -186,11 +186,11 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
   {
     let swalWithBootstrapButtons = swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal') });
 
-    const reg = this.detail.filter(x => x.line === value.line && x.numLocal === value.numLocal);
+    const reg = this.detail.filter(x => x.line1 === value.line1 && x.numLocal === value.numLocal);
 
     if(reg.length > 0)
     {
-      swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, 'El registro: Línea ' + value.line.toString() + '. Sku ' + value.sku + '. Local ' + value.nomLocal + '. Existe.', 'info');
+      swalWithBootstrapButtons.fire(this.globalConstants.msgInfoSummary, 'El registro: Línea ' + value.line1.toString() + '. Sku ' + value.sku + '. Local ' + value.nomLocal + '. Existe.', 'info');
       return;
     }
 
@@ -218,7 +218,7 @@ export class PanelSodimacPalletAsignacionComponent implements OnInit {
       this.modeloSave.item.push
         ({
           id            : this.detail[index].id,
-          line          : this.detail[index].line,
+          line1          : this.detail[index].line1,
           numLocal      : this.detail[index].numLocal,
         });
     }

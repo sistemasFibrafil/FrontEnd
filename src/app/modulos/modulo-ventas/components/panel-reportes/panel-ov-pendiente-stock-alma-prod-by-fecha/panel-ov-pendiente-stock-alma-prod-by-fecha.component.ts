@@ -11,7 +11,7 @@ import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
-import { IOrdenVentaPendienteByFecha } from '../../../interfaces/orden-venta-sap.interface';
+import { IOrdenVentaPendienteByFecha } from '../../../interfaces/sap/orden-venta-sap.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { OrdenVentaSapService } from '../../../services/sap/orden-venta-sap.service';
 

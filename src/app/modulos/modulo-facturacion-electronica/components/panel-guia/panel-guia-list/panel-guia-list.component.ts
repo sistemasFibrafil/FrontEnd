@@ -176,9 +176,7 @@ export class PanelGuiaListComponent implements OnInit {
     .subscribe({ next:(data: any) => {
       this.isDisplay = false;
       this.swaCustomService.swaMsgExito(null);
-      setTimeout(() => {
-        this.onToBuscar();
-      },100);
+      this.onListar();
     },error:(e)=>{
       this.isDisplay = false;
       this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);

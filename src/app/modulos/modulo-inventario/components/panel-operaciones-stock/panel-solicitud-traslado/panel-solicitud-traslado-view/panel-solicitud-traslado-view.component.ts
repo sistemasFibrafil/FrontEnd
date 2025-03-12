@@ -25,69 +25,59 @@ interface DocStatus {
 export class PanelSolicitudTrasladoViewComponent implements OnInit {
 
   // Titulo del componente
-  titulo = 'Solicitud de Traslado';
+  titulo                      = 'Solicitud de Traslado';
 
-  modeloFormCab1: FormGroup;
-  modeloFormCab2: FormGroup;
-  modeloFormCab3: FormGroup;
-  modeloFormOtr: FormGroup;
-  modeloFormPie1: FormGroup;
-  globalConstants: GlobalsConstantsForm = new GlobalsConstantsForm();
+  modeloFormCab1              : FormGroup;
+  modeloFormCab2              : FormGroup;
+  modeloFormCab3              : FormGroup;
+  modeloFormOtr               : FormGroup;
+  modeloFormPie1              : FormGroup;
+  globalConstants             : GlobalsConstantsForm = new GlobalsConstantsForm();
 
-  jrnlMemo: string = 'Solicitud de traslado - '
-  docStatus: DocStatus[];
-  docStatusList: SelectItem[];
-  modeloSave: SolicitudTrasladoCreateModel = new SolicitudTrasladoCreateModel();
+  jrnlMemo                    : string = 'Solicitud de traslado - '
+  docStatus                   : DocStatus[];
+  docStatusList               : SelectItem[];
+  modeloSave                  : SolicitudTrasladoCreateModel = new SolicitudTrasladoCreateModel();
 
-  id        : number = 0;
-  docEntry: number = 0;
-
+  id                          : number = 0;
+  docEntry                    : number = 0;
   // MODAL: Progreso
-  isSaving: boolean = false;
-  isDisplay: boolean = false;
-
+  isSaving                    : boolean = false;
+  isDisplay                   : boolean = false;
   // MODAL: CLiente
-  cardCode: string = '';
-  cntctCode: number = 0;
-
-   // MODAL: Almacen
-   whsCodeOrigen: string = '';
-   whsCodeDestino: string = '';
-   itemCodeAlmacen: string = '';
-   demandanteAlmacen: string = 'N';
-   inactiveAlmacen: string = 'N';
-
-   // MODAL: Tipo de traslado
-   codTipTraslado: string = '';
-
-   // MODAL: Motivo de traslado
-   codMotTraslado: string = '';
-
-   // MODAL: Tipo de salida
-   codTipSalida: string = '';
-
+  cardCode                    : string = '';
+  cntctCode                   : number = 0;
+  // MODAL: Almacen
+  whsCodeOrigen               : string = '';
+  whsCodeDestino              : string = '';
+  itemCodeAlmacen             : string = '';
+  demandanteAlmacen           : string = 'N';
+  inactiveAlmacen             : string = 'N';
+  // MODAL: Tipo de traslado
+  codTipTraslado              : string = '';
+  // MODAL: Motivo de traslado
+  codMotTraslado              : string = '';
+  // MODAL: Tipo de salida
+  codTipSalida                : string = '';
   // DETALLE
-  // DETALLE
-  opciones: any = [];
-  columnas: any[];
-  detalle: ISolicitudTrasladoDetalle[] = [];
-  detalleSelected: ISolicitudTrasladoDetalle;
-
+  opciones                    : any = [];
+  columnas                    : any[];
+  modelo                      : ISolicitudTraslado;
+  detalle                     : ISolicitudTrasladoDetalle[] = [];
+  detalleSelected             : ISolicitudTrasladoDetalle;
   // MODAL: Artículo
-  itemCode: string = '';
-  indexArticulo: number = 0;
-  isVisualizarArticulo: boolean = false;
-
-   // MODAL: Almacen - Item
-   indexAlmacenOrigen: number = 0;
-   indexAlmacenDestino: number = 0;
-   inactiveAlmacenItem: string = 'N';
-   demandanteAlmacenItem: string = 'Y';
-   isVisualizarAlmacenOrigen: boolean = false;
-   isVisualizarAlmacenDestino: boolean = false;
-
-   // MODAL: Empleado de ventas
-   slpCode: number = 0;
+  itemCode                    : string = '';
+  indexArticulo               : number = 0;
+  isVisualizarArticulo        : boolean = false;
+  // MODAL: Almacen - Item
+  indexAlmacenOrigen          : number = 0;
+  indexAlmacenDestino         : number = 0;
+  inactiveAlmacenItem         : string = 'N';
+  demandanteAlmacenItem       : string = 'Y';
+  isVisualizarAlmacenOrigen   : boolean = false;
+  isVisualizarAlmacenDestino  : boolean = false;
+  // MODAL: Empleado de ventas
+  slpCode                     : number = 0;
 
 
   constructor
@@ -111,9 +101,9 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.id = Number(params["id"]);
       setTimeout(() => {
-      this.getById(this.id);
+        this.getById(this.id);
       }, 10);
-      });
+    });
   }
 
 
@@ -127,12 +117,12 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
     });
     this.modeloFormCab2 = this.fb.group(
     {
-      'docNum'      : new FormControl({ value: '', disabled: true }),
-      'docStatus'   : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'read'        : new FormControl({ value: false, disabled: true}),
-      'docDate'     : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'docDueDate'  : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'taxDate'     : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required]))
+      'docNum'          : new FormControl({ value: '', disabled: true }),
+      'docStatus'       : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'read'            : new FormControl({ value: false, disabled: true}),
+      'docDate'         : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'docDueDate'      : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'taxDate'         : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required]))
     });
 
     this.modeloFormCab3 = this.fb.group(
@@ -150,9 +140,9 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
 
     this.modeloFormPie1 = this.fb.group(
     {
-      'slpCode'  : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
-      'jrnlMemo' : new FormControl({ value: this.jrnlMemo, disabled: true }),
-      'comments' : new FormControl({ value: '', disabled: true }),
+      'slpCode'         : new FormControl({ value: '', disabled: true }, Validators.compose([Validators.required])),
+      'jrnlMemo'        : new FormControl({ value: this.jrnlMemo, disabled: true }),
+      'comments'        : new FormControl({ value: '', disabled: true }),
     });
   }
 
@@ -220,31 +210,29 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
   }
 
   onSelectedAlmacenOrigen(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
-      if(this.detalle.length > 0){
-        this.detalle.forEach(x => {
-          if(x.itemCode !== '')
-          {
-            x.fromWhsCod = value.whsCode;
-          }
-        });
-      }
-    }, 10);
+    this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
+
+    if(this.detalle.length > 0){
+      this.detalle.forEach(x => {
+        if(x.itemCode !== '')
+        {
+          x.fromWhsCod = value.whsCode;
+        }
+      });
+    }
   }
 
   onSelectedAlmacenDestino(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
-      if(this.detalle.length > 0){
-        this.detalle.forEach(x => {
-          if(x.itemCode !== '')
-          {
-            x.whsCode = value.whsCode;
-          }
-        });
-      }
-    }, 10);
+    this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
+
+    if(this.detalle.length > 0){
+      this.detalle.forEach(x => {
+        if(x.itemCode !== '')
+        {
+          x.whsCode = value.whsCode;
+        }
+      });
+    }
   }
 
   onSelectedTipoTraslado(value: any) {
@@ -374,46 +362,43 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
     this.modeloFormPie1.patchValue({ 'slpCode' : value.slpCode });
   }
 
-  //#region <<< SAVE >>>
-  set(data: ISolicitudTraslado)
+  set(value: ISolicitudTraslado)
   {
     setTimeout(() => {
-      this.docEntry = data.docEntry;
-      this.cardCode = data.cardCode;
-      this.cntctCode = data.cntctCode;
-      this.whsCodeOrigen = data.filler;
-      this.whsCodeDestino = data.toWhsCode;
-      this.codTipTraslado = data.codTipTraslado;
-      this.codMotTraslado = data.codMotTraslado;
-      this.codTipSalida = data.codTipSalida;
-      this.slpCode = data.slpCode;
-    }, 10);
+      this.docEntry         = value.docEntry;
+      this.cardCode         = value.cardCode;
+      this.cntctCode        = value.cntctCode;
+      this.whsCodeOrigen    = value.filler;
+      this.whsCodeDestino   = value.toWhsCode;
+      this.codTipTraslado   = value.codTipTraslado;
+      this.codMotTraslado   = value.codMotTraslado;
+      this.codTipSalida     = value.codTipSalida;
+      this.slpCode          = value.slpCode;
 
-    const status = this.docStatus.find(x => x.statusCode === data.docStatus);
+      const status = this.docStatus.find(x => x.statusCode === value.docStatus);
 
-    this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
-    this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
-    this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );
-    this.modeloFormCab2.controls['docDueDate'].setValue( data.docDueDate == null ?  null : new Date(data.docDueDate) );
-    this.modeloFormCab2.controls['taxDate'].setValue( data.taxDate == null ?  null : new Date(data.taxDate) );
-    this.modeloFormCab2.controls['read'].setValue( data.read === 'Y'? true : false );
-    this.modeloFormPie1.controls['jrnlMemo'].setValue( data.jrnlMemo );
-    this.modeloFormPie1.controls['comments'].setValue( data.comments );
+      this.modeloFormCab2.controls['docNum'].setValue( value.docNum );
+      this.modeloFormCab2.controls['docStatus'].setValue({ label: status.statusName, value: status.statusCode });
+      this.modeloFormCab2.controls['docDate'].setValue( value.docDate == null ?  null : new Date(value.docDate) );
+      this.modeloFormCab2.controls['docDueDate'].setValue( value.docDueDate == null ?  null : new Date(value.docDueDate) );
+      this.modeloFormCab2.controls['taxDate'].setValue( value.taxDate == null ?  null : new Date(value.taxDate) );
+      this.modeloFormCab2.controls['read'].setValue( value.read === 'Y'? true : false );
+      this.modeloFormPie1.controls['jrnlMemo'].setValue( value.jrnlMemo );
+      this.modeloFormPie1.controls['comments'].setValue( value.comments );
+    }, 20);
+
+    setTimeout(() => {
+      this.detalle = value.linea;
+    }, 550);
   }
 
   getById(id: number) {
     this.isDisplay = true;
     this.solicitudTrasladoService.getById(id)
     .subscribe({next:(data: ISolicitudTraslado) => {
-      setTimeout(() => {
-        this.set(data);
-      }, 10);
-      setTimeout(() => {
-        data.linea.forEach(element => {
-          this.detalle.push(element);
-        });
-      }, 1000);
       this.isDisplay = false;
+      this.modelo = data;
+      this.set(this.modelo);
       },error:(e)=>{
         this.isDisplay = false;
         this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
@@ -421,7 +406,7 @@ export class PanelSolicitudTrasladoViewComponent implements OnInit {
     });
   }
 
-
+  //#region <<< SAVE >>>
   onClickSave() {
   }
   //#endregion

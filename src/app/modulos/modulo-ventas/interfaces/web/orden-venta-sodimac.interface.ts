@@ -18,9 +18,11 @@ export interface IOrdenVentaSodimac {
 
 export interface IOrdenVentaSodimacDetalle {
   id                        : number;
-  line                      : number;
+  line1                     : number;
+  line2                     : number;
   numLocal                  : number;
   nomLocal                  : string;
+  isOriente                 : boolean;
   lineStatus                : string;
   itemCode                  : string;
   sku                       : string;
@@ -45,7 +47,7 @@ export interface IOrdenVentaSodimacByFiltro {
 
 export interface IOrdenVentaSodimacConsulta {
   id?                       : number;
-  line?                     : number;
+  line1?                    : number;
 
   docNum?                   : number;
   numOrdenCompra?           : string;

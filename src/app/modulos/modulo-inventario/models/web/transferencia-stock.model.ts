@@ -123,6 +123,7 @@ export class TransferenciaStockDetalleCreateModel {
 export class TransferenciaStockUpdateModel {
   id                          : number;
   docEntry                    : number;
+  docDueDate                  : Date;
 
   codTipTransporte            : string;
   codTipDocTransportista      : string;
@@ -152,6 +153,7 @@ export class TransferenciaStockUpdateModel {
   constructor(){
     this.id                       = 0;
     this.docEntry                 = 0;
+    this.docDueDate               = null;
 
     this.codTipTransporte         = '';
     this.codTipDocTransportista   = '';

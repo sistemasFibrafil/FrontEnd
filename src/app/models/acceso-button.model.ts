@@ -24,7 +24,8 @@ export class ButtonAcces {
     btnAprobar: boolean;
     btnRevisar: boolean;
     btnAsignar: boolean;
-    btnImprimir: boolean;
+    btnImprimir1: boolean;
+    btnImprimir2: boolean;
     btnEnviarSAP: boolean;
     btnRecharSAP: boolean;
     btnDuplicar: boolean;
@@ -60,7 +61,8 @@ export class ButtonAcces {
         this.btnAprobar = true;
         this.btnRevisar = true;
         this.btnAsignar = true;
-        this.btnImprimir = true;
+        this.btnImprimir1 = true;
+        this.btnImprimir2 = true;
         this.btnEnviarSAP = true;
         this.btnRecharSAP = true;
         this.btnDuplicar = true;

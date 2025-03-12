@@ -11,30 +11,36 @@
           <div class="col-12 md:col-2">
             <p-calendar formControlName="dat2" placeholder="Seleccionar fecha final" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="grupoClienteSapList" [(ngModel)]="grupoClienteSelected" formControlName="msGrupoCliente" defaultLabel="Seleccione el Grupo de Cliente" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
+            <p-multiSelect [options]="empleadoVentaList" [(ngModel)]="empleadoVentaSelected" formControlName="msEmpleadoVentaSap" defaultLabel="Seleccione el Vendedor" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="tipDocumentoList" [(ngModel)]="tipDocumentoSelected" formControlName="msTipDocumento" defaultLabel="Seleccione el Tipo de Documento" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
-          <div class="col-12 md:col-2">
+          <div class="col-12 md:col-4">
             <p-multiSelect [options]="statusList" [(ngModel)]="statusSelected" formControlName="msStatus" defaultLabel="Seleccione el Estado" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
           </div>
-          <div class="col-12 md:col-2">
-            <input id="float-input-text1" type="text" placeholder="Buscar por nombre de cliente" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
+          <div class="col-12 md:col-4">
+            <input id="float-input-text1" type="text" placeholder="Buscar por nombre de cliente" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onClickBuscar()">
           </div>
         </div>
       </form>
 
       <p-footer>
         <div class="grid p-fluid">
-          <div class="col-12 md:col-4">
-            <button [disabled]="buttonAcces.btnBuscar || !modeloForm.valid" pButton type="button" label="{{globalConstants.cBuscar}}" icon="{{globalConstants.icoBuscar}}" (click)="onToBuscar()"></button>
+          <div class="col-12 md:col-3">
+            <button [disabled]="buttonAcces.btnBuscar || !modeloForm.valid" pButton type="button" label="{{globalConstants.cBuscar}}" icon="{{globalConstants.icoBuscar}}" (click)="onClickBuscar()"></button>
           </div>
-          <div class="col-12 md:col-4">
-            <button [disabled]="buttonAcces.btnEXCEL || !modeloForm.valid" pButton type="button" label="{{globalConstants.cEXCEL}}" icon="{{globalConstants.icoExcel}}" (click)="onToExcel()"></button>
+          <div class="col-12 md:col-3">
+            <button [disabled]="buttonAcces.btnEXCEL || !modeloForm.valid" pButton type="button" label="{{globalConstants.cEXCEL}}" icon="{{globalConstants.icoExcel}}" (click)="onClickExcel()"></button>
           </div>
-          <div class="col-12 md:col-4">
+          <div class="col-12 md:col-3">
+            <p-splitButton [disabled]='reporteList?.length <= 0' label="Copiar a" icon="pi pi-copy" [model] = "opciones" styleClass="{{globalConstants.cStyleButtonPrimary}}"></p-splitButton>
+          </div>
+          <div class="col-12 md:col-3">
             <app-btn-salir [isMargenTop]="false"></app-btn-salir>
           </div>
         </div>
@@ -47,14 +53,13 @@
         [value]="reporteList"
         [scrollable]="true"
         scrollDirection="both"
-        scrollHeight="500px"
+        scrollHeight="550px"
         [rowHover]="true"
         [responsive]="true"
         [autoLayout]="true"
-        styleClass="{{globalConstants.cStyleTableGridLines}}"
         [showCurrentPageReport]="true"
-        currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}"
-        >
+        styleClass="{{globalConstants.cStyleTableGridLines}}"
+        currentPageReportTemplate="{{globalConstants.currentPageReportTemplate}}">
         <!-- Header -->
         <ng-template pTemplate="header" let-columns>
           <tr>
@@ -299,3 +304,53 @@
     </div>
   </div>
 </p-dialog>
+
+
+<p-dialog header="S&OP" [(visible)]="isVisualizar" [modal]="true" [style]="{width: '40vw'}" [maximizable]="true" (onHide)="onHide()">
+  <p-panel id="modal" header="Datos para generar S&OP" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+    <form [formGroup]="modeloFormSop">
+      <div class="grid p-fluid">
+        <div class="col-12 md:col-12">
+          <label class="label-custom" for="float-input-year">Año </label><span class="label" style="font-weight: bold; color:red">*</span>
+          <p-dropdown id="float-input-year" [options]="listAnio" [filter]="true" class="p dropdown-item-text" placeholder="Seleccione el año" formControlName="year" [required] optionLabel="label" [showClear]="true" (onChange)="getListSemana()"></p-dropdown>
+          <div *ngIf="modeloFormSop.controls['year'].errors && modeloFormSop.controls['year'].dirty">
+            <p-message severity="error" text="El año es requerido." *ngIf="modeloFormSop.controls['year'].errors['required']"></p-message>
+          </div>
+        </div>
+        <div class="col-12 md:col-12">
+          <label class="label-custom" for="float-input-month">Mes </label><span class="label" style="font-weight: bold; color:red">*</span>
+          <p-dropdown id="float-input-month" [options]="listMes" [filter]="true" class="p dropdown-item-text" placeholder="Seleccione el mes" formControlName="month" [required] optionLabel="label" [showClear]="true" (onChange)="getListSemana()"></p-dropdown>
+          <div *ngIf="modeloFormSop.controls['month'].errors && modeloFormSop.controls['month'].dirty">
+            <p-message severity="error" text="El mes es requerido." *ngIf="modeloFormSop.controls['month'].errors['required']"></p-message>
+          </div>
+        </div>
+        <div class="col-12 md:col-12">
+          <label class="label-custom" for="float-input-week">Semana </label><span class="label" style="font-weight: bold; color:red">*</span>
+          <p-dropdown id="float-input-week" [options]="listSemana" [filter]="true" class="p dropdown-item-text" placeholder="Seleccione el semana" formControlName="week" [required] optionLabel="label" [showClear]="true"></p-dropdown>
+          <div *ngIf="modeloFormSop.controls['week'].errors && modeloFormSop.controls['week'].dirty">
+            <p-message severity="error" text="La semana es requerida." *ngIf="modeloFormSop.controls['week'].errors['required']"></p-message>
+          </div>
+        </div>
+        <div class="col-12 md:col-12">
+          <label class="label-custom" for="float-input-name">Nombre de S&OP </label><span class="label" style="font-weight: bold; color:red">*</span>
+          <div class="p-inputgroup">
+            <input id="float-input-name" type="text" placeholder="Nombre de S&OP" maxlength="100" size="50" formControlName="name" autocomplete="off" pInputText>
+          </div>
+        </div>
+        <div class="col-12 md:col-12">
+          <label class="label-custom" for="float-input-comments">Comentarios </label>
+          <div class="p-inputgroup">
+            <textarea id="float-area-comments" formControlName="comments" autocomplete="off" placeholder="Comentarios" maxlength="500" rows="3" pInputText></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </p-panel>
+  <ng-template pTemplate="footer">
+    <p-button [disabled]="!modeloFormSop.valid" label="{{globalConstants.cCopiar}}" icon="{{globalConstants.icoCopiar}}" styleClass="p-button-success" (onClick)="onClickCopySop()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickCloseSop()"></p-button>
+  </ng-template>
+</p-dialog>
+
+
+<app-panel-guardar [isDisplay]="isSaving"></app-panel-guardar>

@@ -1,6 +1,6 @@
 export class FilterRequestModel {
-  dat1?    : Date;
-  dat2?    : Date;
+  dat1?     : Date;
+  dat2?     : Date;
   id1?      : number;
   id2?      : number;
   id3?      : number;

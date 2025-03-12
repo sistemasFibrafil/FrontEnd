@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment.prod';
-import { IForcastVenta, IForcastVentaByFecha, IForcastVentaConSinOc, IForcastVentaEstado, IForcastVentaNegocio } from '../../interfaces/forcast-venta.interface';
+import { IForcastVenta, IForcastVentaByFecha, IForcastVentaConSinOc, IForcastVentaEstado, IForcastVentaNegocio } from '../../interfaces/web/forcast-venta.interface';
 import { ForcastventaFindModel, ForcastventaImportModel } from '../../models/web/forcast-venta.model';
 
 

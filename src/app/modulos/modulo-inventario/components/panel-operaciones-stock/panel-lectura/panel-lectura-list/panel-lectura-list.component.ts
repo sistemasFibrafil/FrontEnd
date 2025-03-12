@@ -7,7 +7,6 @@ import { ButtonAcces } from 'src/app/models/acceso-button.model';
 import { GlobalsConstantsForm } from 'src/app/constants/globals-constants-form';
 import { LanguageService } from 'src/app/services/language.service';
 import { SwaCustomService } from 'src/app/services/swa-custom.service';
-import { UserContextService } from 'src/app/services/user-context.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
 import { ILectura } from 'src/app/modulos/modulo-inventario/interfaces/web/lectura.inteface';
@@ -70,7 +69,6 @@ export class PanelLecturaListComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     public lenguageService: LanguageService,
-    private userContextService: UserContextService,
     private readonly swaCustomService: SwaCustomService,
     private readonly cifrarDataService: CifrarDataService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
@@ -96,6 +94,7 @@ export class PanelLecturaListComponent implements OnInit {
       'dat2'            : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
       'objType'         : new FormControl('', Validators.compose([Validators.required])),
       'msDocStatus'     : new FormControl('', Validators.compose([Validators.required])),
+      'text1'           : new FormControl('')
     });
 
     this.modeloFormBusqueda = this.fb.group({
@@ -109,10 +108,11 @@ export class PanelLecturaListComponent implements OnInit {
     this.columnas =
     [
       { field: 'baseNum',         header: 'Número' },
+      { field: 'docDate',         header: 'Fecha de contabilización' },
+      { field: 'docDueDate',      header: 'Fecha de entrega' },
       { field: 'baseLine',        header: 'Línea' },
       { field: 'itemCode',        header: 'Código' },
       { field: 'dscription',      header: 'Descripción' },
-      // { field: 'return',          header: 'Devuelto' },
       { field: 'unitMsr',         header: 'UM' },
       { field: 'quantity',        header: 'Cantidad' },
       { field: 'openQty',         header: 'Pendiente' },
@@ -135,7 +135,7 @@ export class PanelLecturaListComponent implements OnInit {
       { label: 'Visualizar',  icon: 'pi pi-eye',            command: () => { this.onToVisualizar() } },
     ];
     this.opciones2 = [
-      { label: 'Despacho',    icon: 'pi pi-plus',           command: () => { this.onToCopy() } },
+      { label: 'Despacho',    icon: 'pi pi-cart-plus',           command: () => { this.onToCopy() } },
     ];
   }
 
@@ -235,7 +235,7 @@ export class PanelLecturaListComponent implements OnInit {
 
   onToDelete()
   {
-    this.swaCustomService.swaConfirmation(
+      this.swaCustomService.swaConfirmation(
       this.globalConstants.titleEliminar,
       this.globalConstants.subTitleEliminar,
       this.globalConstants.icoSwalQuestion
@@ -378,7 +378,7 @@ export class PanelLecturaListComponent implements OnInit {
         }
       }
 
-      this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', this.cifrarDataService.encrypt(JSON.stringify(this.paramsCreateTransferencia))]);
+      this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', JSON.stringify(this.paramsCreateTransferencia)]);
     }
   }
 }

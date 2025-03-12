@@ -13,10 +13,12 @@ import { SwaCustomService } from 'src/app/services/swa-custom.service';
 import { AccesoOpcionesService } from 'src/app/services/acceso-opciones.service';
 
 import { IGrupoSocioNegocioSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/socio-negocios/grupo-socio-negocio.interface';
-import { IOrdenVentaSeguimientoByFecha } from '../../../interfaces/orden-venta-sap.interface';
+import { IOrdenVentaSeguimientoByFecha } from '../../../interfaces/sap/orden-venta-sap.interface';
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
 import { GrupoSocionegocioSapService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/socio-negocios/grupo-socio-negocio-sap.service';
 import { OrdenVentaSapService } from '../../../services/sap/orden-venta-sap.service';
+import { IEmpleadoVentaSap } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/general/empleado-venta.interface';
+import { EmpleadoVentaSapService } from 'src/app/modulos/modulo-gestion/services/sap/definiciones/general/empleado-venta-sap.service';
 
 
 
@@ -49,21 +51,26 @@ export class PanelOrdenVentaSeguimientoByFechaComponent implements OnInit {
   // Variaqbles
   columnas: any[];
   isDisplay: boolean = false;
-  tipDocumentoList: SelectItem[];
-  grupoClienteSapList: SelectItem[];
-  grupoClienteSelected: IGrupoSocioNegocioSap[];
-  tipDocumentoItem: ITipoDocumento[];
-  tipDocumentoSelected: ITipoDocumento[];
-  statusItem: IStatus[];
   statusList: SelectItem[];
   statusSelected: IStatus[];
+  tipDocumentoList: SelectItem[];
+  empleadoVentaList: SelectItem[];
+  grupoClienteSapList: SelectItem[];
+
+  statusItem: IStatus[];
+  tipDocumentoItem: ITipoDocumento[];
+  tipDocumentoSelected: ITipoDocumento[];
+  empleadoVentaSelected: IEmpleadoVentaSap[];
   reporteList: IOrdenVentaSeguimientoByFecha[];
+  grupoClienteSelected: IGrupoSocioNegocioSap[];
+
   params: FilterRequestModel = new FilterRequestModel();
 
   fecha: string = this.datePipe.transform(new Date(), 'dd-MM-yyyy');
   nombreArchivo: string = 'Órdenes de Venta - Seguimiento - ' + this.fecha;
 
-  constructor(
+  constructor
+  (
     private router: Router,
     private fb: FormBuilder,
     private datePipe: DatePipe,
@@ -71,12 +78,15 @@ export class PanelOrdenVentaSeguimientoByFechaComponent implements OnInit {
     private readonly swaCustomService: SwaCustomService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
     private ordenVentaSapService: OrdenVentaSapService,
-    private grupoSocionegocioSapService: GrupoSocionegocioSapService) {}
+    private empleadoVentaSapService: EmpleadoVentaSapService,
+    private grupoSocionegocioSapService: GrupoSocionegocioSapService
+  ) {}
 
   ngOnInit() {
     this.onBuildForm();
     this.onBuildColumn();
     this.getListGrupoAll();
+    this.getListEmpleadoVenta();
     this.getListTipoDocumento();
     this.getListStatus();
   }
@@ -84,12 +94,13 @@ export class PanelOrdenVentaSeguimientoByFechaComponent implements OnInit {
   onBuildForm() {
     this.modeloForm = this.fb.group(
     {
-        'dat1'            : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-        'dat2'            : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
-        'msGrupoCliente'  : new FormControl('', Validators.compose([Validators.required])),
-        'msTipDocumento'  : new FormControl('', Validators.compose([Validators.required])),
-        'msStatus'        : new FormControl('', Validators.compose([Validators.required])),
-        'text1'           : new FormControl(''),
+        'dat1'                : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
+        'dat2'                : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
+        'msGrupoCliente'      : new FormControl('', Validators.compose([Validators.required])),
+        'msEmpleadoVentaSap'  : new FormControl('', Validators.compose([Validators.required])),
+        'msTipDocumento'      : new FormControl('', Validators.compose([Validators.required])),
+        'msStatus'            : new FormControl('', Validators.compose([Validators.required])),
+        'text1'               : new FormControl(''),
     });
 
     // Iniciamos el acceso a las opciones con la que cuenta el usuario
@@ -98,7 +109,7 @@ export class PanelOrdenVentaSeguimientoByFechaComponent implements OnInit {
 
   onBuildColumn() {
     this.columnas = [
-      { field: 'cardCode',        header: 'Código de CCliente' },
+      { field: 'cardCode',        header: 'Código de Cliente' },
       { field: 'cardName',        header: 'Nombre de Cliente' },
       { field: 'nomTipDocumento', header: 'Tipo de Documento' },
       { field: 'numeroDocumento', header: 'Número de Documento' },
@@ -106,6 +117,7 @@ export class PanelOrdenVentaSeguimientoByFechaComponent implements OnInit {
       { field: 'taxDate',         header: 'Fecha de Emisión' },
       { field: 'docDueDate',      header: 'Fecha de Entrega' },
       { field: 'nomStatus',       header: 'Estado' },
+      { field: 'slpName',         header: 'Vendedor' },
       { field: 'docTotalSy',      header: 'Total USD' },
     ];
   }
@@ -120,6 +132,23 @@ export class PanelOrdenVentaSeguimientoByFechaComponent implements OnInit {
         for (let item of data) {
           this.grupoClienteSelected.push({ groupCode: item.groupCode, groupName: item.groupName });
           this.grupoClienteSapList.push({ label: item.groupName, value: { groupCode: item.groupCode, groupName: item.groupName } });
+        }
+      },error:(e)=>{
+        this.isDisplay = false;
+        this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
+      }
+    });
+  }
+
+  getListEmpleadoVenta() {
+    this.empleadoVentaSapService.getList()
+    .subscribe({next:(data: IEmpleadoVentaSap[]) =>{
+        this.empleadoVentaList = [];
+        this.empleadoVentaSelected = [];
+
+        for (let item of data) {
+          this.empleadoVentaSelected.push({ slpCode: item.slpCode, slpName: item.slpName });
+          this.empleadoVentaList.push({ label: item.slpName, value: { slpCode: item.slpCode, slpName: item.slpName } });
         }
       },error:(e)=>{
         this.isDisplay = false;
@@ -170,8 +199,9 @@ export class PanelOrdenVentaSeguimientoByFechaComponent implements OnInit {
   {
     this.params = this.modeloForm.getRawValue();
     this.params.cod1 = this.grupoClienteSelected.map(x=> x.groupCode).join(",");
-    this.params.cod2 = this.tipDocumentoSelected.map(x=> x.codTipDocumento).join(",");
-    this.params.cod3 = this.statusSelected.map(x=> x.codStatus).join(",");
+    this.params.cod2 = this.empleadoVentaSelected.map(x=> x.slpCode).join(",");
+    this.params.cod3 = this.tipDocumentoSelected.map(x=> x.codTipDocumento).join(",");
+    this.params.cod4 = this.statusSelected.map(x=> x.codStatus).join(",");
   }
 
   onListar() {

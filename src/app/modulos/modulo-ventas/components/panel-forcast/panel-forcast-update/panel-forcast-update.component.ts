@@ -14,7 +14,7 @@ import { GrupoArticuloService } from 'src/app/modulos/modulo-gestion/services/sa
 
 import { IArticuloSap } from 'src/app/modulos/modulo-inventario/interfaces/sap/articulo-sap.interface';
 import { IGrupoArticulo } from 'src/app/modulos/modulo-gestion/interfaces/sap/definiciones/inventario/grupo-articulo-sap.interface';
-import { IForcastVenta, IForcastVentaConSinOc, IForcastVentaEstado, IForcastVentaNegocio } from '../../../interfaces/forcast-venta.interface';
+import { IForcastVenta, IForcastVentaConSinOc, IForcastVentaEstado, IForcastVentaNegocio } from '../../../interfaces/web/forcast-venta.interface';
 import { SelectItem } from 'primeng/api';
 import { ISocioNegocio } from 'src/app/modulos/modulo-socio-negocios/interfaces/socio-segocio.interface';
 import { ForCastVentaService } from '../../../services/web/forcast-venta.service';

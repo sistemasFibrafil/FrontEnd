@@ -66,7 +66,6 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
     public lenguageService: LanguageService,
     private userContextService: UserContextService,
     private readonly swaCustomService: SwaCustomService,
-    private readonly cifrarDataService: CifrarDataService,
     private readonly accesoOpcionesService: AccesoOpcionesService,
     private solicitudTrasladoService: SolicitudTrasladoService,
     private solicitudTrasladoSapService: SolicitudTrasladoSapService,
@@ -86,6 +85,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
       'dat1'        : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
       'dat2'        : new FormControl(new Date(new Date()), Validators.compose([Validators.required])),
       'msDocStatus' : new FormControl('', Validators.compose([Validators.required])),
+      'text1'       : new FormControl('')
     });
 
     this.buttonAcces = this.accesoOpcionesService.getObtieneOpciones('app-inv-panel-solicitud-traslado-list');
@@ -98,7 +98,6 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
       { field: 'read',            header: '¿Lectura?' },
       { field: 'docDate',         header: 'Fecha de contabilización' },
       { field: 'docDueDate',      header: 'Fecha de entrega' },
-      { field: 'taxDate',         header: 'Fecha de documento' },
       { field: 'filler',          header: 'Origen' },
       { field: 'toWhsCode',       header: 'Destino' },
     ];
@@ -108,7 +107,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
     this.opciones = [
       { label: 'Editar',      icon: 'pi pi-pencil',                   command: () => { this.onClickEditar() } },
       { label: 'Cerrar',      icon: 'pi pi-times',                    command: () => { this.onClickCerrar() } },
-      { label: 'Imprimir',    icon: 'pi pi-print',                    command: () => { this.onClickImprimir() } },
+      { label: 'Formato',     icon: 'pi pi-print',                    command: () => { this.onClickImprimir() } },
       { label: 'Transferir',  icon: 'pi pi-arrow-right-arrow-left',   command: () => { this.onClickTransferir() } },
       { label: 'Visualizar',  icon: 'pi pi-eye',                      command: () => { this.onClickVisualizar() } },
     ];
@@ -126,10 +125,10 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
     } else {
       this.opciones.find(x => x.label == "Cerrar").visible = false;
     }
-    if(!this.buttonAcces.btnImprimir){
-      this.opciones.find(x => x.label == "Imprimir").visible = true;
+    if(!this.buttonAcces.btnImprimir1){
+      this.opciones.find(x => x.label == "Formato").visible = true;
     } else {
-      this.opciones.find(x => x.label == "Imprimir").visible = false;
+      this.opciones.find(x => x.label == "Formato").visible = false;
     }
     if(!this.buttonAcces.btnTransferir && modelo.docStatus === '01' && modelo.read === 'N'){
       this.opciones.find(x => x.label == "Transferir").visible = true;
@@ -280,7 +279,7 @@ export class PanelSolicitdTraladoListComponent implements OnInit {
 
   onTransferir(params: ParamCreateTransferenciaModel)
   {
-    this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', this.cifrarDataService.encrypt(JSON.stringify(params))]);
+    this.router.navigate(['/main/modulo-inv/panel-transferencia-stock-create', JSON.stringify(params)]);
   }
 
 

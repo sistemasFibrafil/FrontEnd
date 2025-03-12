@@ -271,27 +271,31 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
 
 
   onSelectedAlmacenOrigen(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
+    this.modeloFormCab3.patchValue({ 'whsCodeOrigen' : value.whsCode });
+
+    if(this.detalle.length > 0)
+    {
       this.detalle.forEach(x => {
         if(x.itemCode !== '')
         {
           x.fromWhsCod = value.whsCode;
         }
       });
-    }, 10);
+    }
   }
 
   onSelectedAlmacenDestino(value: any) {
-    setTimeout(() => {
-      this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
+    this.modeloFormCab3.patchValue({ 'whsCodeDestino' : value.whsCode });
+
+    if(this.detalle.length > 0)
+    {
       this.detalle.forEach(x => {
         if(x.itemCode !== '')
         {
           x.whsCode = value.whsCode;
         }
       });
-    }, 10);
+    }
   }
 
   //#region <<< Transportista >>>
@@ -433,14 +437,12 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
 
     this.detalle[this.indexTipoOperacion].codTipOperacion = value.code;
 
-    setTimeout(() => {
-      this.lectura.forEach(x => {
-        if(x.baseEntry === baseEntry && x.baseLine === baseLine)
-        {
-          x.codTipOperacion = value.code;
-        }
-      });
-    }, 10);
+    this.lectura.forEach(x => {
+      if(x.baseEntry === baseEntry && x.baseLine === baseLine)
+      {
+        x.codTipOperacion = value.code;
+      }
+    });
     this.isVisualizarTipoOperacion = !this.isVisualizarTipoOperacion;
   }
 
@@ -535,74 +537,70 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     this.modeloFormPie1.patchValue({ 'slpCode' : value.slpCode });
   }
 
-  set(data: ITransferenciaStock)
+  set(value: ITransferenciaStock)
   {
     setTimeout(() => {
-      this.docEntry                 = data.docEntry;
-      this.cardCode                 = data.cardCode;
-      this.cntctCode                = data.cntctCode;
-      this.tipDocumento             = data.tipDocumento;
-      this.serDocumento             = data.serDocumento;
-      this.whsCodeOrigen            = data.filler;
-      this.whsCodeDestino           = data.toWhsCode;
-      this.codTipTransporte         = data.codTipTransporte;
-      this.codTipDocTransportista   = data.codTipDocTransportista;
-      this.codTipDocConductor       = data.codTipDocConductor;
-      this.codTipTraslado           = data.codTipTraslado;
-      this.codMotTraslado           = data.codMotTraslado;
-      this.codTipSalida             = data.codTipSalida;
-      this.slpCode                  = data.slpCode;
+      this.docEntry                 = value.docEntry;
+      this.cardCode                 = value.cardCode;
+      this.cntctCode                = value.cntctCode;
+      this.tipDocumento             = value.tipDocumento;
+      this.serDocumento             = value.serDocumento;
+      this.whsCodeOrigen            = value.filler;
+      this.whsCodeDestino           = value.toWhsCode;
+      this.codTipTransporte         = value.codTipTransporte;
+      this.codTipDocTransportista   = value.codTipDocTransportista;
+      this.codTipDocConductor       = value.codTipDocConductor;
+      this.codTipTraslado           = value.codTipTraslado;
+      this.codMotTraslado           = value.codMotTraslado;
+      this.codTipSalida             = value.codTipSalida;
+      this.slpCode                  = value.slpCode;
 
-    }, 10);
+      this.modeloFormCab1.controls['cardCode'].setValue( value.cardCode );
+      this.modeloFormCab1.controls['cardName'].setValue( value.cardName );
+      this.modeloFormCab1.controls['cntctCode'].setValue( value.cntctCode );
+      this.modeloFormCab1.controls['address'].setValue( value.address );
+      this.modeloFormCab2.controls['docNum'].setValue( value.docNum );
+      this.modeloFormCab2.controls['tipDocumento'].setValue( value.tipDocumento );
+      this.modeloFormCab2.controls['serDocumento'].setValue( value.serDocumento );
+      this.modeloFormCab2.controls['numDocumento'].setValue( value.numDocumento );
+      this.modeloFormCab2.controls['docDate'].setValue( value.docDate == null ?  null : new Date(value.docDate) );
+      this.modeloFormCab2.controls['docDueDate'].setValue( value.docDueDate == null ?  null : new Date(value.docDueDate) );
+      this.modeloFormCab2.controls['taxDate'].setValue( value.taxDate == null ?  null : new Date(value.taxDate) );
+      this.modeloFormCab3.controls['whsCodeOrigen'].setValue( value.filler );
+      this.modeloFormCab3.controls['whsCodeDestino'].setValue( value.toWhsCode );
+      this.modeloFormTra.controls['codTipTransporte'].setValue( value.codTipTransporte );
+      this.modeloFormTra.controls['codTipDocTransportista'].setValue( value.codTipDocTransportista );
+      this.modeloFormTra.controls['numTipoDocTransportista'].setValue( value.numTipoDocTransportista );
+      this.modeloFormTra.controls['nomTransportista'].setValue( value.nomTransportista );
+      this.modeloFormTra.controls['numPlaVehTransportista'].setValue( value.numPlaVehTransportista );
+      this.modeloFormTra.controls['codTipDocConductor'].setValue( value.codTipDocConductor );
+      this.modeloFormTra.controls['numTipoDocConductor'].setValue( value.numTipoDocConductor );
+      this.modeloFormTra.controls['nomConductor'].setValue( value.nomConductor );
+      this.modeloFormTra.controls['apeConductor'].setValue( value.apeConductor );
+      this.modeloFormTra.controls['nomComConductor'].setValue( value.nomComConductor );
+      this.modeloFormTra.controls['numLicConductor'].setValue( value.numLicConductor );
+      this.modeloFormOtr.controls['codTipTraslado'].setValue( value.codTipTraslado );
+      this.modeloFormOtr.controls['codMotTraslado'].setValue( value.codMotTraslado );
+      this.modeloFormOtr.controls['codTipSalida'].setValue( value.codTipSalida );
+      this.modeloFormPie1.controls['slpCode'].setValue( value.slpCode );
+      this.modeloFormPie1.controls['numBulto'].setValue( value.numBulto );
+      this.modeloFormPie1.controls['totKilo'].setValue( value.totKilo );
+      this.modeloFormPie1.controls['jrnlMemo'].setValue( value.jrnlMemo );
+      this.modeloFormPie1.controls['comments'].setValue( value.comments );
+    }, 20);
 
-    this.modeloFormCab1.controls['cardCode'].setValue( data.cardCode );
-    this.modeloFormCab1.controls['cardName'].setValue( data.cardName );
-    this.modeloFormCab1.controls['cntctCode'].setValue( data.cntctCode );
-    this.modeloFormCab1.controls['address'].setValue( data.address );
-    this.modeloFormCab2.controls['docNum'].setValue( data.docNum );
-    this.modeloFormCab2.controls['tipDocumento'].setValue( data.tipDocumento );
-    this.modeloFormCab2.controls['serDocumento'].setValue( data.serDocumento );
-    this.modeloFormCab2.controls['numDocumento'].setValue( data.numDocumento );
-    this.modeloFormCab2.controls['docDate'].setValue( data.docDate == null ?  null : new Date(data.docDate) );
-    this.modeloFormCab2.controls['docDueDate'].setValue( data.docDueDate == null ?  null : new Date(data.docDueDate) );
-    this.modeloFormCab2.controls['taxDate'].setValue( data.taxDate == null ?  null : new Date(data.taxDate) );
-    this.modeloFormCab3.controls['whsCodeOrigen'].setValue( data.filler );
-    this.modeloFormCab3.controls['whsCodeDestino'].setValue( data.toWhsCode );
-    this.modeloFormTra.controls['codTipTransporte'].setValue( data.codTipTransporte );
-    this.modeloFormTra.controls['codTipDocTransportista'].setValue( data.codTipDocTransportista );
-    this.modeloFormTra.controls['numTipoDocTransportista'].setValue( data.numTipoDocTransportista );
-    this.modeloFormTra.controls['nomTransportista'].setValue( data.nomTransportista );
-    this.modeloFormTra.controls['numPlaVehTransportista'].setValue( data.numPlaVehTransportista );
-    this.modeloFormTra.controls['codTipDocConductor'].setValue( data.codTipDocConductor );
-    this.modeloFormTra.controls['numTipoDocConductor'].setValue( data.numTipoDocConductor );
-    this.modeloFormTra.controls['nomConductor'].setValue( data.nomConductor );
-    this.modeloFormTra.controls['apeConductor'].setValue( data.apeConductor );
-    this.modeloFormTra.controls['nomComConductor'].setValue( data.nomComConductor );
-    this.modeloFormTra.controls['numLicConductor'].setValue( data.numLicConductor );
-    this.modeloFormOtr.controls['codTipTraslado'].setValue( data.codTipTraslado );
-    this.modeloFormOtr.controls['codMotTraslado'].setValue( data.codMotTraslado );
-    this.modeloFormOtr.controls['codTipSalida'].setValue( data.codTipSalida );
-    this.modeloFormPie1.controls['slpCode'].setValue( data.slpCode );
-    this.modeloFormPie1.controls['numBulto'].setValue( data.numBulto );
-    this.modeloFormPie1.controls['totKilo'].setValue( data.totKilo );
-    this.modeloFormPie1.controls['jrnlMemo'].setValue( data.jrnlMemo );
-    this.modeloFormPie1.controls['comments'].setValue( data.comments );
+    setTimeout(() => {
+      this.detalle = value.linea;
+    }, 550);
   }
 
   getById(id: number) {
     this.isDisplay = true;
     this.transferenciaStockService.getById(id)
     .subscribe({next:(data: ITransferenciaStock) => {
-      setTimeout(() => {
-        this.modelo = data;
-        this.set(this.modelo);
-      }, 10);
-      setTimeout(() => {
-        data.linea.forEach(element => {
-          this.detalle.push(element);
-        });
-      }, 1000);
       this.isDisplay = false;
+      this.modelo = data;
+      this.set(this.modelo);
       },error:(e)=>{
         this.isDisplay = false;
         this.swaCustomService.swaMsgError(e.error.resultadoDescripcion);
@@ -672,9 +670,10 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
 
     // CAB 02: SOCIO NEGOCIO
     // CAB 02: TRANSFERENCIA
-    this.modeloSave.id = this.id;
-    this.modeloSave.docEntry = this.docEntry;
+    this.modeloSave.id                        = this.id;
+    this.modeloSave.docEntry                  = this.docEntry;
     // CAB 03: TRANSFERENCIA
+    this.modeloSave.docDueDate                = new Date(this.modeloFormCab2.controls['docDueDate'].value);
 
     // TRANSPORTISTA
     this.modeloSave.codTipTransporte          = this.modeloFormTra.controls['codTipTransporte'].value;
@@ -692,16 +691,16 @@ export class PanelPanelTransferenciaStockUpdateComponent implements OnInit {
     this.modeloSave.numLicConductor           = this.modeloFormTra.controls['numLicConductor'].value;
 
     // OTROS
-    this.modeloSave.codTipTraslado  = this.modeloFormOtr.controls['codTipTraslado'].value;
-    this.modeloSave.codMotTraslado  = this.modeloFormOtr.controls['codMotTraslado'].value;
-    this.modeloSave.codTipSalida    = this.modeloFormOtr.controls['codTipSalida'].value;
+    this.modeloSave.codTipTraslado            = this.modeloFormOtr.controls['codTipTraslado'].value;
+    this.modeloSave.codMotTraslado            = this.modeloFormOtr.controls['codMotTraslado'].value;
+    this.modeloSave.codTipSalida              = this.modeloFormOtr.controls['codTipSalida'].value;
 
     // PIE 01: TRANSFERENCIA
-    this.modeloSave.slpCode         = this.modeloFormPie1.controls['slpCode'].value;
-    this.modeloSave.numBulto        = this.modeloFormPie1.controls['numBulto'].value;
-    this.modeloSave.totKilo         = this.modeloFormPie1.controls['totKilo'].value;
-    this.modeloSave.jrnlMemo        = this.modeloFormPie1.controls['jrnlMemo'].value;
-    this.modeloSave.comments        = this.modeloFormPie1.controls['comments'].value;
+    this.modeloSave.slpCode                   = this.modeloFormPie1.controls['slpCode'].value;
+    this.modeloSave.numBulto                  = this.modeloFormPie1.controls['numBulto'].value;
+    this.modeloSave.totKilo                   = this.modeloFormPie1.controls['totKilo'].value;
+    this.modeloSave.jrnlMemo                  = this.modeloFormPie1.controls['jrnlMemo'].value;
+    this.modeloSave.comments                  = this.modeloFormPie1.controls['comments'].value;
 
     this.modeloSave.idUsuarioUpdate = this.userContextService.getIdUsuario();
 

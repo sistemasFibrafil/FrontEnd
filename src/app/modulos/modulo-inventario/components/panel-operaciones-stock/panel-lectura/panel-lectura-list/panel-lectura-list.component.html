@@ -11,11 +11,14 @@
           <div class="col-12 md:col-2">
             <p-calendar formControlName="dat2" placeholder="Seleccionar fecha final" [showButtonBar]="true" [locale]="lenguageService.es" dateFormat="dd/mm/yy" [showIcon]="true"></p-calendar>
           </div>
-          <div class="col-12 md:col-4">
+          <div class="col-12 md:col-2">
             <p-dropdown id="float-input-objType" [options]="listObjType" class="p dropdown-item-text" placeholder="Seleccionar el tipo de documento" formControlName="objType" [required] optionLabel="label" [showClear]="false"></p-dropdown>
           </div>
-          <div class="col-12 md:col-4">
+          <div class="col-12 md:col-2">
             <p-multiSelect [options]="docStatusList" [(ngModel)]="docStatusSelected" formControlName="msDocStatus" defaultLabel="Seleccione el Estado" selectedItemsLabel="{0} regitros seleccionadas"></p-multiSelect>
+          </div>
+          <div class="col-12 md:col-4">
+            <input id="float-input-text1" type="text" placeholder="Buscar por número" maxlength="100" size="50" formControlName="text1" autocomplete="off" pInputText (keyup.enter)="onToBuscar()">
           </div>
         </div>
       </form>
@@ -75,6 +78,12 @@
             <td class="custom-td-5">
               <span class="p-column-title">Número: </span> {{modelo.baseNum}}
             </td>
+            <td class="p-fluid">
+              <span class="p-column-title">Fecha de contabilización</span> {{modelo.docDate | date: 'dd/MM/yyyy'}}
+            </td>
+            <td class="p-fluid">
+              <span class="p-column-title">Fecha de documento</span> {{modelo.docDueDate | date: 'dd/MM/yyyy'}}
+            </td>
             <td class="custom-td-4">
               <span class="p-column-title">Línea: </span> {{modelo.baseLine}}
             </td>
@@ -116,8 +125,7 @@
       <p-footer>
         <div class="grid p-fluid">
           <div class="col-12 md:col-4">
-            <p-splitButton [disabled]='lecturaSelected.length <= 0' label="Copiar a" icon="pi pi-copy" [model] = "opciones2" styleClass="{{globalConstants.cStyleButtonPrimary}}">
-            </p-splitButton>
+            <p-splitButton [disabled]='lecturaSelected?.length <= 0' label="Copiar a" icon="pi pi-copy" [model] = "opciones2" styleClass="{{globalConstants.cStyleButtonPrimary}}"></p-splitButton>
           </div>
         </div>
       </p-footer>
@@ -136,7 +144,7 @@
           </div>
         </div>
         <div class="col-12 md:col-6">
-          <button pButton type="button" label="{{globalConstants.cBuscar}}" icon="{{globalConstants.icoBuscar}}" (click)="onToBuscar()"></button>
+          <button pButton type="button" label="{{globalConstants.cBuscar}}" icon="{{globalConstants.icoBuscar}}" (click)="onToModalBuscar()"></button>
         </div>
       </div>
     </form>
@@ -185,7 +193,7 @@
     </p-table>
   </p-panel>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickClose()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickClose()"></p-button>
   </ng-template>
 </p-dialog>
 

@@ -49,7 +49,8 @@ export class ModalFileImportComponent implements OnInit {
   ngOnInit() {
   }
 
-  onToUpload(event, fileUpload) {
+  onToUpload(event, fileUpload)
+  {
     this.lista = [];
     let swalWithBootstrapButtons = swal.mixin({ customClass: { container: 'my-swal' }, target: document.getElementById('modal-import') });
 
@@ -65,20 +66,24 @@ export class ModalFileImportComponent implements OnInit {
 
     const file: File = event.files[0];
 
-    if (file) {
+    if (file)
+    {
       const reader = new FileReader();
-      reader.onload = (e: any) => {
+      reader.onload = (e: any) =>
+      {
         const fileContent = e.target.result;
         const rows = fileContent.split('\n');
         const data: any[] = [];
         for (let i = 0; i < rows.length; i++) {
           const columns = rows[i].split('|');
           data.push(columns);
-         }
+        }
 
-         this.param.linea = [];
-         for (let i = 1; i < data.length - 1; i++) {
-          this.param.linea.push({
+        this.param.linea = [];
+        for (let i = 1; i < data.length - 1; i++)
+        {
+          this.param.linea.push
+          ({
             line                : Number(data[i][18]),
             numLocal            : Number(data[i][19]),
             nomLocal            : data[i][20].toString().trim(),
@@ -88,8 +93,8 @@ export class ModalFileImportComponent implements OnInit {
             ean                 : data[i][15].toString().trim(),
             quantity            : Number(data[i][21])
           });
-         }
-         this.getArticuloForOrdenVentaSodimacBySku(this.param);
+        }
+        this.getArticuloForOrdenVentaSodimacBySku(this.param);
       };
 
       reader.readAsText(file);

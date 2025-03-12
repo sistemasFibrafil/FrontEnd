@@ -92,14 +92,14 @@
 <p-dialog *ngIf="isVisualizarSerieNumeracion" header="Serie - Numeración" [(visible)]="isVisualizarSerieNumeracion" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-serie-numeracion-sap (eventoAceptar)="onToSerieNumeracionItemSelected($event)"></app-busqueda-serie-numeracion-sap>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickSerieNumeracionClose()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickSerieNumeracionClose()"></p-button>
   </ng-template>
 </p-dialog>
 
 <p-dialog *ngIf="isVisualizarFormulario" header="Serie - Numeración" [(visible)]="isVisualizarFormulario" [modal]="true" [style]="{width: '50vw'}" [maximizable]="true">
   <app-busqueda-formulario (eventoAceptar)="onToFormularioItemSelected($event)"></app-busqueda-formulario>
   <ng-template pTemplate="footer">
-    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-text" (onClick)="onClickSerieNumeracionClose()"></p-button>
+    <p-button label="{{globalConstants.cCerrar}}" icon="{{globalConstants.icoCerrar}}" styleClass="p-button-danger" (onClick)="onClickSerieNumeracionClose()"></p-button>
   </ng-template>
 </p-dialog>
 

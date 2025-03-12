@@ -5,8 +5,8 @@ import { environment } from 'src/environments/environment.prod';
 
 
 import { FilterRequestModel } from 'src/app/models/filter-request.model';
-import { OrdenVentaSodimacCreateModel, OrdenVentaSodimacLpnUpdateModel } from '../../models/web/orden-venta-sodimac.model';
-import { IOrdenVentaSodimac, IOrdenVentaSodimacByFiltro, IOrdenVentaSodimacConsulta, IOrdenVentaSodimacDetalle } from '../../interfaces/orden-venta-sodimac.interface';
+import { OrdenVentaSodimacCreateModel, OrdenVentaSodimacLpnUpdateModel, OrdenVentaSodimacUpdateModel } from '../../models/web/orden-venta-sodimac.model';
+import { IOrdenVentaSodimac, IOrdenVentaSodimacByFiltro, IOrdenVentaSodimacConsulta, IOrdenVentaSodimacDetalle } from '../../interfaces/web/orden-venta-sodimac.interface';
 
 
 
@@ -19,17 +19,13 @@ export class OrdenVentaSodimacService {
   ){}
 
   setCreate(value: OrdenVentaSodimacCreateModel) {
-    debugger
     const param: string = JSON.stringify(value);
+    return this.http.post(`${environment.url_api_fib}OrdenVentaSodimac/SetCreate/`, param);
+  }
 
-    if(value.id == 0 || value.id === undefined)
-    {
-        return this.http.post(`${environment.url_api_fib}OrdenVentaSodimac/SetCreate/`, param);
-    }
-    else
-    {
-      return this.http.put(`${environment.url_api_fib}OrdenVentaSodimac/SetUpdate/`, param);
-    }
+  setUpdte(value: OrdenVentaSodimacUpdateModel) {
+    const param: string = JSON.stringify(value);
+    return this.http.put(`${environment.url_api_fib}OrdenVentaSodimac/SetUpdate/`, param);
   }
 
   getListOrdenVentaSodimacByFiltro(value: FilterRequestModel) {
